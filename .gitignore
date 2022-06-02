@@ -2,3 +2,5 @@
 */.DS_Store
 *.pyc
 layout.md
+static/bootstrap/bootstrap.min.js
+static/bootstrap/bootstrap.min.js.map
