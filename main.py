@@ -19,6 +19,15 @@ app.config["JUSTIFICATIONS"] = "files/justifications"
 app.config["BP_TEMPLATES"] = "files/templates"
 
 
+# -- Confirm output directories exist at __init__
+for path in ["uploads", "justifications"]:
+      
+      temp = os.path.join(here, "files", path)
+
+      if not os.path.exists(temp):
+            pathlib.Path(temp).mkdir(parents=True, exist_ok=True)
+
+
 # == ROUTING ==
 @app.route("/", methods=["GET", "POST"])
 def index():
