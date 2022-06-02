@@ -9,7 +9,7 @@ Ian Ferguson | Stanford University
 
 
 # --- Imports
-import json, docx, pathlib, os
+import docx, pathlib, os, random
 import tarfile
 from datetime import datetime
 
@@ -135,6 +135,29 @@ projects = {
 }
 
 
+# --- Have a nice day!
+def drop_a_line(path):
+
+      options = ["Have a nice day!",
+                 "Keep up the great work!",
+                 "You're doing great!",
+                 "You are the sun and the moon!",
+                 "You are absolute magic!",
+                 "Thank you for being you!",
+                 "Make today great!",
+                 "Make it a great day!",
+                 "Do something nice for yourself today!",
+                 "You are a light everywhere you go!",
+                 "You can accomplish anything you set your mind to!",
+                 "Everyone needs a friend like you!"]
+
+      with open(os.path.join(path, "README.txt"), "w") as file:
+            message = random.choice(options)
+
+            file.write("PLEASE READ\n\n")
+            file.write(message)
+
+
 
 # --- Object definitions
 class PCard:
@@ -184,6 +207,8 @@ class PCard:
             head.text = f"\n\nCreated {now}"
 
             template.save(os.path.join(self.output_path, self.output_filename))
+
+            drop_a_line(self.output_path)
 
             self.gunzip()
 
@@ -248,6 +273,8 @@ class Reimbursement:
 
             template.save(os.path.join(self.output_path, self.output_filename))
 
+            drop_a_line(self.output_path)
+
             self.gunzip()
 
 
@@ -311,6 +338,8 @@ class Reocurring:
             head.text = "\n\nCreated {}".format(datetime.today().strftime("%m/%d/%Y"))
 
             doc.save(os.path.join(self.output_path, filename))
+
+            drop_a_line(self.output_path)
 
             self.gunzip()
 
