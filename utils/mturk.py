@@ -2,8 +2,30 @@
 
 # --- Imports
 import pandas as pd
-import os, docx, tarfile
+import os, docx, tarfile, random
 from datetime import date, datetime
+
+# --- Have a nice day!
+def drop_a_line(path):
+
+      options = ["Have a nice day!",
+                 "Keep up the great work!",
+                 "You're doing great!",
+                 "You are the sun and the moon!",
+                 "You are absolute magic!",
+                 "Thank you for being you!",
+                 "Make today great!",
+                 "Make it a great day!",
+                 "Do something nice for yourself today!",
+                 "You are a light everywhere you go!",
+                 "You can accomplish anything you set your mind to!",
+                 "Everyone needs a friend like you!"]
+
+      with open(os.path.join(path, "README.txt"), "w") as file:
+            message = random.choice(options)
+
+            file.write("PLEASE READ\n\n")
+            file.write(message)
 
 
 # --- Object definitions
@@ -108,9 +130,14 @@ class WorkerFile:
                   file.write(f"\n\nTotal Participants:\t\t{len(dataframe)}")
 
 
-            self.write_justification(total_subs=len(dataframe), price_per_sub=dataframe["Pay"][0],
-                                    percent=percent, fee_per_sub=dataframe["AmazonFee"][0],
-                                    total=total)
+            self.write_justification(total_subs=len(dataframe), 
+                                     price_per_sub=dataframe["Pay"][0],
+                                     percent=percent, 
+                                     fee_per_sub=dataframe["AmazonFee"][0],
+                                     total=total)
+
+
+            drop_a_line(self.incoming_filepath)
 
 
       def gunzip(self):
