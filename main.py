@@ -7,12 +7,9 @@ import os, pathlib
 from datetime import datetime
 from helper import *
 
-# This will change on the server
-here = os.getcwd()
-
-
 # == APP CONFIGURATION ==
 app = Flask(__name__)
+here = app.root_path
 
 app.config["UPLOAD_FOLDER"] = "files/uploads"
 app.config["JUSTIFICATIONS"] = "files/justifications"
@@ -21,7 +18,7 @@ app.config["BP_TEMPLATES"] = "files/templates"
 
 # -- Confirm output directories exist at __init__
 for path in ["uploads", "justifications"]:
-      
+
       temp = os.path.join(here, "files", path)
 
       if not os.path.exists(temp):
@@ -57,7 +54,7 @@ def bp():
 
 @app.route("/P-Card", methods=["GET", "POST"])
 def bp_pcard():
-      
+
       if request.method == "POST":
 
             from justifications.justification import PCard
@@ -72,7 +69,7 @@ def bp_pcard():
             date_c = request.form["date_charged"]
 
             # -- Instantiate PCard object
-            p_card = PCard(here=".", charge_to_card=amount, j_short=j_short,
+            p_card = PCard(here=here, charge_to_card=amount, j_short=j_short,
                           j_long=j_long, j_why=j_why, who=who, when=date_c,
                           project=source)
 
@@ -88,9 +85,9 @@ def bp_pcard():
 
 @app.route("/Reimbursements", methods=["GET", "POST"])
 def bp_reimbursements():
-      
+
       if request.method == "POST":
-            
+
             from justifications.justification import Reimbursement
 
             # -- Assign HTML form input to variables
@@ -103,7 +100,7 @@ def bp_reimbursements():
             date_c = request.form["date_charged"]
 
             # -- Instantiate Reimbursement object
-            reimburse = Reimbursement(here=".", charge_to_card=amount, j_short=j_short,
+            reimburse = Reimbursement(here=here, charge_to_card=amount, j_short=j_short,
                                       j_long=j_long, j_why=j_why, who=who, when=date_c,
                                       project=source)
 
@@ -121,7 +118,7 @@ def bp_reimbursements():
 def bp_reocurring():
 
       if request.method == "POST":
-            
+
             from justifications.justification import Reocurring
 
             # -- HTML form => variables
@@ -129,7 +126,7 @@ def bp_reocurring():
             date_of_charge = request.form["date_of_charge"]
 
             # -- Instantiate Reocurring object
-            ripper = Reocurring(here=".", charge=charge, date_of_charge=date_of_charge)
+            ripper = Reocurring(here=here, charge=charge, date_of_charge=date_of_charge)
 
             # Write to file
             ripper.write_justification()
@@ -137,7 +134,7 @@ def bp_reocurring():
             # Download zipped files
             path = os.path.join(app.config["JUSTIFICATIONS"], f"SSNL-{charge}.tar.gz")
             return download(path)
-            
+
       return render_template("reocurring.html")
 
 
@@ -164,8 +161,9 @@ def mturk():
             file.save(os.path.join(output_path, safe_name))
 
             # -- Instantiate WorkerFile object
-            worker = WorkerFile(filename=safe_name, filepath=output_path, 
-                                basepath=app.config["UPLOAD_FOLDER"], template_path=app.config["BP_TEMPLATES"])
+            worker = WorkerFile(filename=safe_name, filepath=output_path,
+                                basepath=os.path.join(here, app.config["UPLOAD_FOLDER"]),
+                                template_path=os.path.join(here, app.config["BP_TEMPLATES"]))
             worker.run()
 
             # Download zipped files
@@ -188,11 +186,11 @@ def ema():
             safe_name = secure_filename(file.filename)
 
             output_dir = datetime.now().strftime("%b_%d_%Y_%H_%M_%S")
-            output_path = os.path.join(app.config["UPLOAD_FOLDER"], output_dir)
+            output_path = os.path.join(app.root_path, app.config["UPLOAD_FOLDER"], output_dir)
 
             if not os.path.exists(output_path):
                   pathlib.Path(output_path).mkdir(exist_ok=True, parents=True)
-                   
+
             file.save(os.path.join(output_path, safe_name))
 
             # -- Instantiate EMA_Parser object
@@ -215,14 +213,14 @@ def combine_pdf():
 
             # -- Create output directories
             now = datetime.now().strftime("%b_%d_%Y_%H_%M_%S")
-            output_path = os.path.join(app.config["UPLOAD_FOLDER"], now)
+            output_path = os.path.join(app.root_path, app.config["UPLOAD_FOLDER"], now)
 
             if not os.path.exists(output_path):
                   pathlib.Path(output_path).mkdir(parents=True, exist_ok=True)
 
             # -- List to append into
             ordered_files = []
-                  
+
 
             # -- Save and aggregate PDF inputs
             for k in request.files:
