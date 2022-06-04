@@ -3,9 +3,6 @@ from flask import Flask, render_template, url_for, redirect, request
 import json, sqlite3, sys, os, pathlib, shutil
 from datetime import datetime
 
-from pexpect import ExceptionPexpect
-
-
 # --- Helpers
 def cleanup_output(path):
       """
