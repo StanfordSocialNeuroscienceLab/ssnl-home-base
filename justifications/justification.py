@@ -1,13 +1,5 @@
 #!/bin/python3
 
-"""
-About these Classes
-
-
-Ian Ferguson | Stanford University
-"""
-
-
 # --- Imports
 import docx, pathlib, os, random
 import tarfile
@@ -320,6 +312,10 @@ class Reocurring:
             elif self.charge == "Buzzsprout":
                   filename = "pcard_27.00_zaki.docx"
                   filepath = os.path.join(self.template_path, "Buzzsprout.docx")
+
+            elif self.charge == "PythonAnywhere":
+                  filename = "pcard_10.00_zaki.docx"
+                  filepath = os.path.join(self.template_path, "PythonAnywhere.docx")
 
             
             return filename, filepath
