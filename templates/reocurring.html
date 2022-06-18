@@ -11,29 +11,22 @@
             <form action="{{ url_for('bp_reocurring') }}" method="POST">
                   <h2>Reocurring Charges</h2>
 
-                  <label for="charge">
-                        Select One
-                  </label><br><br>
-                  <input type="radio" id="charge" name="charge" value="AWS_SCP">
-                  <label>AWS (Communities Project)</label><br>
-                  <input type="radio" id="charge" name="charge" value="AWS_JM">
-                  <label>AWS (Just Mercy)</label><br>
-                  <input type="radio" id="charge" name="charge" value="Mailchimp">
-                  <label>Mailchimp</label><br>
-                  <input type="radio" id="charge" name="charge" value="Forge">
-                  <label>Laravel Forge</label><br>
-                  <input type="radio" id="charge" name="charge" value="Buzzsprout">
-                  <label>Buzzsprout (Eric's Podcast)</label><br>
-
-                  <br> <br>
-
+                  <br ><br>
+                  <select name="charge" id="charge">
+                        <option value="">---- Select One ----</option>
+                        <option value="AWS_SCP">AWS (Communities Project)</option>
+                        <option value="AWS_JM">AWS (Just Mercy)</option>
+                        <option value="Mailchimp">Mailchimp</option>
+                        <option value="Forge">Laravel Forge</option>
+                        <option value="Buzzsprout">Buzzsprout (Eric's Podcast)</option>
+                        <option value="PythonAnywhere">PythonAnywhere</option>
+                  </select>
+                  <br> <br> <br>
                   <label for="date_of_charge">
                         Date of Charge
                   </label>
                   <input type="text" name="date_of_charge" id="date_of_charge">
-                  
                   <br><br><br>
-
                   <input type="submit" value="Download Justification">
             </form>
 
