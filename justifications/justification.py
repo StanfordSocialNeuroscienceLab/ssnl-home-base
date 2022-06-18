@@ -1,7 +1,7 @@
 #!/bin/python3
 
 # --- Imports
-import docx, pathlib, os, random
+import docx, pathlib, os, random, pytz
 import tarfile
 from datetime import datetime
 
@@ -127,6 +127,10 @@ projects = {
 }
 
 
+# Current time in Pacific
+now = datetime.now(pytz.timezone("US/Pacific")).strftime("%m/%d/%Y")
+
+
 # --- Have a nice day!
 def drop_a_line(path):
 
@@ -182,8 +186,6 @@ class PCard:
       def write_justification(self):
 
             template = self.load_template()
-
-            now = datetime.now().strftime("%m/%d/%Y")
 
             template.paragraphs[3].text = template.paragraphs[3].text.format(self.j_short,
                                                                              self.project["award"],
@@ -246,8 +248,6 @@ class Reimbursement:
       def write_justification(self):
 
             template = self.load_template()
-
-            now = datetime.now().strftime("%m/%d/%Y")
 
             template.paragraphs[3].text = template.paragraphs[3].text.format(self.j_short,
                                                                              self.project["award"],
@@ -331,7 +331,7 @@ class Reocurring:
 
             header = doc.sections[0].header
             head = header.paragraphs[0]
-            head.text = "\n\nCreated {}".format(datetime.today().strftime("%m/%d/%Y"))
+            head.text = "\n\nCreated {}".format(now)
 
             doc.save(os.path.join(self.output_path, filename))
 
@@ -343,15 +343,3 @@ class Reocurring:
       def gunzip(self):
             with tarfile.open(os.path.join(self.base_path, f"SSNL-{self.charge}.tar.gz"), "w:gz") as tar:
                   tar.add(self.output_path, arcname=f"SSNL-{self.charge}")
-
-
-
-class FoodOrder:
-      def __init__(self):
-            pass
-
-
-
-class LabLunch:
-      def __init__(self):
-            pass
