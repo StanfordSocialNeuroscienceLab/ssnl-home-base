@@ -317,6 +317,10 @@ class Reocurring:
                   filename = "pcard_10.00_zaki.docx"
                   filepath = os.path.join(self.template_path, "PythonAnywhere.docx")
 
+            elif self.charge == "SCP_Adobe":
+                  filename = "pcard_19.99_zaki.docx"
+                  filepath = os.path.join(self.template_path, "SCP_Adobe.docx")
+
             
             return filename, filepath
 
