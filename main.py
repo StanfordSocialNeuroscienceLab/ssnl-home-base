@@ -3,6 +3,7 @@
 # --- Imports
 from flask import Flask, render_template, send_file, request
 from werkzeug.utils import secure_filename
+from flask_httpauth import HTTPBasicAuth
 import os, pathlib
 from datetime import datetime
 from helper import *
@@ -14,6 +15,9 @@ here = app.root_path
 app.config["UPLOAD_FOLDER"] = "files/uploads"
 app.config["JUSTIFICATIONS"] = "files/justifications"
 app.config["BP_TEMPLATES"] = "files/templates"
+
+path_to_members = os.path.join(here, "files/packets/members.json")
+path_to_projects = os.path.join(here, "files/packets/projects.json")
 
 
 # -- Confirm output directories exist at __init__
@@ -36,12 +40,6 @@ def index():
                   print(e)
 
       return render_template("index.html")
-
-
-
-@app.route("/Admin", methods=["GET", "POST"])
-def admin():
-      return render_template("admin.html")
 
 
 
@@ -80,7 +78,7 @@ def bp_pcard():
             path = os.path.join(app.config["JUSTIFICATIONS"], "SSNL-Justification.tar.gz")
             return download(path)
 
-      return render_template("pcard.html")
+      return render_template("justifications/pcard.html")
 
 
 @app.route("/Reimbursements", methods=["GET", "POST"])
@@ -111,7 +109,7 @@ def bp_reimbursements():
             path = os.path.join(app.config["JUSTIFICATIONS"], "SSNL-Reimbursement.tar.gz")
             return download(path)
 
-      return render_template("reimbursement.html")
+      return render_template("justifications/reimbursement.html")
 
 
 @app.route("/Reocurring-Charges", methods=["GET", "POST"])
@@ -135,7 +133,7 @@ def bp_reocurring():
             path = os.path.join(app.config["JUSTIFICATIONS"], f"SSNL-{charge}.tar.gz")
             return download(path)
 
-      return render_template("reocurring.html")
+      return render_template("justifications/reocurring.html")
 
 
 # -- MTurk
@@ -170,7 +168,7 @@ def mturk():
             target = os.path.join(app.config["UPLOAD_FOLDER"], "SSNL-MTurk-Workerfile.tar.gz")
             return download(target)
 
-      return render_template("mturk.html")
+      return render_template("utils/mturk.html")
 
 
 # -- EMA
@@ -201,7 +199,7 @@ def ema():
             target = os.path.join(output_path, "SCP_EMA_Responses.tar.gz")
             return download(target)
 
-      return render_template("ema.html")
+      return render_template("utils/ema.html")
 
 
 @app.route("/combine_pdf", methods=["GET", "POST"])
@@ -243,7 +241,70 @@ def combine_pdf():
             ripper.write(os.path.join(output_path, "MERGED-FILES.pdf"))
             return download(os.path.join(output_path, "MERGED-FILES.pdf"))
 
-      return render_template("combine_pdf.html")
+      return render_template("utils/combine_pdf.html")
+
+
+# === Lab Manager Only ===
+auth = HTTPBasicAuth()
+foolproof_security = {
+      "user": "jamil4ever"
+}
+
+@auth.verify_password
+def verify(username, password):
+      if not (username and password):
+            return False
+      return password == "jamil4ever"
+
+
+@app.route("/lab_manager", methods=["GET", "POST"])
+def lab_manager_login():
+      
+      error = None
+
+      if request.method == "POST":
+            manager = request.form["name"]
+            password = request.form["password"]
+
+            print("\n\nUsername: {}\nPassword: {}\n\n".format(manager, password))
+
+            if verify(manager, password):
+                  return render_template("lab_manager/landing.html", manager_name=manager)
+            else:
+                  error = "Invalid password!"
+                  return render_template("lab_manager/login.html", error=error)
+
+      return render_template("lab_manager/login.html", error=error)
+
+
+@app.route("/lab_manager_landed", methods=["GET", "POST"])
+@auth.login_required
+def lab_manager_landing():
+      return render_template("lab_manager/landing.html", manager_name=None)
+
+
+@app.route("/lab_manager/view_lab_members", methods=["GET", "POST"])
+@auth.login_required
+def view_members():
+      return render_template("lab_manager/view_members.html")
+
+
+@app.route("/lab_manager/view_projects", methods=["GET", "POST"])
+@auth.login_required
+def view_projects():
+      return render_template("lab_manager/view_projects.html")
+
+
+@app.route("/lab_manager/add_lab_member", methods=["GET", "POST"])
+@auth.login_required
+def add_lab_member():
+      return render_template("lab_manager/add_member.html")
+
+
+@app.route("/lab_manager/add_project", methods=["GET", "POST"])
+@auth.login_required
+def add_project():
+      return render_template("lab_manager/add_project.html")
 
 
 @app.route("/download", methods=["GET", "POST"])
@@ -252,4 +313,5 @@ def download(filepath):
 
 
 if __name__ == "__main__":
+      print("\n=== App Running ===\n")
       app.run(debug=True)
