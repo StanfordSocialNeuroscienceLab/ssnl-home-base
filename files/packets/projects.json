@@ -1,0 +1,50 @@
+{
+      "Just Mercy": {
+            "funding-string": "1239209-100-UAQQZ (PI: Jamil Zaki, Sponsor: Good Films Impact)",
+            "award": "UAQQZ",
+            "irb-number": "IRB-36348",
+            "irb-name": "Empathy and Emotion Understanding in Social Contexts"
+      },
+      "MASC": {
+            "funding-string": "1204832-100-PAKUV (PI: Jamil Zaki, Sponsor: NIH R01)",
+            "award": "PAKUV",
+            "irb-number": "",
+            "irb-name": ""
+      },
+      "ResX": {
+            "funding-string": "1231456-1-DDLHA (PI: Jamil Zaki, Sponsor: Provost ResX Task Force)",
+            "award": "DDLHA",
+            "irb-number": "IRB-24593",
+            "irb-name": "Relationships as Psychological Protective Factors: Neural and Behavioral Markers or Prosocial Behavior Across the Lifespan or Vicarious Reward: A Neural Marker for Beneficial Social Relationships"
+      },
+      "SCP R01": {
+            "funding-string": "1254167-100-PAGYP (PI: Jamil Zaki, Sponsor: National Institute of Health)",
+            "award": "PAGYP",
+            "irb-number": "IRB-24593",
+            "irb-name": "Relationships as Psychological Protective Factors: Neural and Behavioral Markers or Prosocial Behavior Across the Lifespan or Vicarious Reward: A Neural Marker for Beneficial Social Relationships"
+      },
+      "NSF": {
+            "funding-string": "1179634-100-QAASO (PI: Jamil Zaki, Sponsor: National Science Foundation)",
+            "award": "QAASO",
+            "irb-number": "NA",
+            "irb-name": "NA"
+      },
+      "MOC": {
+            "funding-string": "1224924-1-DDLFE (PI: Jamil Zaki, Sponsor: Media and Outrach Committee)",
+            "award": "DDLFE",
+            "irb-number": "NA",
+            "irb-name": "NA"
+      },
+      "STAP": {
+            "funding-string": "{}'s STAP funds",
+            "award": "STAP",
+            "irb-number": "NA",
+            "irb-name": "NA"
+      },
+      "Dean's": {
+            "funding-string": "1145804-1-FZBRB (PI: Jamil Zaki, Sponsor: Dean's Account)",
+            "award": "FZBRB",
+            "irb-number": "IRB-25837",
+            "irb-name": "Unraveling Social Influences on Decision-Making"
+      }
+}
