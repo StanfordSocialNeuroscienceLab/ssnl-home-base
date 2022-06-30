@@ -1,0 +1,155 @@
+<html>
+      {% extends "template.html" %}
+
+      <body>
+            {% block content %}
+
+            <a href="{{ url_for('index') }}">
+                  <img src="../static/img/THE_OG.jpg" width="35%">
+            </a>
+
+            <h1>Research Assistant Application</h1>
+            
+            <form action="{{ url_for('ra_app') }}" method="POST">
+
+                  <div class="app_box">
+                        <label for="name">Name</label><br>
+                        <input type="text" id="name" name="name">
+                        <br>
+
+                        <br>
+                        <label for="email">Email</label><br>
+                        <input type="text" id="email" name="email">
+                        <br>
+
+                        <br>
+                        <label for="phone">Phone Number</label><br>
+                        <input type="text" id="phone" name="phone">
+                        <br>
+
+                        <br>
+                        <label for="year">Year in School</label><br>
+                        <input type="radio" id="frosh" value="Frosh" name="year">
+                        <label for="frosh">Frosh</label><br>
+                        <input type="radio" id="sophomore" value="Sophomore" name="year">
+                        <label for="sophomore">Sophomore</label><br>
+                        <input type="radio" id="junior" value="Junior" name="year">
+                        <label for="junior">Junior</label><br>
+                        <input type="radio" id="senior" value="Senior" name="year">
+                        <label for="senior">Senior</label><br>
+                        <input type="radio" id="other" value="Other" name="year">
+                        <label for="other">Other</label>
+                  </div>
+
+                  <div class="app_box">
+                        <label for="work_study">
+                              Please indicate if you are interested in 
+                              (and eligible for) any of the following:
+                        </label><br>
+                        <input type="checkbox" id="workStudy" value="Work Study" name="work_study">
+                        <label for="workStudy">Work Study</label><br>
+                        <input type="checkbox" id="psych195" value="Psych 195" name="work_study">
+                        <label for="psych195">Psych 195 Credit</label><br>
+
+                        <br> <br>
+
+                        <label for="hours_per_week">
+                              About how many hours a week would you like
+                              to work in the lab?
+                        </label><br>
+                        <input type="text" id="hoursPerWeek" name="hoursPerWeek">
+
+                        <br> <br>
+
+                        <label for="past_experience">
+                              Do you have any prior research experience?
+                        </label> <br>
+                        <input type="radio" id="yes" value="Yes" name="pastExperience">
+                        <label for="yes">Yes</label>
+                        <input type="radio" id="no" value="No" name="pastExperience">
+                        <label for="no">No</label><br>
+
+                        <br> <br>
+                        
+                        <label for="past_experience_description">
+                              If you checked <b>yes</b>, please describe the
+                              nature of your prior experience:
+                        </label> <br>
+                        <textarea id="past_experience_description" name="pastExperienceDescription" rows="5" cols="50"></textarea>
+
+                        <br> <br>
+
+                        <label for="programming_experience">
+                              Please describe any progamming experience,
+                              if applicable:
+                        </label> <br>
+                        <textarea id="programming_experience" name="programmingExperience" rows="5" cols="50"></textarea>
+
+                        <br> <br>
+
+                        <label for="relevant_experience">
+                              Please list any other relevant experience:
+                        </label> <br>
+                        <textarea id="relevant_experience" name="relevantExperience" rows="5" cols="50"></textarea>
+
+                  </div>
+
+                  <div class="app_box">
+
+                        <label for="why_apply">
+                              Why are you applying for this position?
+                              Why are you interested in being an RA for the SSNL?
+                        </label>
+                        <textarea id="why_apply" name="why_apply" rows="5" cols="50"></textarea>
+
+                        <br> <br>
+
+                        <label for="whats_next">
+                              If you are an undergraduate, what are you planning
+                              on doing after you graduate? <br>If you have already graduated,
+                              what are you currently working towards?
+                        </label>
+                        <textarea id="whats_next" name="whats_next" rows="5" cols="50"></textarea>
+
+                        <br> <br>
+
+                        <label for="work_with_who">
+                              Is there a particular project you are interested in 
+                              working on or a person you would like to work with?
+                        </label>
+                        <textarea id="work_with_who" name="work_with_who" rows="5" cols="50"></textarea>
+
+                        <br> <br>
+
+                        <label for="interested_topics">
+                              Please indicate which topics / projects you are interested in:
+                        </label><br>
+                        <input type="checkbox" id="interested_topics" value="Empathy" name="interested_topics">
+                        <label for="empathy">Empathy and being Empathized With</label> <br>
+                        <input type="checkbox" id="interested_topics" value="Persuasion and Attitude Change" name="interested_topics">
+                        <label for="persuasion">Persuasion, Attitude Change, Message Propagation</label> <br>
+                        <input type="checkbox" id="interested_topics" value="Emotion Regulation and Self-Control" name="interested_topics">
+                        <label for="emo_regulation">Emotion Regulation and Self-Control</label> <br>
+                        <input type="checkbox" id="interested_topics" value="Social Support" name="interested_topics">
+                        <label for="social_support">Giving and Receiving Social Support</label> <br>
+                        <input type="checkbox" id="interested_topics" value="Altruism and Prosocial Behavior" name="interested_topics">
+                        <label for="altruism">Altruism and Prosocial Behavior</label> <br>
+                        <input type="checkbox" id="interested_topics" value="Biology of Social Stress" name="interested_topics">
+                        <label for="biology_stress">Biology of Social Stress</label> <br>
+                        <input type="checkbox" id="interested_topics" value="Automaticity" name="interested_topics">
+                        <label for="automaticity">Automaticity, Controlled Processing, and Consciousness</label> <br>
+                        <input type="checkbox" id="interested_topics" value="Social Learning and Decision Making" name="interested_topics">
+                        <label for="social_learning">Social Learning and Decision Making</label> <br>
+                        <input type="checkbox" id="interested_topics" value="Political Empathy" name="interested_topics">
+                        <label for="political_empathy">Political Empathy</label> <br>
+                        <input type="checkbox" id="interested_topics" value="Morality" name="interested_topics">
+                        <label for="morality">Morality</label>
+                        
+                  </div>
+
+                  <input type="submit" value="Submit Application">
+
+            </form>
+            {% endblock %}
+      </body>
+</html>
