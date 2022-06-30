@@ -286,13 +286,23 @@ def lab_manager_landing():
 @app.route("/lab_manager/view_lab_members", methods=["GET", "POST"])
 @auth.login_required
 def view_members():
-      return render_template("lab_manager/view_members.html")
+
+      from utils.lab_manager_utils import build_members_df
+
+      dataframe = build_members_df()
+
+      return render_template("lab_manager/view_members.html", data=dataframe.to_html())
 
 
 @app.route("/lab_manager/view_projects", methods=["GET", "POST"])
 @auth.login_required
 def view_projects():
-      return render_template("lab_manager/view_projects.html")
+
+      from utils.lab_manager_utils import build_projects_df
+
+      dataframe = build_projects_df()
+
+      return render_template("lab_manager/view_projects.html", data=dataframe.to_html())
 
 
 @app.route("/lab_manager/add_lab_member", methods=["GET", "POST"])
@@ -307,6 +317,7 @@ def add_project():
       return render_template("lab_manager/add_project.html")
 
 
+# === Utilities ===
 @app.route("/download", methods=["GET", "POST"])
 def download(filepath):
       return send_file(filepath, as_attachment=True)
