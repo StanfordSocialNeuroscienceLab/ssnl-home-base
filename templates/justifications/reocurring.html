@@ -1,0 +1,36 @@
+<html>
+      {% extends "template.html" %}
+
+      <body>
+            {% block content %}
+
+            <a href="{{ url_for('index') }}">
+                  <img src="static/img/THE_OG.jpg" class="the_og">
+            </a>
+
+            <form action="{{ url_for('bp_reocurring') }}" method="POST">
+                  <h2>Reocurring Charges</h2>
+
+                  <br ><br>
+                  <select name="charge" id="charge">
+                        <option value="">---- Select One ----</option>
+                        <option value="AWS_SCP">AWS (Communities Project)</option>
+                        <option value="AWS_JM">AWS (Just Mercy)</option>
+                        <option value="Mailchimp">Mailchimp</option>
+                        <option value="Forge">Laravel Forge</option>
+                        <option value="Buzzsprout">Buzzsprout (Eric's Podcast)</option>
+                        <option value="PythonAnywhere">PythonAnywhere</option>
+                        <option value="SCP_Adobe">Adobe Creative Cloud (SCP)</option>
+                  </select>
+                  <br> <br> <br>
+                  <label for="date_of_charge">
+                        Date of Charge
+                  </label>
+                  <input type="text" name="date_of_charge" id="date_of_charge">
+                  <br><br><br>
+                  <input type="submit" value="Download Justification">
+            </form>
+
+            {% endblock %}
+      </body>
+</html>
