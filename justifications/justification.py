@@ -1,131 +1,17 @@
 #!/bin/python3
 
 # --- Imports
-import docx, pathlib, os, random, pytz
+import docx, pathlib, os, random, pytz, json
 import tarfile
 from datetime import datetime
 
+from ..main import path_to_members, path_to_projects
 
-# --- Packets
-members = {"Jamil": {
-            "full-name": "Jamil Zaki",
-            "title": "Jamil Zaki, PI for the Social Neuroscience Lab in the Psychology Department",
-            "employee-number": "005778469"
-            },
-            "Rachel Calcott": {
-                  "full-name": "Rachel Calcott",
-                  "title": "Rachel Calcott, Lab Manager in the Social Neuroscience Lab (PI: Jamil Zaki) in the Psychology Department",
-                  "employee-number": "NONE"
-            },
-            "Ian Ferguson": {
-                  "full-name": "Ian Ferguson",
-                  "title": "Ian Ferguson, Lab Manager in the Social Neuroscience Lab (PI: Jamil Zaki) in the Psychology Department",
-                  "employee-number": "50017234"
-            },
-            "Marianne Reddan": {
-                  "full-name": "Marianne Reddan",
-                  "title": "Marianne Reddan, postdoc in the Social Neuroscience Lab (PI: Jamil Zaki) in the Psychology Department",
-                  "employee-number": "06406897"
-            },
-            "Andrea Courtney": {
-                  "full-name": "Andrea Courtney",
-                  "title": "Andrea Courtney, postdoc in the Social Neuroscience Lab (PI: Jamil Zaki) in the Psychology Department",
-                  "employee-number": "06324767"
-            },
-            "Rui Pei": {
-                  "full-name": "Rui Pei",
-                  "title": "Rui Pei, postdoc in the Social Neuroscience Lab (PI: Jamil Zaki) in the Psychology Department",
-                  "employee-number": "06642333"
-            },
-            "Luiza Santos": {
-                  "full-name": "Luiza Santos",
-                  "title": "Luiza Santos, PhD student in the Social Neuroscience Lab (PI: Jamil Zaki) in the Psychology Department",
-                  "employee-number": "NONE"
-            },
-            "Eric Neumann": {
-                  "full-name": "Eric Neumann",
-                  "title": "Eric Neumann, PhD student in the Social Neuroscience Lab (PI: Jamil Zaki) in the Psychology Department",
-                  "employee-number": "NONE"
-            },
-            "Dean Baltiansky": {
-                  "full-name": "Dean Baltiansky",
-                  "title": "Dean Baltiansky, Research Assistant in the Social Neuroscience Lab (PI: Jamil Zaki) in the Psychology Department",
-                  "employee-number": "050014827"
-            },
-            "Wicia Fang": {
-                  "full-name": "Wicia Fang",
-                  "title": "Wicia Fang, Research Assistant in the Social Neuroscience Lab (PI: Jamil Zaki) in the Psychology Department",
-                  "employee-number": "06058964"
-            },
-            "Sydney Garcia": {
-                  "full-name": "Sydney Garcia",
-                  "title": "Sydney Garcia, Research Assistant in the Social Neuroscience Lab (PI: Jamil Zaki) in the Psychology Department",
-                  "employee-number": "06124957"
-            },
-            "Samantha Grayson": {
-                  "full-name": "Samantha Grayson",
-                  "title": "Samantha Grayson, Research Assistant in the Social Neuroscience Lab (PI: Jamil Zaki) in the Psychology Department",
-                  "employee-number": "50018861"
-            },
-            "Daniel Ogunbamowo": {
-                  "full-name": "Daniel Ogunbamowo",
-                  "title": "Daniel Ogunbamowo, Research Assistant in the Social Neuroscience Lab (PI: Jamil Zaki) in the Psychology Department",
-                  "employee-number": "50018870"
-            }
-      }
+with open(path_to_members) as incoming:
+      members = json.load(incoming)
 
-
-projects = {
-      "Just Mercy": {
-            "funding-string": "1239209-100-UAQQZ (PI: Jamil Zaki, Sponsor: Good Films Impact)",
-            "award": "UAQQZ",
-            "irb-number": "IRB-36348",
-            "irb-name": "Empathy and Emotion Understanding in Social Contexts"
-      },
-      "MASC": {
-            "funding-string": "1204832-100-PAKUV (PI: Jamil Zaki, Sponsor: NIH R01)",
-            "award": "PAKUV",
-            "irb-number": "",
-            "irb-name": ""
-      },
-      "ResX": {
-            "funding-string": "1231456-1-DDLHA (PI: Jamil Zaki, Sponsor: Provost ResX Task Force)",
-            "award": "DDLHA",
-            "irb-number": "IRB-24593",
-            "irb-name": "Relationships as Psychological Protective Factors: Neural and Behavioral Markers or Prosocial Behavior Across the Lifespan or Vicarious Reward: A Neural Marker for Beneficial Social Relationships"
-      },
-      "SCP R01": {
-            "funding-string": "1254167-100-PAGYP (PI: Jamil Zaki, Sponsor: National Institute of Health)",
-            "award": "PAGYP",
-            "irb-number": "IRB-24593",
-            "irb-name": "Relationships as Psychological Protective Factors: Neural and Behavioral Markers or Prosocial Behavior Across the Lifespan or Vicarious Reward: A Neural Marker for Beneficial Social Relationships"
-      },
-      "NSF": {
-            "funding-string": "1179634-100-QAASO (PI: Jamil Zaki, Sponsor: National Science Foundation)",
-            "award": "QAASO",
-            "irb-number": "NA",
-            "irb-name": "NA"
-      },
-      "MOC": {
-            "funding-string": "1224924-1-DDLFE (PI: Jamil Zaki, Sponsor: Media and Outrach Committee)",
-            "award": "DDLFE",
-            "irb-number": "NA",
-            "irb-name": "NA"
-      },
-      "STAP": {
-            "funding-string": "{}'s STAP funds",
-            "award": "STAP",
-            "irb-number": "NA",
-            "irb-name": "NA"
-      },
-      "Dean's": {
-            "funding-string": "1145804-1-FZBRB (PI: Jamil Zaki, Sponsor: Dean's Account)",
-            "award": "FZBRB",
-            "irb-number": "IRB-25837",
-            "irb-name": "Unraveling Social Influences on Decision-Making"
-      }
-}
-
+with open(path_to_projects) as incoming:
+      projects = json.load(incoming)
 
 # Current time in Pacific
 now = datetime.now(pytz.timezone("US/Pacific")).strftime("%m/%d/%Y")
@@ -207,12 +93,10 @@ class PCard:
             self.gunzip()
 
 
-
       def gunzip(self):
 
             with tarfile.open(os.path.join(self.base_path, "SSNL-Justification.tar.gz"), "w:gz") as tar:
                   tar.add(self.output_path, arcname=f"SSNL-Justification-{datetime.now().strftime('%m-%d-%Y')}")
-
 
 
 
@@ -239,10 +123,8 @@ class Reimbursement:
             self.project = projects[project]
 
 
-
       def load_template(self):
             return docx.Document(os.path.join(self.input_path, "Reimbursement.docx"))
-
 
 
       def write_justification(self):
@@ -268,7 +150,6 @@ class Reimbursement:
             drop_a_line(self.output_path)
 
             self.gunzip()
-
 
 
       def gunzip(self):
@@ -323,7 +204,6 @@ class Reocurring:
 
             
             return filename, filepath
-
 
 
       def write_justification(self):
