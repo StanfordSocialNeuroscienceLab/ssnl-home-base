@@ -5,7 +5,7 @@ import docx, pathlib, os, random, pytz, json
 import tarfile
 from datetime import datetime
 
-from ..main import path_to_members, path_to_projects
+from main import path_to_members, path_to_projects
 
 with open(path_to_members) as incoming:
       members = json.load(incoming)
