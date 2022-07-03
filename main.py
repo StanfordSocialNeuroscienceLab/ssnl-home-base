@@ -289,9 +289,9 @@ def view_members():
 
       from utils.lab_manager_utils import build_members_df
 
-      dataframe = build_members_df()
+      dataframe, test = build_members_df()
 
-      return render_template("lab_manager/view_members.html", data=dataframe.to_html())
+      return render_template("lab_manager/view_members.html", data=test, data2=dataframe.to_html())
 
 
 @app.route("/lab_manager/view_projects", methods=["GET", "POST"])
@@ -300,9 +300,21 @@ def view_projects():
 
       from utils.lab_manager_utils import build_projects_df
 
-      dataframe = build_projects_df()
+      dataframe, projects = build_projects_df()
 
-      return render_template("lab_manager/view_projects.html", data=dataframe.to_html())
+      return render_template("lab_manager/view_projects.html", data=projects)
+
+
+@app.route("/lab_manager/update_members", methods=["GET", "POST"])
+@auth.login_required
+def update_members():
+      return render_template("lab_manager/update_members.html")
+
+
+@app.route("/lab_manager/update_projects", methods=["GET", "POST"])
+@auth.login_required
+def update_projects():
+      return render_template("lab_manager/update_projects.html")
 
 
 @app.route("/lab_manager/add_lab_member", methods=["GET", "POST"])
