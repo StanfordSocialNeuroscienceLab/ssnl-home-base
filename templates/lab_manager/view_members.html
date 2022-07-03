@@ -15,8 +15,25 @@
 
             <h2>SSNL Lab Members</h2>
 
-            <div style="padding: 50px 0px; margin-left: auto; margin-right: auto; width: 85%;">
-                  {{ data | safe }}
+            <div style="padding: 20px;">
+                  <table id="member_data" class="table table-striped">
+                        <thead>
+                              <tr>
+                                    <th>Name</th>
+                                    <th>Employee #</th>
+                                    <th>Title</th>
+                              </tr>
+                        </thead>
+                        <tbody>
+                              {% for member in data %}
+                                    <tr>
+                                          <td>{{ member.full_name }}</td>
+                                          <td>{{ member.employee_number }}</td>
+                                          <td>{{ member.title }}</td>
+                                    </tr>
+                              {% endfor %}
+                        </tbody>
+                  </table>
             </div>
 
             {% endblock %}
