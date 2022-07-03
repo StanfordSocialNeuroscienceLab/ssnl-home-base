@@ -17,19 +17,21 @@ def build_members_df():
             members = json.load(incoming)
 
       output = pd.DataFrame()
+      members_ = []
 
       for lab_member in list(members.keys()):
             temp_data = members[lab_member]
 
             temp_df = pd.DataFrame({
-                  "Name": temp_data["full-name"],
-                  "Employee #": temp_data["employee-number"],
-                  "Title": temp_data["title"]
+                  "full_name": temp_data["full_name"],
+                  "employee_number": temp_data["employee_number"],
+                  "title": temp_data["title"]
             }, index=[0])
 
             output = output.append(temp_df, ignore_index=True)
+            members_.append(temp_data)
 
-      return output.reset_index(drop=True)
+      return output.reset_index(drop=True), members_
 
 
 def build_projects_df():
@@ -42,6 +44,7 @@ def build_projects_df():
             projects = json.load(incoming)
 
       output = pd.DataFrame()
+      projects_ = []
 
       for key in list(projects.keys()):
 
@@ -57,13 +60,16 @@ def build_projects_df():
             except:
                   sponsor = ""
 
-            temp_df = pd.DataFrame({
-                  "Key": key,
-                  "PTA": pta,
-                  "Sponsor": sponsor,
-                  "IRB Number": temp_data["irb-number"]
-            }, index=[0])
+            clean_dictionary = {
+                  "key": key,
+                  "pta": pta,
+                  "sponsor": sponsor.replace(")", ""),
+                  "irb_number": temp_data["irb-number"]
+            }
+
+            temp_df = pd.DataFrame(clean_dictionary, index=[0])
 
             output = output.append(temp_df, ignore_index=True)
+            projects_.append(clean_dictionary)
 
-      return output.reset_index(drop=True)
+      return output.reset_index(drop=True), projects_
