@@ -15,8 +15,27 @@
 
             <h2>SSNL Projects</h2>
 
-            <div style="padding: 50px 0px; margin-left: auto; margin-right: auto; width: 85%;">
-                  {{ data | safe }}
+            <div style="padding: 20px;">
+                  <table id="project_data" class="table table-striped">
+                        <thead>
+                              <tr>
+                                    <th>Key</th>
+                                    <th>PTA</th>
+                                    <th>Sponsor</th>
+                                    <th>IRB Number</th>
+                              </tr>
+                        </thead>
+                        <tbody>
+                              {% for project in data %}
+                                    <tr>
+                                          <td>{{ project.key }}</td>
+                                          <td>{{ project.pta }}</td>
+                                          <td>{{ project.sponsor }}</td>
+                                          <td>{{ project.irb_number }}</td>
+                                    </tr>
+                              {% endfor %}
+                        </tbody>
+                  </table>
             </div>
 
             {% endblock %}
