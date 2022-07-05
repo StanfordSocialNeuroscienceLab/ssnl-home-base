@@ -1,67 +1,42 @@
 {
       "Jamil": {
-            "full-name": "Jamil Zaki",
-            "title": "Jamil Zaki, PI for the Social Neuroscience Lab in the Psychology Department",
-            "employee-number": "005778469"
+            "full_name": "Jamil Zaki",
+            "title": "Principal Investigator",
+            "employee_number": "005778469"
       },
       "Rachel Calcott": {
-            "full-name": "Rachel Calcott",
-            "title": "Rachel Calcott, Lab Manager in the Social Neuroscience Lab (PI: Jamil Zaki) in the Psychology Department",
-            "employee-number": "NONE"
+            "full_name": "Rachel Calcott",
+            "title": "Lab Manager",
+            "employee_number": "NONE"
       },
       "Ian Ferguson": {
-            "full-name": "Ian Ferguson",
-            "title": "Ian Ferguson, Lab Manager in the Social Neuroscience Lab (PI: Jamil Zaki) in the Psychology Department",
-            "employee-number": "50017234"
-      },
-      "Marianne Reddan": {
-            "full-name": "Marianne Reddan",
-            "title": "Marianne Reddan, postdoc in the Social Neuroscience Lab (PI: Jamil Zaki) in the Psychology Department",
-            "employee-number": "06406897"
-      },
-      "Andrea Courtney": {
-            "full-name": "Andrea Courtney",
-            "title": "Andrea Courtney, postdoc in the Social Neuroscience Lab (PI: Jamil Zaki) in the Psychology Department",
-            "employee-number": "06324767"
+            "full_name": "Ian Ferguson",
+            "title": "Lab Manager",
+            "employee_number": "50017234"
       },
       "Rui Pei": {
-            "full-name": "Rui Pei",
-            "title": "Rui Pei, postdoc in the Social Neuroscience Lab (PI: Jamil Zaki) in the Psychology Department",
-            "employee-number": "06642333"
+            "full_name": "Rui Pei",
+            "title": "Postdoc",
+            "employee_number": "06642333"
       },
       "Luiza Santos": {
-            "full-name": "Luiza Santos",
-            "title": "Luiza Santos, PhD student in the Social Neuroscience Lab (PI: Jamil Zaki) in the Psychology Department",
-            "employee-number": "NONE"
+            "full_name": "Luiza Santos",
+            "title": "Graduate Student",
+            "employee_number": "NONE"
       },
       "Eric Neumann": {
-            "full-name": "Eric Neumann",
-            "title": "Eric Neumann, PhD student in the Social Neuroscience Lab (PI: Jamil Zaki) in the Psychology Department",
-            "employee-number": "NONE"
-      },
-      "Dean Baltiansky": {
-            "full-name": "Dean Baltiansky",
-            "title": "Dean Baltiansky, Research Assistant in the Social Neuroscience Lab (PI: Jamil Zaki) in the Psychology Department",
-            "employee-number": "050014827"
-      },
-      "Wicia Fang": {
-            "full-name": "Wicia Fang",
-            "title": "Wicia Fang, Research Assistant in the Social Neuroscience Lab (PI: Jamil Zaki) in the Psychology Department",
-            "employee-number": "06058964"
-      },
-      "Sydney Garcia": {
-            "full-name": "Sydney Garcia",
-            "title": "Sydney Garcia, Research Assistant in the Social Neuroscience Lab (PI: Jamil Zaki) in the Psychology Department",
-            "employee-number": "06124957"
+            "full_name": "Eric Neumann",
+            "title": "Graduate Student",
+            "employee_number": "NONE"
       },
       "Samantha Grayson": {
-            "full-name": "Samantha Grayson",
-            "title": "Samantha Grayson, Research Assistant in the Social Neuroscience Lab (PI: Jamil Zaki) in the Psychology Department",
-            "employee-number": "50018861"
+            "full_name": "Samantha Grayson",
+            "title": "Research Assistant",
+            "employee_number": "50018861"
       },
       "Daniel Ogunbamowo": {
-            "full-name": "Daniel Ogunbamowo",
-            "title": "Daniel Ogunbamowo, Research Assistant in the Social Neuroscience Lab (PI: Jamil Zaki) in the Psychology Department",
-            "employee-number": "50018870"
+            "full_name": "Daniel Ogunbamowo",
+            "title": "Research Assistant",
+            "employee_number": "50018870"
       }
 }

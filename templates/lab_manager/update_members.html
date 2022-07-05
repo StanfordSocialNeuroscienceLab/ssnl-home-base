@@ -13,19 +13,21 @@
                   <img src="../../static/img/THE_OG.jpg" class="the_og">
             </a>
 
-            <form action="{{ url_for('add_lab_member') }}" method="POST">
-                  <label for="member_to_add">
-                        Lab Member Name
+            <h2>Update Existing Project</h2>
+
+            <form action="{{ url_for('update_members') }}" method="POST">
+                  <label for="member_to_update">
+                        Lab Member to Update
                   </label><br>
-                  <input type="text" id="member_to_add" name="member_to_add">
+                  <input type="text" id="member_to_update" name="member_to_update">
                   <br><br><br>
                   <label for="employee_number">
-                        Employee Number
+                        New Employee Number (leave blank if NA)
                   </label><br>
                   <input type="text" id="employee_number" name="employee_number" value="">
                   <br><br><br>
                   <label for="title">
-                        Title (RA, Grad Student, Postdoc, etc.)
+                        New Title (leave blank if NA)
                   </label><br>
                   <input type="text" id="title" name="title" value="">
                   <br><br><br>

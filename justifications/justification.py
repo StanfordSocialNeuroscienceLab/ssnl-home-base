@@ -75,6 +75,7 @@ class PCard:
 
             template.paragraphs[3].text = template.paragraphs[3].text.format(self.j_short,
                                                                              self.project["award"],
+                                                                             self.who["full_name"],
                                                                              self.who["title"],
                                                                              self.j_long,
                                                                              self.when,
@@ -133,6 +134,7 @@ class Reimbursement:
 
             template.paragraphs[3].text = template.paragraphs[3].text.format(self.j_short,
                                                                              self.project["award"],
+                                                                             self.who["full_name"],
                                                                              self.who["title"],
                                                                              self.who["employee-number"],
                                                                              self.j_long,

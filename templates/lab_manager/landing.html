@@ -7,13 +7,30 @@
             {% block content %}
 
                   {% if manager_name %}
-                        <div style="padding: 3% 0%;">
+                        <div style="padding: 2% 0%;">
                               <h1>
+                                    <b>
+                                          Hi {{ manager_name }}!
+                                    </b>
+                              </h1>
+                        </div>
+                  {% else %}
+                        <div style="padding: 2% 0%;">
+                              <h1>
+                                    <b>
+                                          Lab Manager Utilities
+                                    </b>
+                              </h1>
+                        </div>
+                  {% endif %}
+
+                  {% if special_text %}
+                        <div>
+                              <p>
                                     <i>
-                                          <mark>
-                                                Hi {{ manager_name }}!
-                                          </mark>
-                                    </i></h1>
+                                          {{ special_text }}
+                                    </i>
+                              </p>
                         </div>
                   {% endif %}
 
@@ -30,6 +47,18 @@
                         <h3>View Projects</h3>
                   </a>
             </div>
+            <br> <br>
+            <div style="padding: 0.5%">
+                  <a href="{{ url_for('update_members') }}">
+                        <h3>Update Existing Lab Member</h3>
+                  </a>
+            </div>
+            <div style="padding: 0.5%">
+                  <a href="{{ url_for('update_projects') }}">
+                        <h3>Update Existing Lab Project</h3>
+                  </a>
+            </div>
+            <br> <br>
             <div style="padding: 0.5%;">
                   <a href="{{ url_for('add_lab_member') }}">
                         <h3>Add Lab Member</h3>

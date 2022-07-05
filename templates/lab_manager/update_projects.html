@@ -13,24 +13,26 @@
                   <img src="../../static/img/THE_OG.jpg" class="the_og">
             </a>
 
-            <form action="{{ url_for('add_project') }}" method="POST">
-                  <label for="project_to_add">
-                        Project Name
+            <h2>Update Existing Project</h2>
+
+            <form action="{{ url_for('update_projects') }}" method="POST">
+                  <label for="project_to_update">
+                        Project to Update
                   </label><br>
-                  <input type="text" id="project_to_add" name="project_to_add">
+                  <input type="text" id="project_to_update" name="project_to_update">
                   <br><br><br>
                   <label for="pta">
-                        PTA (Project-Task-Award)
+                        New PTA (leave blank if NA)
                   </label><br>
                   <input type="text" id="pta" name="pta" value="">
                   <br><br><br>
                   <label for="sponsor">
-                        Sponsor (e.g., National Institute of Health)
+                        New Sponsor (leave blank if NA)
                   </label><br>
                   <input type="text" id="sponsor" name="sponsor" value="">
                   <br><br><br>
                   <label for="irb_number">
-                        IRB Number (if applicable)
+                        New IRB Number (leave blank if NA)
                   </label><br>
                   <input type="text" id="irb_number" name="irb_number" value="">
                   <br><br><br>

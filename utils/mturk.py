@@ -65,16 +65,19 @@ class WorkerFile:
 
             today = datetime.now().strftime("%m/%d/%Y")
 
+            # Allow end user to feed variable-case data
+            dataframe.columns = [x.lower() for x in dataframe.columns]
+
 
             if "fee" in dataframe.columns:
-                  dataframe = dataframe.loc[:, ["WorkerId", "payment", "fee"]]
+                  dataframe = dataframe.loc[:, ["workerid", "payment", "fee"]]
             else:
-                  dataframe = dataframe.loc[:, ["WorkerId", "payment"]]
+                  dataframe = dataframe.loc[:, ["workerid", "payment"]]
                   dataframe["fee"] = [0.] * len(dataframe)
 
             dataframe["Date"] = [today] * len(dataframe)
 
-            dataframe.rename(columns={"WorkerId": "MTurk ID", 
+            dataframe.rename(columns={"workerid": "MTurk ID", 
                                       "payment": "Pay",
                                       "fee": "AmazonFee"}, inplace=True)
 
@@ -99,7 +102,6 @@ class WorkerFile:
                                                (dataframe["AmazonFee"] == fee)].reset_index(drop=True)
 
                               file.write(f"* Pay ${pay}\tAmazon fee ${fee}:\t\t{len(temp)}\n")
-
 
 
       def write_workerfile(self):
@@ -129,20 +131,20 @@ class WorkerFile:
 
                   file.write(f"\n\nTotal Participants:\t\t{len(dataframe)}")
 
-
             self.write_justification(total_subs=len(dataframe), 
                                      price_per_sub=dataframe["Pay"][0],
                                      percent=percent, 
                                      fee_per_sub=dataframe["AmazonFee"][0],
                                      total=total)
 
-
             drop_a_line(self.incoming_filepath)
+
 
 
       def gunzip(self):
             with tarfile.open(os.path.join(self.base_path, "SSNL-MTurk-Workerfile.tar.gz"), "w:gz") as tar:
                   tar.add(self.incoming_filepath, arcname="SSNL-MTurk-Workerfile")
+
 
 
       def write_justification(self, total_subs, price_per_sub, percent, fee_per_sub, total):
@@ -163,6 +165,7 @@ class WorkerFile:
             head.text = f"\n\nCreated {today}"
 
             doc.save(os.path.join(self.incoming_filepath, f"mturk_{total}_zaki.docx"))
+
 
 
       def run(self):
