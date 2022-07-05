@@ -308,24 +308,110 @@ def view_projects():
 @app.route("/lab_manager/update_members", methods=["GET", "POST"])
 @auth.login_required
 def update_members():
+
+      if request.method == "POST":
+
+            from utils.lab_manager_utils import MembersCursor
+
+            # -- Form input
+            member = request.form["member_to_update"]
+            employee_number = request.form["employee_number"]
+            title = request.form["title"]
+
+            cursor = MembersCursor(path_to_packets=path_to_members,
+                                   key=member,
+                                   employee_number=employee_number,
+                                   title=title)
+
+            cursor.run()
+
+            comment = f"{member} was updated successfuly!"
+
+            return redirect(url_for("lab_manager_landing", special_text=comment))
+
       return render_template("lab_manager/update_members.html")
 
 
 @app.route("/lab_manager/update_projects", methods=["GET", "POST"])
 @auth.login_required
 def update_projects():
+
+      if request.method == "POST":
+
+            from utils.lab_manager_utils import ProjectsCursor
+
+            project = request.form["project_to_update"]
+            pta = request.form["pta"]
+            sponsor = request.form["sponsor"]
+            irb_number = request.form["irb_number"]
+
+            cursor = ProjectsCursor(path_to_packets=path_to_projects,
+                                    key=project,
+                                    pta=pta,
+                                    sponsor=sponsor,
+                                    irb_number=irb_number)
+
+            cursor.run()
+
+            comment = f"{project} was updated successfully!"
+
+            return redirect(url_for("lab_manager_landing", special_text=comment))
+
       return render_template("lab_manager/update_projects.html")
 
 
 @app.route("/lab_manager/add_lab_member", methods=["GET", "POST"])
 @auth.login_required
 def add_lab_member():
+
+      if request.method == "POST":
+
+            from utils.lab_manager_utils import MembersCursor
+
+            # -- Form input
+            member = request.form["member_to_add"]
+            employee_number = request.form["employee_number"]
+            title = request.form["title"]
+
+            cursor = MembersCursor(path_to_packets=path_to_members,
+                                   key=member,
+                                   employee_number=employee_number,
+                                   title=title)
+
+            cursor.run()
+
+            comment = f"{member} was added successfuly!"
+
+            return redirect(url_for("lab_manager_landing", special_text=comment))
+
       return render_template("lab_manager/add_member.html")
 
 
 @app.route("/lab_manager/add_project", methods=["GET", "POST"])
 @auth.login_required
 def add_project():
+
+      if request.method == "POST":
+
+            from utils.lab_manager_utils import ProjectsCursor
+
+            project = request.form["project_to_add"]
+            pta = request.form["pta"]
+            sponsor = request.form["sponsor"]
+            irb_number = request.form["irb_number"]
+
+            cursor = ProjectsCursor(path_to_packets=path_to_projects,
+                                    key=project,
+                                    pta=pta,
+                                    sponsor=sponsor,
+                                    irb_number=irb_number)
+
+            cursor.run()
+
+            comment = f"{project} was added successfully!"
+
+            return redirect(url_for("lab_manager_landing", special_text=comment))
+
       return render_template("lab_manager/add_project.html")
 
 
