@@ -24,6 +24,16 @@
                         </div>
                   {% endif %}
 
+                  {% if special_text %}
+                        <div>
+                              <p>
+                                    <i>
+                                          {{ special_text }}
+                                    </i>
+                              </p>
+                        </div>
+                  {% endif %}
+
             <div style="padding: 1%;">
                   <h2>Admin Options Below</h2>
             </div>
@@ -37,6 +47,7 @@
                         <h3>View Projects</h3>
                   </a>
             </div>
+            <br> <br>
             <div style="padding: 0.5%">
                   <a href="{{ url_for('update_members') }}">
                         <h3>Update Existing Lab Member</h3>
@@ -47,6 +58,7 @@
                         <h3>Update Existing Lab Project</h3>
                   </a>
             </div>
+            <br> <br>
             <div style="padding: 0.5%;">
                   <a href="{{ url_for('add_lab_member') }}">
                         <h3>Add Lab Member</h3>
