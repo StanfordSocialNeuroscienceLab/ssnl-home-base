@@ -4,7 +4,7 @@
 from flask import Flask, render_template, send_file, request
 from werkzeug.utils import secure_filename
 from flask_httpauth import HTTPBasicAuth
-import os, pathlib
+import os, pathlib, pytz
 from datetime import datetime
 from helper import *
 
@@ -18,6 +18,8 @@ app.config["BP_TEMPLATES"] = "files/templates"
 
 path_to_members = os.path.join(here, "files/packets/members.json")
 path_to_projects = os.path.join(here, "files/packets/projects.json")
+
+right_now = datetime.now(pytz.timezone("US/Pacific")).strftime("%m_%d_%Y")
 
 
 # -- Confirm output directories exist at __init__
@@ -75,7 +77,8 @@ def bp_pcard():
             p_card.write_justification()
 
             # Download zipped files
-            path = os.path.join(app.config["JUSTIFICATIONS"], "SSNL-Justification.zip")
+            path = os.path.join(app.config["JUSTIFICATIONS"], 
+                                f"SSNL-Justification-{right_now}-{amount}.zip")
             
             return download(path)
 
@@ -107,7 +110,8 @@ def bp_reimbursements():
             reimburse.write_justification()
 
             # Download zipped files
-            path = os.path.join(app.config["JUSTIFICATIONS"], "SSNL-Reimbursement.zip")
+            path = os.path.join(app.config["JUSTIFICATIONS"], 
+                                f"SSNL-Reimbursement-{right_now}-{amount}.zip")
             
             return download(path)
 
@@ -132,7 +136,8 @@ def bp_reocurring():
             ripper.write_justification()
 
             # Download zipped files
-            path = os.path.join(app.config["JUSTIFICATIONS"], f"SSNL-{charge}.zip")
+            path = os.path.join(app.config["JUSTIFICATIONS"], 
+                                f"SSNL-{charge}-{right_now}.zip")
             
             return download(path)
 
@@ -168,7 +173,8 @@ def mturk():
             worker.run()
 
             # Download zipped files
-            target = os.path.join(app.config["UPLOAD_FOLDER"], "SSNL-MTurk-Workerfile.zip")
+            target = os.path.join(app.config["UPLOAD_FOLDER"], 
+                                  f"SSNL-MTurk-Workerfile-{right_now}.zip")
             
             return download(target)
 
@@ -200,7 +206,7 @@ def ema():
             parser.big_dogs_only()
 
             # -- Download resulting files
-            target = os.path.join(output_path, "SCP_EMA_Responses.zip")
+            target = os.path.join(output_path, f"SCP_EMA_Responses-{right_now}.zip")
             
             return download(target)
 
