@@ -2,7 +2,7 @@
 
 # --- Imports
 import docx, pathlib, os, random, pytz, json
-import tarfile
+import tarfile, zipfile, shutil
 from datetime import datetime
 
 from main import path_to_members, path_to_projects
@@ -96,8 +96,15 @@ class PCard:
 
       def gunzip(self):
 
-            with tarfile.open(os.path.join(self.base_path, "SSNL-Justification.tar.gz"), "w:gz") as tar:
-                  tar.add(self.output_path, arcname=f"SSNL-Justification-{datetime.now().strftime('%m-%d-%Y')}")
+            shutil.make_archive(os.path.join(self.base_path, "SSNL-Justification"),
+                                "zip",
+                                self.output_path)
+
+            #with zipfile.ZipFile(os.path.join(self.base_path, "SSNL-Justification.zip"), "w") as zip:
+            #      zip.write(self.output_path, arcname=f"SSNL-Justification-{datetime.now().strftime('%m-%d-%Y')}")
+
+            #with tarfile.open(os.path.join(self.base_path, "SSNL-Justification.tar.gz"), "w:gz") as tar:
+            #      tar.add(self.output_path, arcname=f"SSNL-Justification-{datetime.now().strftime('%m-%d-%Y')}")
 
 
 
@@ -155,8 +162,11 @@ class Reimbursement:
 
 
       def gunzip(self):
-            with tarfile.open(os.path.join(self.base_path, "SSNL-Reimbursement.tar.gz"), "w:gz") as tar:
-                  tar.add(self.output_path, arcname=f"SSNL-Reimbursement-{datetime.now().strftime('%m-%d-%Y')}")
+            with zipfile.ZipFile(os.path.join(self.base_path, "SSNL-Reimbursement.zip"), "w") as zip:
+                  zip.write(self.output_path, arcname=f"SSNL-Reimbursement-{datetime.now().strftime('%m-%d-%Y')}")
+            
+            #with tarfile.open(os.path.join(self.base_path, "SSNL-Reimbursement.tar.gz"), "w:gz") as tar:
+            #      tar.add(self.output_path, arcname=f"SSNL-Reimbursement-{datetime.now().strftime('%m-%d-%Y')}")
 
 
 
@@ -227,5 +237,11 @@ class Reocurring:
 
 
       def gunzip(self):
-            with tarfile.open(os.path.join(self.base_path, f"SSNL-{self.charge}.tar.gz"), "w:gz") as tar:
-                  tar.add(self.output_path, arcname=f"SSNL-{self.charge}")
+
+            shutil.make_archive(f"SSNL-{self.charge}", "zip", os.path.join(self.base_path, f"SSNL-{self.charge}"))
+
+            #with zipfile.ZipFile(os.path.join(self.base_path, f"SSNL-{self.charge}.tar.gz"), "w") as zip:
+            #      zip.write(self.output_path, arcname=f"SSNL-{self.charge}")
+            
+            #with tarfile.open(os.path.join(self.base_path, f"SSNL-{self.charge}.tar.gz"), "w:gz") as tar:
+            #      tar.add(self.output_path, arcname=f"SSNL-{self.charge}")
