@@ -14,7 +14,7 @@ with open(path_to_projects) as incoming:
 
 # Current time in Pacific
 now = datetime.now(pytz.timezone("US/Pacific")).strftime("%m/%d/%Y")
-right_now = datetime.now(pytz.timezone("US/Pacific")).strftime("%m_%d_%Y_%H_%M_%S")
+right_now = datetime.now(pytz.timezone("US/Pacific")).strftime("%m_%d_%Y")
 
 
 # --- Have a nice day!
@@ -64,6 +64,8 @@ class PCard:
             self.when = when
             self.project = projects[project]
 
+            self._charge = charge_to_card
+
 
       def load_template(self):
             return docx.Document(os.path.join(self.input_path, "P-Card.docx"))
@@ -94,7 +96,9 @@ class PCard:
 
 
       def gunzip(self):
-            shutil.make_archive(os.path.join(self.base_path, f"SSNL-Justification-{right_now}"),
+            out_path = os.path.join(self.base_path, f"SSNL-Justification-{right_now}-{self._charge}")
+
+            shutil.make_archive(out_path,
                                 "zip",
                                 self.output_path)
 
@@ -121,6 +125,8 @@ class Reimbursement:
             self.who = members[who]
             self.when = when
             self.project = projects[project]
+
+            self._charge = charge_to_card
 
 
       def load_template(self):
@@ -153,7 +159,10 @@ class Reimbursement:
 
 
       def gunzip(self):
-            shutil.make_archive(os.path.join(self.base_path, f"SSNL-Reimbursement-{right_now}"),
+            out_path = os.path.join(self.base_path, 
+                                    f"SSNL-Reimbursement-{right_now}-{self._charge}")
+
+            shutil.make_archive(out_path,
                                 "zip",
                                 self.output_path)
 
@@ -225,6 +234,9 @@ class Reocurring:
 
 
       def gunzip(self):
-            shutil.make_archive(f"SSNL-{self.charge}-{right_now}", 
+            out_path = os.path.join(self.base_path, 
+                                    f"SSNL-{self.charge}-{right_now}")
+
+            shutil.make_archive(out_path, 
                                 "zip", 
-                                os.path.join(self.base_path, f"SSNL-{self.charge}"))
+                                self.output_path) 
