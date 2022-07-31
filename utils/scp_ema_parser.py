@@ -17,7 +17,7 @@ Ian Richard Ferguson | Stanford University
 # --- Imports
 from datetime import datetime
 import os, pathlib, json, sys, tarfile
-import shutil
+import shutil, zipfile
 from tqdm import tqdm
 import pandas as pd
 import numpy as np
@@ -562,8 +562,15 @@ class EMA_Parser:
 
             filename = datetime.now().strftime("%b_%d_%Y")
 
-            with tarfile.open(f"{self.output_path}/SCP_EMA_Responses.tar.gz", "w:gz") as tar:
-                  tar.add(self.aggregate_output, arcname=f"SCP_EMA_Responses_{filename}")
+            shutil.make_archive(f"{self.output_path}/SCP_EMA_Responses",
+                                "zip",
+                                self.aggregate_output)
+
+            #with zipfile.ZipFile(f"{self.output_path}/SCP_EMA_Responses.zip", "w") as zip:
+            #      zip.write(self.aggregate_output, arcname=f"SCP_EMA_Responses_{filename}")
+            
+            #with tarfile.open(f"{self.output_path}/SCP_EMA_Responses.tar.gz", "w:gz") as tar:
+            #      tar.add(self.aggregate_output, arcname=f"SCP_EMA_Responses_{filename}")
 
 
 
