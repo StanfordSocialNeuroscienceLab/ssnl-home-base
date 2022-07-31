@@ -68,6 +68,9 @@ def bp_pcard():
             amount = request.form["charge_amount"].replace("$", "")
             date_c = request.form["date_charged"]
 
+            if date_c.upper() == "TODAY":
+                  date_c = datetime.now(pytz.timezone("US/Pacific")).strftime("%m/%d/%Y")
+
             # -- Instantiate PCard object
             p_card = PCard(here=here, charge_to_card=amount, j_short=j_short,
                           j_long=j_long, j_why=j_why, who=who, when=date_c,
@@ -101,6 +104,9 @@ def bp_reimbursements():
             amount = request.form["charge_amount"].replace("$", "")
             date_c = request.form["date_charged"]
 
+            if date_c.upper() == "TODAY":
+                  date_c = datetime.now(pytz.timezone("US/Pacific")).strftime("%m/%d/%Y")
+
             # -- Instantiate Reimbursement object
             reimburse = Reimbursement(here=here, charge_to_card=amount, j_short=j_short,
                                       j_long=j_long, j_why=j_why, who=who, when=date_c,
@@ -128,6 +134,9 @@ def bp_reocurring():
             # -- HTML form => variables
             charge = request.form["charge"]
             date_of_charge = request.form["date_of_charge"]
+
+            if date_of_charge.upper() == "TODAY":
+                  date_of_charge = datetime.now(pytz.timezone("US/Pacific")).strftime("%m/%d/%Y")
 
             # -- Instantiate Reocurring object
             ripper = Reocurring(here=here, charge=charge, date_of_charge=date_of_charge)
