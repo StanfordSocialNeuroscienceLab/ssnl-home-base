@@ -75,7 +75,8 @@ def bp_pcard():
             p_card.write_justification()
 
             # Download zipped files
-            path = os.path.join(app.config["JUSTIFICATIONS"], "SSNL-Justification.tar.gz")
+            path = os.path.join(app.config["JUSTIFICATIONS"], "SSNL-Justification.zip")
+            
             return download(path)
 
       return render_template("justifications/pcard.html")
@@ -106,7 +107,8 @@ def bp_reimbursements():
             reimburse.write_justification()
 
             # Download zipped files
-            path = os.path.join(app.config["JUSTIFICATIONS"], "SSNL-Reimbursement.tar.gz")
+            path = os.path.join(app.config["JUSTIFICATIONS"], "SSNL-Reimbursement.zip")
+            
             return download(path)
 
       return render_template("justifications/reimbursement.html")
@@ -130,7 +132,8 @@ def bp_reocurring():
             ripper.write_justification()
 
             # Download zipped files
-            path = os.path.join(app.config["JUSTIFICATIONS"], f"SSNL-{charge}.tar.gz")
+            path = os.path.join(app.config["JUSTIFICATIONS"], f"SSNL-{charge}.zip")
+            
             return download(path)
 
       return render_template("justifications/reocurring.html")
@@ -165,7 +168,8 @@ def mturk():
             worker.run()
 
             # Download zipped files
-            target = os.path.join(app.config["UPLOAD_FOLDER"], "SSNL-MTurk-Workerfile.tar.gz")
+            target = os.path.join(app.config["UPLOAD_FOLDER"], "SSNL-MTurk-Workerfile.zip")
+            
             return download(target)
 
       return render_template("utils/mturk.html")
@@ -196,7 +200,8 @@ def ema():
             parser.big_dogs_only()
 
             # -- Download resulting files
-            target = os.path.join(output_path, "SCP_EMA_Responses.tar.gz")
+            target = os.path.join(output_path, "SCP_EMA_Responses.zip")
+            
             return download(target)
 
       return render_template("utils/ema.html")
