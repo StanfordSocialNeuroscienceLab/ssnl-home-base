@@ -2,8 +2,12 @@
 
 # --- Imports
 import pandas as pd
-import os, docx, tarfile, random
+import os, docx, tarfile, random, shutil, pytz
 from datetime import date, datetime
+
+# Current time in Pacific
+now = datetime.now(pytz.timezone("US/Pacific")).strftime("%m/%d/%Y")
+right_now = datetime.now(pytz.timezone("US/Pacific")).strftime("%m_%d_%Y")
 
 # --- Have a nice day!
 def drop_a_line(path):
@@ -142,9 +146,9 @@ class WorkerFile:
 
 
       def gunzip(self):
-            with tarfile.open(os.path.join(self.base_path, "SSNL-MTurk-Workerfile.tar.gz"), "w:gz") as tar:
-                  tar.add(self.incoming_filepath, arcname="SSNL-MTurk-Workerfile")
-
+            shutil.make_archive(os.path.join(self.base_path, f"SSNL-MTurk-{right_now}"),
+                                "zip",
+                                self.incoming_filepath)
 
 
       def write_justification(self, total_subs, price_per_sub, percent, fee_per_sub, total):
