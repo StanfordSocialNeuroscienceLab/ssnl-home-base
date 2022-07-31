@@ -1,8 +1,7 @@
 #!/bin/python3
 
 # --- Imports
-import docx, pathlib, os, random, pytz, json
-import tarfile, zipfile, shutil
+import docx, pathlib, os, random, pytz, json, shutil
 from datetime import datetime
 
 from main import path_to_members, path_to_projects
@@ -15,6 +14,7 @@ with open(path_to_projects) as incoming:
 
 # Current time in Pacific
 now = datetime.now(pytz.timezone("US/Pacific")).strftime("%m/%d/%Y")
+right_now = datetime.now(pytz.timezone("US/Pacific")).strftime("%m_%d_%Y_%H_%M_%S")
 
 
 # --- Have a nice day!
@@ -70,7 +70,6 @@ class PCard:
 
 
       def write_justification(self):
-
             template = self.load_template()
 
             template.paragraphs[3].text = template.paragraphs[3].text.format(self.j_short,
@@ -95,16 +94,9 @@ class PCard:
 
 
       def gunzip(self):
-
-            shutil.make_archive(os.path.join(self.base_path, "SSNL-Justification"),
+            shutil.make_archive(os.path.join(self.base_path, f"SSNL-Justification-{right_now}"),
                                 "zip",
                                 self.output_path)
-
-            #with zipfile.ZipFile(os.path.join(self.base_path, "SSNL-Justification.zip"), "w") as zip:
-            #      zip.write(self.output_path, arcname=f"SSNL-Justification-{datetime.now().strftime('%m-%d-%Y')}")
-
-            #with tarfile.open(os.path.join(self.base_path, "SSNL-Justification.tar.gz"), "w:gz") as tar:
-            #      tar.add(self.output_path, arcname=f"SSNL-Justification-{datetime.now().strftime('%m-%d-%Y')}")
 
 
 
@@ -136,14 +128,13 @@ class Reimbursement:
 
 
       def write_justification(self):
-
             template = self.load_template()
 
             template.paragraphs[3].text = template.paragraphs[3].text.format(self.j_short,
                                                                              self.project["award"],
                                                                              self.who["full_name"],
                                                                              self.who["title"],
-                                                                             self.who["employee-number"],
+                                                                             self.who["employee_number"],
                                                                              self.j_long,
                                                                              self.when,
                                                                              self.j_why,
@@ -162,11 +153,9 @@ class Reimbursement:
 
 
       def gunzip(self):
-            with zipfile.ZipFile(os.path.join(self.base_path, "SSNL-Reimbursement.zip"), "w") as zip:
-                  zip.write(self.output_path, arcname=f"SSNL-Reimbursement-{datetime.now().strftime('%m-%d-%Y')}")
-            
-            #with tarfile.open(os.path.join(self.base_path, "SSNL-Reimbursement.tar.gz"), "w:gz") as tar:
-            #      tar.add(self.output_path, arcname=f"SSNL-Reimbursement-{datetime.now().strftime('%m-%d-%Y')}")
+            shutil.make_archive(os.path.join(self.base_path, f"SSNL-Reimbursement-{right_now}"),
+                                "zip",
+                                self.output_path)
 
 
 
@@ -219,7 +208,6 @@ class Reocurring:
 
 
       def write_justification(self):
-            
             filename, filepath = self.get_file()
 
             doc = docx.Document(filepath)
@@ -237,11 +225,6 @@ class Reocurring:
 
 
       def gunzip(self):
-
-            shutil.make_archive(f"SSNL-{self.charge}", "zip", os.path.join(self.base_path, f"SSNL-{self.charge}"))
-
-            #with zipfile.ZipFile(os.path.join(self.base_path, f"SSNL-{self.charge}.tar.gz"), "w") as zip:
-            #      zip.write(self.output_path, arcname=f"SSNL-{self.charge}")
-            
-            #with tarfile.open(os.path.join(self.base_path, f"SSNL-{self.charge}.tar.gz"), "w:gz") as tar:
-            #      tar.add(self.output_path, arcname=f"SSNL-{self.charge}")
+            shutil.make_archive(f"SSNL-{self.charge}-{right_now}", 
+                                "zip", 
+                                os.path.join(self.base_path, f"SSNL-{self.charge}"))
