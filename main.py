@@ -183,7 +183,7 @@ def mturk():
 
             # Download zipped files
             target = os.path.join(app.config["UPLOAD_FOLDER"], 
-                                  f"SSNL-MTurk-Workerfile-{right_now}.zip")
+                                  f"SSNL-MTurk-{right_now}.zip")
             
             return download(target)
 
