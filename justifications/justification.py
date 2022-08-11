@@ -182,8 +182,10 @@ class Reocurring:
             if not os.path.exists(self.output_path):
                   pathlib.Path(self.output_path).mkdir(exist_ok=True, parents=True)
 
+            self.set_conventions()
 
-      def get_file(self):
+
+      def set_conventions(self):
             if self.charge == "AWS_SCP":
                   filename = "pcard_AWS-SCP_zaki.docx"
                   filepath = os.path.join(self.template_path, "SCP_AWS.docx")
@@ -213,20 +215,20 @@ class Reocurring:
                   filepath = os.path.join(self.template_path, "SCP_Adobe.docx")
 
             
-            return filename, filepath
+            self.filename = filename
+            self.filepath = filepath
 
 
       def write_justification(self):
-            filename, filepath = self.get_file()
 
-            doc = docx.Document(filepath)
+            doc = docx.Document(self.filepath)
             doc.paragraphs[3].text = doc.paragraphs[3].text.format(self.date)
 
             header = doc.sections[0].header
             head = header.paragraphs[0]
             head.text = "\n\nCreated {}".format(now)
 
-            doc.save(os.path.join(self.output_path, filename))
+            doc.save(os.path.join(self.output_path, self.filename))
 
             drop_a_line(self.output_path)
 
