@@ -1,7 +1,7 @@
 #!/bin/python3
 
 # --- Imports
-from flask import Flask, render_template, send_file, request
+from flask import Flask, render_template, send_file, request, after_this_request
 from werkzeug.utils import secure_filename
 from flask_httpauth import HTTPBasicAuth
 import os, pathlib, pytz
@@ -83,7 +83,7 @@ def bp_pcard():
             path = os.path.join(app.config["JUSTIFICATIONS"], 
                                 f"SSNL-Justification-{right_now}-{amount}.zip")
             
-            return download(path)
+            return download(path, p_card.output_path)
 
       return render_template("justifications/pcard.html")
 
@@ -119,7 +119,7 @@ def bp_reimbursements():
             path = os.path.join(app.config["JUSTIFICATIONS"], 
                                 f"SSNL-Reimbursement-{right_now}-{amount}.zip")
             
-            return download(path)
+            return download(path, reimburse.output_path)
 
       return render_template("justifications/reimbursement.html")
 
@@ -148,7 +148,7 @@ def bp_reocurring():
             path = os.path.join(app.config["JUSTIFICATIONS"], 
                                 f"SSNL-{charge}-{right_now}.zip")
             
-            return download(path)
+            return download(path, ripper.output_path)
 
       return render_template("justifications/reocurring.html")
 
@@ -185,7 +185,7 @@ def mturk():
             target = os.path.join(app.config["UPLOAD_FOLDER"], 
                                   f"SSNL-MTurk-{right_now}.zip")
             
-            return download(target)
+            return download(target, output_path)
 
       return render_template("utils/mturk.html")
 
@@ -217,7 +217,7 @@ def ema():
             # -- Download resulting files
             target = os.path.join(output_path, f"SCP_EMA_Responses-{right_now}.zip")
             
-            return download(target)
+            return download(target, output_path)
 
       return render_template("utils/ema.html")
 
@@ -259,6 +259,7 @@ def combine_pdf():
 
             # Download aggregated PDF
             ripper.write(os.path.join(output_path, "MERGED-FILES.pdf"))
+            
             return download(os.path.join(output_path, "MERGED-FILES.pdf"))
 
       return render_template("utils/combine_pdf.html")
@@ -437,7 +438,22 @@ def add_project():
 
 # === Utilities ===
 @app.route("/download", methods=["GET", "POST"])
-def download(filepath):
+def download(filepath, base_dir=None):
+
+      @after_this_request
+      def au_revoir(response):
+            try:
+                  os.remove(filepath)
+            except Exception as e:
+                  print(f"\n{e}\n")
+
+            try:
+                  shutil.rmtree(base_dir)
+            except Exception as e:
+                  print(f"\n{e}\n")
+
+            return response
+
       return send_file(filepath, as_attachment=True)
 
 
