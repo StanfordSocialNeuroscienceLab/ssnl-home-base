@@ -45,7 +45,7 @@ def drop_a_line(path):
 class PCard:
       def __init__(self, here, charge_to_card, j_short, j_long, j_why, who, when, project):
 
-            today_f = datetime.now().strftime("%b_%d_%Y_%H_%M_%S")
+            today_f = datetime.now(pytz.timezone("US/Pacific")).strftime("%b_%d_%Y_%H_%M_%S")
 
             self.base_path = os.path.join(here, "files/justifications")
 
@@ -106,7 +106,7 @@ class PCard:
 
 class Reimbursement:
       def __init__(self, here, charge_to_card, j_short, j_long, j_why, who, when, project):
-            today_f = datetime.now().strftime("%b_%d_%Y_%H_%M_%S")
+            today_f = datetime.now(pytz.timezone("US/Pacific")).strftime("%b_%d_%Y_%H_%M_%S")
 
             self.base_path = os.path.join(here, "files/justifications")
 
@@ -173,7 +173,7 @@ class Reocurring:
             self.charge = charge
             self.date = date_of_charge
 
-            today_f = datetime.now().strftime("%b_%d_%Y_%H_%M_%S")
+            today_f = datetime.now(pytz.timezone("US/Pacific")).strftime("%b_%d_%Y_%H_%M_%S")
 
             self.base_path = os.path.join(here, "files/justifications")
             self.template_path = os.path.join(here, "files/templates/reoccuring")
