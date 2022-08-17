@@ -7,8 +7,21 @@
             <link rel="icon" href="static/img/big_brain.jpg">
       </head>
       <body>
+            <!---  Error Handling --->
+            {% with messages = get_flashed_messages() %}
+                  {% if messages %}
+                        <ul class=flashes>
+                              {% for message in messages %}
+                              <li>
+                                    {{ message }}
+                              </li>
+                              {% endfor %}
+                        </ul>
+                  {% endif %}
+            {% endwith %}
+
+            <!---  Dyanmic page content -->
             {% block content %}
-            
             {% endblock %}
       </body>
 </html>
