@@ -1,10 +1,10 @@
 #!/bin/python3
 
 # --- Imports
-from flask import Flask, render_template, send_file, request
+from flask import Flask, render_template, send_file, request, after_this_request, flash
 from werkzeug.utils import secure_filename
 from flask_httpauth import HTTPBasicAuth
-import os, pathlib
+import os, pathlib, pytz
 from datetime import datetime
 from helper import *
 
@@ -18,6 +18,8 @@ app.config["BP_TEMPLATES"] = "files/templates"
 
 path_to_members = os.path.join(here, "files/packets/members.json")
 path_to_projects = os.path.join(here, "files/packets/projects.json")
+
+right_now = datetime.now(pytz.timezone("US/Pacific")).strftime("%m_%d_%Y")
 
 
 # -- Confirm output directories exist at __init__
@@ -75,8 +77,13 @@ def bp_pcard():
             p_card.write_justification()
 
             # Download zipped files
-            path = os.path.join(app.config["JUSTIFICATIONS"], "SSNL-Justification.tar.gz")
-            return download(path)
+            path = os.path.join(app.config["JUSTIFICATIONS"], 
+                                f"SSNL-Justification-{right_now}-{amount}.zip")
+            
+            try:
+                  return download(path, p_card.output_path)
+            except Exception as e:
+                  flash(e)
 
       return render_template("justifications/pcard.html")
 
@@ -106,8 +113,13 @@ def bp_reimbursements():
             reimburse.write_justification()
 
             # Download zipped files
-            path = os.path.join(app.config["JUSTIFICATIONS"], "SSNL-Reimbursement.tar.gz")
-            return download(path)
+            path = os.path.join(app.config["JUSTIFICATIONS"], 
+                                f"SSNL-Reimbursement-{right_now}-{amount}.zip")
+            
+            try:
+                  return download(path, reimburse.output_path)
+            except Exception as e:
+                  flash(e)
 
       return render_template("justifications/reimbursement.html")
 
@@ -130,8 +142,13 @@ def bp_reocurring():
             ripper.write_justification()
 
             # Download zipped files
-            path = os.path.join(app.config["JUSTIFICATIONS"], f"SSNL-{charge}.tar.gz")
-            return download(path)
+            path = os.path.join(app.config["JUSTIFICATIONS"], 
+                                f"SSNL-{charge}-{right_now}.zip")
+            
+            try:
+                  return download(path, ripper.output_path)
+            except Exception as e:
+                  flash(e)
 
       return render_template("justifications/reocurring.html")
 
@@ -159,15 +176,23 @@ def mturk():
             file.save(os.path.join(output_path, safe_name))
 
             # -- Instantiate WorkerFile object
-            worker = WorkerFile(filename=safe_name, filepath=output_path,
-                                basepath=os.path.join(here, app.config["UPLOAD_FOLDER"]),
-                                template_path=os.path.join(here, app.config["BP_TEMPLATES"]))
-            worker.run()
+            try:
+                  worker = WorkerFile(filename=safe_name, filepath=output_path,
+                                    basepath=os.path.join(here, app.config["UPLOAD_FOLDER"]),
+                                    template_path=os.path.join(here, app.config["BP_TEMPLATES"]))
+                  worker.run()
+            
+            except Exception as e:
+                  flash(e)
+                  return redirect(url_for('mturk'))
 
             # Download zipped files
-            target = os.path.join(app.config["UPLOAD_FOLDER"], "SSNL-MTurk-Workerfile.tar.gz")
-            return download(target)
-
+            target = os.path.join(app.config["UPLOAD_FOLDER"], 
+                                  f"SSNL-MTurk-{right_now}.zip")
+            
+            
+            return download(target, output_path)
+   
       return render_template("utils/mturk.html")
 
 
@@ -423,4 +448,4 @@ def download(filepath):
 
 if __name__ == "__main__":
       print("\n=== App Running ===\n")
-      app.run(debug=True)
+      app.run(debug=False)
