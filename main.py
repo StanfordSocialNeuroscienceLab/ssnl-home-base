@@ -61,25 +61,39 @@ def bp_pcard():
             from justifications.justification import PCard
             
             # -- Assign HTML form input to variables
-            j_short = request.form["purchased_short"]
-            j_long = request.form["purchased_long"]
-            j_why = request.form["purchased_why"]
-            who = request.form["purchased_by"]
-            source = request.form["funding_source"]
-            amount = request.form["charge_amount"].replace("$", "")
-            date_c = request.form["date_charged"]
+            try:
+                  j_short = request.form["purchased_short"]
+                  j_long = request.form["purchased_long"]
+                  j_why = request.form["purchased_why"]
+                  who = request.form["purchased_by"]
+                  source = request.form["funding_source"]
+                  amount = request.form["charge_amount"].replace("$", "")
+                  date_c = request.form["date_charged"]
+            
+            except Exception as e:
+                  flash(f"Send this to Ian:\t{e}")
+
 
             # -- Instantiate PCard object
-            p_card = PCard(here=here, charge_to_card=amount, j_short=j_short,
-                          j_long=j_long, j_why=j_why, who=who, when=date_c,
-                          project=source)
+            try:
+                  p_card = PCard(here=here, charge_to_card=amount, j_short=j_short,
+                              j_long=j_long, j_why=j_why, who=who, when=date_c,
+                              project=source)
+            except Exception as e:
+                  flash(f"Send this to Ian:\t{e}")
 
             # Write to file
-            p_card.write_justification()
+            try:
+                  p_card.write_justification()
+            except Exception as e:
+                  flash(f"Send this to Ian:\t{e}")
 
             # Download zipped files
-            path = os.path.join(app.config["JUSTIFICATIONS"], 
-                                f"SSNL-Justification-{right_now}-{amount}.zip")
+            try:
+                  path = os.path.join(app.config["JUSTIFICATIONS"], 
+                                    f"SSNL-Justification-{right_now}-{amount}.zip")
+            except Exception as e:
+                  flash(f"Send this to Ian:\t{e}")
             
             try:
                   return download(path)
