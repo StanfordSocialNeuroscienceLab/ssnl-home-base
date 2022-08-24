@@ -16,13 +16,13 @@ Ian Richard Ferguson | Stanford University
 
 # --- Imports
 from datetime import datetime
-import os, pathlib, json, sys, tarfile
-import shutil
+import os, pathlib, json, sys, shutil, pytz
 from tqdm import tqdm
 import pandas as pd
 import numpy as np
 from time import sleep
 
+right_now = datetime.now(pytz.timezone("US/Pacific")).strftime("%m_%d_%Y")
 
 # --- Class definition
 class EMA_Parser:
@@ -37,10 +37,6 @@ class EMA_Parser:
 
 
       def _output_directories(self):
-            """
-            
-            """
-
             output = []
 
             for subdir in ["Subjects", f"SCP-EMA_Output"]:
@@ -56,9 +52,6 @@ class EMA_Parser:
 
       # -- Sanity checks
       def sanity_check(self, JSON, OUTPUT_DIR):
-            """
-            
-            """
 
             # Read in subject data JSON as dictionary
             with open(os.path.join(self.output_path, self.filename)) as incoming:
@@ -556,21 +549,11 @@ class EMA_Parser:
 
 
       def gunzip_output(self):
-            """
-            
-            """
-
-            filename = datetime.now().strftime("%b_%d_%Y")
-
-            with tarfile.open(f"{self.output_path}/SCP_EMA_Responses.tar.gz", "w:gz") as tar:
-                  tar.add(self.aggregate_output, arcname=f"SCP_EMA_Responses_{filename}")
-
+            shutil.make_archive(f"{self.output_path}/SCP_EMA_Responses-{right_now}",
+                                "zip",
+                                self.aggregate_output)
 
 
       def big_dogs_only(self):
-            """
-            
-            """
-
             self.run_this_puppy()
             self.gunzip_output()

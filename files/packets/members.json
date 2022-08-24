@@ -38,5 +38,10 @@
             "full_name": "Daniel Ogunbamowo",
             "title": "Research Assistant",
             "employee_number": "50018870"
+      },
+      "Catherine Garton": {
+            "full_name": "Catherine Garton",
+            "title": "Graduate Student",
+            "employee_number": "NONE"
       }
 }

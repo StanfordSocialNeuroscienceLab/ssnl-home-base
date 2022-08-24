@@ -66,6 +66,7 @@ class PCard:
             self.project = projects[project]
 
             self._charge = charge_to_card
+            
 
       def load_template(self):
            return docx.Document(os.path.join(self.input_path, "P-Card.docx"))
@@ -100,6 +101,7 @@ class PCard:
                                 self.output_path)
 
 
+
 class Reimbursement:
       def __init__(self, here, charge_to_card, j_short, j_long, j_why, who, when, project):
             today_f = datetime.now(pytz.timezone("US/Pacific")).strftime("%b_%d_%Y_%H_%M_%S")
@@ -123,6 +125,7 @@ class Reimbursement:
             self.project = projects[project]
 
             self._charge = charge_to_card
+
 
       def load_template(self):
             return docx.Document(os.path.join(self.input_path, "Reimbursement.docx"))
@@ -167,6 +170,7 @@ class Reocurring:
             today_f = datetime.now(pytz.timezone(
                   "US/Pacific")).strftime("%b_%d_%Y_%H_%M_%S")
 
+
             self.base_path = os.path.join(here, "files/justifications")
             self.template_path = os.path.join(
                   here, "files/templates/reoccuring")
@@ -176,6 +180,7 @@ class Reocurring:
                  pathlib.Path(self.output_path).mkdir(exist_ok=True, parents=True)
 
             self.set_conventions()
+
 
       def set_conventions(self):
             if self.charge == "AWS_SCP":
@@ -212,6 +217,7 @@ class Reocurring:
             self.filename = filename
             self.filepath = filepath
 
+
       def write_justification(self):
 
             doc = docx.Document(self.filepath)
@@ -228,9 +234,11 @@ class Reocurring:
             self.gunzip()
 
       def gunzip(self):
+      
             out_path = os.path.join(self.base_path,
                                     f"SSNL-{self.charge}-{right_now}")
 
             shutil.make_archive(out_path,
                                 "zip",
                                 self.output_path)
+

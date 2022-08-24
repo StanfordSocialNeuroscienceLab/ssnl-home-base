@@ -74,6 +74,9 @@ def bp_pcard():
                   flash(f"Send this to Ian:\t{e}")
 
 
+            if date_c.upper() == "TODAY":
+                  date_c = datetime.now(pytz.timezone("US/Pacific")).strftime("%m/%d/%Y")
+
             # -- Instantiate PCard object
             try:
                   p_card = PCard(here=here, charge_to_card=amount, j_short=j_short,
@@ -100,6 +103,7 @@ def bp_pcard():
             except Exception as e:
                   flash(e)
 
+
       print(f"\n\n{get_members()}\n\n")
 
       return render_template("justifications/pcard.html", members=get_members())
@@ -121,6 +125,9 @@ def bp_reimbursements():
             amount = request.form["charge_amount"].replace("$", "")
             date_c = request.form["date_charged"]
 
+            if date_c.upper() == "TODAY":
+                  date_c = datetime.now(pytz.timezone("US/Pacific")).strftime("%m/%d/%Y")
+
             # -- Instantiate Reimbursement object
             reimburse = Reimbursement(here=here, charge_to_card=amount, j_short=j_short,
                                       j_long=j_long, j_why=j_why, who=who, when=date_c,
@@ -138,6 +145,7 @@ def bp_reimbursements():
             except Exception as e:
                   flash(e)
 
+
       return render_template("justifications/reimbursement.html", members=get_members())
 
 
@@ -151,6 +159,9 @@ def bp_reocurring():
             # -- HTML form => variables
             charge = request.form["charge"]
             date_of_charge = request.form["date_of_charge"]
+
+            if date_of_charge.upper() == "TODAY":
+                  date_of_charge = datetime.now(pytz.timezone("US/Pacific")).strftime("%m/%d/%Y")
 
             # -- Instantiate Reocurring object
             ripper = Reocurring(here=here, charge=charge, date_of_charge=date_of_charge)
@@ -166,6 +177,8 @@ def bp_reocurring():
                   return download(path, ripper.output_path)
             except Exception as e:
                   flash(e)
+
+            return download(path, ripper.output_path)
 
       return render_template("justifications/reocurring.html", members=get_members())
 
@@ -207,9 +220,10 @@ def mturk():
             target = os.path.join(app.config["UPLOAD_FOLDER"], 
                                   f"SSNL-MTurk-{right_now}.zip")
             
+
             
             return download(target, output_path)
-   
+
       return render_template("utils/mturk.html")
 
 
@@ -238,8 +252,9 @@ def ema():
             parser.big_dogs_only()
 
             # -- Download resulting files
-            target = os.path.join(output_path, "SCP_EMA_Responses.tar.gz")
-            return download(target)
+            target = os.path.join(output_path, f"SCP_EMA_Responses-{right_now}.zip")
+            
+            return download(target, output_path)
 
       return render_template("utils/ema.html")
 
@@ -281,6 +296,7 @@ def combine_pdf():
 
             # Download aggregated PDF
             ripper.write(os.path.join(output_path, "MERGED-FILES.pdf"))
+            
             return download(os.path.join(output_path, "MERGED-FILES.pdf"))
 
       return render_template("utils/combine_pdf.html")
@@ -459,7 +475,22 @@ def add_project():
 
 # === Utilities ===
 @app.route("/download", methods=["GET", "POST"])
-def download(filepath):
+def download(filepath, base_dir=None):
+
+      @after_this_request
+      def au_revoir(response):
+            try:
+                  os.remove(filepath)
+            except Exception as e:
+                  print(f"\n{e}\n")
+
+            try:
+                  shutil.rmtree(base_dir)
+            except Exception as e:
+                  print(f"\n{e}\n")
+
+            return response
+
       return send_file(filepath, as_attachment=True)
 
 
