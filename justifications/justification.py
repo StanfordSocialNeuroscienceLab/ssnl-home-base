@@ -1,20 +1,20 @@
 #!/bin/python3
 
 # --- Imports
-import docx, pathlib, os, random, pytz, json
-import tarfile
+import docx, pathlib, os, random, pytz, json, shutil
 from datetime import datetime
 
 from main import path_to_members, path_to_projects
 
 with open(path_to_members) as incoming:
-      members = json.load(incoming)
+     members = json.load(incoming)
 
 with open(path_to_projects) as incoming:
-      projects = json.load(incoming)
+     projects = json.load(incoming)
 
 # Current time in Pacific
 now = datetime.now(pytz.timezone("US/Pacific")).strftime("%m/%d/%Y")
+right_now = datetime.now(pytz.timezone("US/Pacific")).strftime("%m_%d_%Y")
 
 
 # --- Have a nice day!
@@ -40,12 +40,12 @@ def drop_a_line(path):
             file.write(message)
 
 
-
 # --- Object definitions
 class PCard:
       def __init__(self, here, charge_to_card, j_short, j_long, j_why, who, when, project):
 
-            today_f = datetime.now().strftime("%b_%d_%Y_%H_%M_%S")
+            today_f = datetime.now(pytz.timezone(
+               "US/Pacific")).strftime("%b_%d_%Y_%H_%M_%S")
 
             self.base_path = os.path.join(here, "files/justifications")
 
@@ -53,7 +53,8 @@ class PCard:
             self.output_path = os.path.join(self.base_path, today_f)
 
             if not os.path.exists(self.output_path):
-                  pathlib.Path(self.output_path).mkdir(exist_ok=True, parents=True)
+                 pathlib.Path(self.output_path).mkdir(
+                     exist_ok=True, parents=True)
 
             self.output_filename = f"pcard_{charge_to_card}_zaki.docx"
 
@@ -64,13 +65,12 @@ class PCard:
             self.when = when
             self.project = projects[project]
 
+            self._charge = charge_to_card
 
       def load_template(self):
-            return docx.Document(os.path.join(self.input_path, "P-Card.docx"))
-
+           return docx.Document(os.path.join(self.input_path, "P-Card.docx"))
 
       def write_justification(self):
-
             template = self.load_template()
 
             template.paragraphs[3].text = template.paragraphs[3].text.format(self.j_short,
@@ -82,7 +82,6 @@ class PCard:
                                                                              self.j_why,
                                                                              self.project["funding-string"])
 
-
             header = template.sections[0].header
             head = header.paragraphs[0]
             head.text = f"\n\nCreated {now}"
@@ -93,17 +92,17 @@ class PCard:
 
             self.gunzip()
 
-
       def gunzip(self):
+            out_path = os.path.join(self.base_path, f"SSNL-Justification-{right_now}-{self._charge}")
 
-            with tarfile.open(os.path.join(self.base_path, "SSNL-Justification.tar.gz"), "w:gz") as tar:
-                  tar.add(self.output_path, arcname=f"SSNL-Justification-{datetime.now().strftime('%m-%d-%Y')}")
-
+            shutil.make_archive(out_path,
+                                "zip",
+                                self.output_path)
 
 
 class Reimbursement:
       def __init__(self, here, charge_to_card, j_short, j_long, j_why, who, when, project):
-            today_f = datetime.now().strftime("%b_%d_%Y_%H_%M_%S")
+            today_f = datetime.now(pytz.timezone("US/Pacific")).strftime("%b_%d_%Y_%H_%M_%S")
 
             self.base_path = os.path.join(here, "files/justifications")
 
@@ -112,7 +111,7 @@ class Reimbursement:
 
             if not os.path.exists(self.output_path):
                   pathlib.Path(self.output_path).mkdir(
-                        exist_ok=True, parents=True)
+                      exist_ok=True, parents=True)
 
             self.output_filename = f"reimbursement_{charge_to_card}_zaki.docx"
 
@@ -123,25 +122,23 @@ class Reimbursement:
             self.when = when
             self.project = projects[project]
 
+            self._charge = charge_to_card
 
       def load_template(self):
             return docx.Document(os.path.join(self.input_path, "Reimbursement.docx"))
 
-
       def write_justification(self):
-
             template = self.load_template()
 
             template.paragraphs[3].text = template.paragraphs[3].text.format(self.j_short,
                                                                              self.project["award"],
                                                                              self.who["full_name"],
                                                                              self.who["title"],
-                                                                             self.who["employee-number"],
+                                                                             self.who["employee_number"],
                                                                              self.j_long,
                                                                              self.when,
                                                                              self.j_why,
                                                                              self.project["funding-string"])
-
 
             header = template.sections[0].header
             head = header.paragraphs[0]
@@ -153,11 +150,13 @@ class Reimbursement:
 
             self.gunzip()
 
-
       def gunzip(self):
-            with tarfile.open(os.path.join(self.base_path, "SSNL-Reimbursement.tar.gz"), "w:gz") as tar:
-                  tar.add(self.output_path, arcname=f"SSNL-Reimbursement-{datetime.now().strftime('%m-%d-%Y')}")
+            out_path = os.path.join(self.base_path,
+                                    f"SSNL-Reimbursement-{right_now}-{self._charge}")
 
+            shutil.make_archive(out_path,
+                                "zip",
+                                self.output_path)
 
 
 class Reocurring:
@@ -165,17 +164,20 @@ class Reocurring:
             self.charge = charge
             self.date = date_of_charge
 
-            today_f = datetime.now().strftime("%b_%d_%Y_%H_%M_%S")
+            today_f = datetime.now(pytz.timezone(
+                  "US/Pacific")).strftime("%b_%d_%Y_%H_%M_%S")
 
             self.base_path = os.path.join(here, "files/justifications")
-            self.template_path = os.path.join(here, "files/templates/reoccuring")
+            self.template_path = os.path.join(
+                  here, "files/templates/reoccuring")
             self.output_path = os.path.join(self.base_path, today_f)
 
             if not os.path.exists(self.output_path):
-                  pathlib.Path(self.output_path).mkdir(exist_ok=True, parents=True)
+                 pathlib.Path(self.output_path).mkdir(exist_ok=True, parents=True)
 
+            self.set_conventions()
 
-      def get_file(self):
+      def set_conventions(self):
             if self.charge == "AWS_SCP":
                   filename = "pcard_AWS-SCP_zaki.docx"
                   filepath = os.path.join(self.template_path, "SCP_AWS.docx")
@@ -186,7 +188,8 @@ class Reocurring:
 
             elif self.charge == "Mailchimp":
                   filename = "pcard_87.00_zaki.docx"
-                  filepath = os.path.join(self.template_path, "SCP_Mailchimp.docx")
+                  filepath = os.path.join(
+                        self.template_path, "SCP_Mailchimp.docx")
 
             elif self.charge == "Forge":
                   filename = "pcard_12.00_zaki.docx"
@@ -194,38 +197,40 @@ class Reocurring:
 
             elif self.charge == "Buzzsprout":
                   filename = "pcard_27.00_zaki.docx"
-                  filepath = os.path.join(self.template_path, "Buzzsprout.docx")
+                  filepath = os.path.join(
+                        self.template_path, "Buzzsprout.docx")
 
             elif self.charge == "PythonAnywhere":
                   filename = "pcard_10.00_zaki.docx"
-                  filepath = os.path.join(self.template_path, "PythonAnywhere.docx")
+                  filepath = os.path.join(
+                        self.template_path, "PythonAnywhere.docx")
 
             elif self.charge == "SCP_Adobe":
                   filename = "pcard_19.99_zaki.docx"
                   filepath = os.path.join(self.template_path, "SCP_Adobe.docx")
 
-            
-            return filename, filepath
-
+            self.filename = filename
+            self.filepath = filepath
 
       def write_justification(self):
-            
-            filename, filepath = self.get_file()
 
-            doc = docx.Document(filepath)
+            doc = docx.Document(self.filepath)
             doc.paragraphs[3].text = doc.paragraphs[3].text.format(self.date)
 
             header = doc.sections[0].header
             head = header.paragraphs[0]
             head.text = "\n\nCreated {}".format(now)
 
-            doc.save(os.path.join(self.output_path, filename))
+            doc.save(os.path.join(self.output_path, self.filename))
 
             drop_a_line(self.output_path)
 
             self.gunzip()
 
-
       def gunzip(self):
-            with tarfile.open(os.path.join(self.base_path, f"SSNL-{self.charge}.tar.gz"), "w:gz") as tar:
-                  tar.add(self.output_path, arcname=f"SSNL-{self.charge}")
+            out_path = os.path.join(self.base_path,
+                                    f"SSNL-{self.charge}-{right_now}")
+
+            shutil.make_archive(out_path,
+                                "zip",
+                                self.output_path)
