@@ -10,6 +10,7 @@ from helper import *
 
 # == APP CONFIGURATION ==
 app = Flask(__name__)
+app.secret_key = 'jamil4ever'
 here = app.root_path
 
 app.config["UPLOAD_FOLDER"] = "files/uploads"
@@ -58,7 +59,7 @@ def bp_pcard():
       if request.method == "POST":
 
             from justifications.justification import PCard
-
+            
             # -- Assign HTML form input to variables
             j_short = request.form["purchased_short"]
             j_long = request.form["purchased_long"]
@@ -81,11 +82,13 @@ def bp_pcard():
                                 f"SSNL-Justification-{right_now}-{amount}.zip")
             
             try:
-                  return download(path, p_card.output_path)
+                  return download(path)
             except Exception as e:
                   flash(e)
 
-      return render_template("justifications/pcard.html")
+      print(f"\n\n{get_members()}\n\n")
+
+      return render_template("justifications/pcard.html", members=get_members())
 
 
 @app.route("/Reimbursements", methods=["GET", "POST"])
@@ -121,7 +124,7 @@ def bp_reimbursements():
             except Exception as e:
                   flash(e)
 
-      return render_template("justifications/reimbursement.html")
+      return render_template("justifications/reimbursement.html", members=get_members())
 
 
 @app.route("/Reocurring-Charges", methods=["GET", "POST"])
@@ -150,7 +153,7 @@ def bp_reocurring():
             except Exception as e:
                   flash(e)
 
-      return render_template("justifications/reocurring.html")
+      return render_template("justifications/reocurring.html", members=get_members())
 
 
 # -- MTurk
@@ -446,6 +449,11 @@ def download(filepath):
       return send_file(filepath, as_attachment=True)
 
 
+def get_members():
+      with open(path_to_members) as temp:
+            return sorted(list(json.load(temp).keys()))
+
+
 if __name__ == "__main__":
       print("\n=== App Running ===\n")
-      app.run(debug=False)
+      app.run(debug=True)
