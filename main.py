@@ -1,7 +1,7 @@
 #!/bin/python3
 
 # --- Imports
-from flask import Flask, render_template, send_file, request, after_this_request
+from flask import Flask, render_template, send_file, request, after_this_request, flash
 from werkzeug.utils import secure_filename
 from flask_httpauth import HTTPBasicAuth
 import os, pathlib, pytz
@@ -10,6 +10,7 @@ from helper import *
 
 # == APP CONFIGURATION ==
 app = Flask(__name__)
+app.secret_key = 'jamil4ever'
 here = app.root_path
 
 app.config["UPLOAD_FOLDER"] = "files/uploads"
@@ -58,34 +59,54 @@ def bp_pcard():
       if request.method == "POST":
 
             from justifications.justification import PCard
-
+            
             # -- Assign HTML form input to variables
-            j_short = request.form["purchased_short"]
-            j_long = request.form["purchased_long"]
-            j_why = request.form["purchased_why"]
-            who = request.form["purchased_by"]
-            source = request.form["funding_source"]
-            amount = request.form["charge_amount"].replace("$", "")
-            date_c = request.form["date_charged"]
+            try:
+                  j_short = request.form["purchased_short"]
+                  j_long = request.form["purchased_long"]
+                  j_why = request.form["purchased_why"]
+                  who = request.form["purchased_by"]
+                  source = request.form["funding_source"]
+                  amount = request.form["charge_amount"].replace("$", "")
+                  date_c = request.form["date_charged"]
+            
+            except Exception as e:
+                  flash(f"Send this to Ian:\t{e}")
+
 
             if date_c.upper() == "TODAY":
                   date_c = datetime.now(pytz.timezone("US/Pacific")).strftime("%m/%d/%Y")
 
             # -- Instantiate PCard object
-            p_card = PCard(here=here, charge_to_card=amount, j_short=j_short,
-                          j_long=j_long, j_why=j_why, who=who, when=date_c,
-                          project=source)
+            try:
+                  p_card = PCard(here=here, charge_to_card=amount, j_short=j_short,
+                              j_long=j_long, j_why=j_why, who=who, when=date_c,
+                              project=source)
+            except Exception as e:
+                  flash(f"Send this to Ian:\t{e}")
 
             # Write to file
-            p_card.write_justification()
+            try:
+                  p_card.write_justification()
+            except Exception as e:
+                  flash(f"Send this to Ian:\t{e}")
 
             # Download zipped files
-            path = os.path.join(app.config["JUSTIFICATIONS"], 
-                                f"SSNL-Justification-{right_now}-{amount}.zip")
+            try:
+                  path = os.path.join(app.config["JUSTIFICATIONS"], 
+                                    f"SSNL-Justification-{right_now}-{amount}.zip")
+            except Exception as e:
+                  flash(f"Send this to Ian:\t{e}")
             
-            return download(path, p_card.output_path)
+            try:
+                  return download(path)
+            except Exception as e:
+                  flash(e)
 
-      return render_template("justifications/pcard.html")
+
+      print(f"\n\n{get_members()}\n\n")
+
+      return render_template("justifications/pcard.html", members=get_members())
 
 
 @app.route("/Reimbursements", methods=["GET", "POST"])
@@ -119,9 +140,13 @@ def bp_reimbursements():
             path = os.path.join(app.config["JUSTIFICATIONS"], 
                                 f"SSNL-Reimbursement-{right_now}-{amount}.zip")
             
-            return download(path, reimburse.output_path)
+            try:
+                  return download(path, reimburse.output_path)
+            except Exception as e:
+                  flash(e)
 
-      return render_template("justifications/reimbursement.html")
+
+      return render_template("justifications/reimbursement.html", members=get_members())
 
 
 @app.route("/Reocurring-Charges", methods=["GET", "POST"])
@@ -148,9 +173,14 @@ def bp_reocurring():
             path = os.path.join(app.config["JUSTIFICATIONS"], 
                                 f"SSNL-{charge}-{right_now}.zip")
             
+            try:
+                  return download(path, ripper.output_path)
+            except Exception as e:
+                  flash(e)
+
             return download(path, ripper.output_path)
 
-      return render_template("justifications/reocurring.html")
+      return render_template("justifications/reocurring.html", members=get_members())
 
 
 # -- MTurk
@@ -176,14 +206,21 @@ def mturk():
             file.save(os.path.join(output_path, safe_name))
 
             # -- Instantiate WorkerFile object
-            worker = WorkerFile(filename=safe_name, filepath=output_path,
-                                basepath=os.path.join(here, app.config["UPLOAD_FOLDER"]),
-                                template_path=os.path.join(here, app.config["BP_TEMPLATES"]))
-            worker.run()
+            try:
+                  worker = WorkerFile(filename=safe_name, filepath=output_path,
+                                    basepath=os.path.join(here, app.config["UPLOAD_FOLDER"]),
+                                    template_path=os.path.join(here, app.config["BP_TEMPLATES"]))
+                  worker.run()
+            
+            except Exception as e:
+                  flash(e)
+                  return redirect(url_for('mturk'))
 
             # Download zipped files
             target = os.path.join(app.config["UPLOAD_FOLDER"], 
                                   f"SSNL-MTurk-{right_now}.zip")
+            
+
             
             return download(target, output_path)
 
@@ -455,6 +492,11 @@ def download(filepath, base_dir=None):
             return response
 
       return send_file(filepath, as_attachment=True)
+
+
+def get_members():
+      with open(path_to_members) as temp:
+            return sorted(list(json.load(temp).keys()))
 
 
 if __name__ == "__main__":

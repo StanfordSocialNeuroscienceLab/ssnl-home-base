@@ -7,10 +7,10 @@ from datetime import datetime
 from main import path_to_members, path_to_projects
 
 with open(path_to_members) as incoming:
-      members = json.load(incoming)
+     members = json.load(incoming)
 
 with open(path_to_projects) as incoming:
-      projects = json.load(incoming)
+     projects = json.load(incoming)
 
 # Current time in Pacific
 now = datetime.now(pytz.timezone("US/Pacific")).strftime("%m/%d/%Y")
@@ -40,12 +40,12 @@ def drop_a_line(path):
             file.write(message)
 
 
-
 # --- Object definitions
 class PCard:
       def __init__(self, here, charge_to_card, j_short, j_long, j_why, who, when, project):
 
-            today_f = datetime.now(pytz.timezone("US/Pacific")).strftime("%b_%d_%Y_%H_%M_%S")
+            today_f = datetime.now(pytz.timezone(
+               "US/Pacific")).strftime("%b_%d_%Y_%H_%M_%S")
 
             self.base_path = os.path.join(here, "files/justifications")
 
@@ -53,7 +53,8 @@ class PCard:
             self.output_path = os.path.join(self.base_path, today_f)
 
             if not os.path.exists(self.output_path):
-                  pathlib.Path(self.output_path).mkdir(exist_ok=True, parents=True)
+                 pathlib.Path(self.output_path).mkdir(
+                     exist_ok=True, parents=True)
 
             self.output_filename = f"pcard_{charge_to_card}_zaki.docx"
 
@@ -65,11 +66,10 @@ class PCard:
             self.project = projects[project]
 
             self._charge = charge_to_card
-
+            
 
       def load_template(self):
-            return docx.Document(os.path.join(self.input_path, "P-Card.docx"))
-
+           return docx.Document(os.path.join(self.input_path, "P-Card.docx"))
 
       def write_justification(self):
             template = self.load_template()
@@ -83,7 +83,6 @@ class PCard:
                                                                              self.j_why,
                                                                              self.project["funding-string"])
 
-
             header = template.sections[0].header
             head = header.paragraphs[0]
             head.text = f"\n\nCreated {now}"
@@ -93,7 +92,6 @@ class PCard:
             drop_a_line(self.output_path)
 
             self.gunzip()
-
 
       def gunzip(self):
             out_path = os.path.join(self.base_path, f"SSNL-Justification-{right_now}-{self._charge}")
@@ -115,7 +113,7 @@ class Reimbursement:
 
             if not os.path.exists(self.output_path):
                   pathlib.Path(self.output_path).mkdir(
-                        exist_ok=True, parents=True)
+                      exist_ok=True, parents=True)
 
             self.output_filename = f"reimbursement_{charge_to_card}_zaki.docx"
 
@@ -132,7 +130,6 @@ class Reimbursement:
       def load_template(self):
             return docx.Document(os.path.join(self.input_path, "Reimbursement.docx"))
 
-
       def write_justification(self):
             template = self.load_template()
 
@@ -146,7 +143,6 @@ class Reimbursement:
                                                                              self.j_why,
                                                                              self.project["funding-string"])
 
-
             header = template.sections[0].header
             head = header.paragraphs[0]
             head.text = f"\n\nCreated {now}"
@@ -157,9 +153,8 @@ class Reimbursement:
 
             self.gunzip()
 
-
       def gunzip(self):
-            out_path = os.path.join(self.base_path, 
+            out_path = os.path.join(self.base_path,
                                     f"SSNL-Reimbursement-{right_now}-{self._charge}")
 
             shutil.make_archive(out_path,
@@ -167,20 +162,22 @@ class Reimbursement:
                                 self.output_path)
 
 
-
 class Reocurring:
       def __init__(self, here, charge, date_of_charge):
             self.charge = charge
             self.date = date_of_charge
 
-            today_f = datetime.now(pytz.timezone("US/Pacific")).strftime("%b_%d_%Y_%H_%M_%S")
+            today_f = datetime.now(pytz.timezone(
+                  "US/Pacific")).strftime("%b_%d_%Y_%H_%M_%S")
+
 
             self.base_path = os.path.join(here, "files/justifications")
-            self.template_path = os.path.join(here, "files/templates/reoccuring")
+            self.template_path = os.path.join(
+                  here, "files/templates/reoccuring")
             self.output_path = os.path.join(self.base_path, today_f)
 
             if not os.path.exists(self.output_path):
-                  pathlib.Path(self.output_path).mkdir(exist_ok=True, parents=True)
+                 pathlib.Path(self.output_path).mkdir(exist_ok=True, parents=True)
 
             self.set_conventions()
 
@@ -196,7 +193,8 @@ class Reocurring:
 
             elif self.charge == "Mailchimp":
                   filename = "pcard_87.00_zaki.docx"
-                  filepath = os.path.join(self.template_path, "SCP_Mailchimp.docx")
+                  filepath = os.path.join(
+                        self.template_path, "SCP_Mailchimp.docx")
 
             elif self.charge == "Forge":
                   filename = "pcard_12.00_zaki.docx"
@@ -204,17 +202,18 @@ class Reocurring:
 
             elif self.charge == "Buzzsprout":
                   filename = "pcard_27.00_zaki.docx"
-                  filepath = os.path.join(self.template_path, "Buzzsprout.docx")
+                  filepath = os.path.join(
+                        self.template_path, "Buzzsprout.docx")
 
             elif self.charge == "PythonAnywhere":
                   filename = "pcard_10.00_zaki.docx"
-                  filepath = os.path.join(self.template_path, "PythonAnywhere.docx")
+                  filepath = os.path.join(
+                        self.template_path, "PythonAnywhere.docx")
 
             elif self.charge == "SCP_Adobe":
                   filename = "pcard_19.99_zaki.docx"
                   filepath = os.path.join(self.template_path, "SCP_Adobe.docx")
 
-            
             self.filename = filename
             self.filepath = filepath
 
@@ -234,11 +233,12 @@ class Reocurring:
 
             self.gunzip()
 
-
       def gunzip(self):
-            out_path = os.path.join(self.base_path, 
+      
+            out_path = os.path.join(self.base_path,
                                     f"SSNL-{self.charge}-{right_now}")
 
-            shutil.make_archive(out_path, 
-                                "zip", 
-                                self.output_path) 
+            shutil.make_archive(out_path,
+                                "zip",
+                                self.output_path)
+

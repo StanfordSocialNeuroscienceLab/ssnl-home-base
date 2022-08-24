@@ -37,16 +37,9 @@
                   </label><br>
                   <select name="purchased_by" id="purchased_by">
                         <option value=""></option>
-                        <option value="Rachel Calcott">Rachel Calcott</option>
-                        <option value="Ian Ferguson">Ian Ferguson</option>
-                        <option value="Samantha Grayson">Samantha Grayson</option>
-                        <option value="Daniel Ogunbamowo">Daniel Ogunbamowo</option>
-                        <option value="Luiza Santos">Luiza Santos</option>
-                        <option value="Eric Neumann">Eric Neumann</option>
-                        <option value="Catherine Garton">Catherine Garton</option>
-                        <option value="Andrea Courtney">Andrea Courtney</option>
-                        <option value="Rui Pei">Rui Pei</option>
-                        <option value="Beau Sievers">Beau Sievers</option>
+                        {% for member in members %}
+                              <option value="{{ member }}">{{ member.upper() }}</option>
+                        {% endfor %}
                   </select>
 
                   <br> <br>

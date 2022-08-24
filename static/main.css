@@ -6,6 +6,13 @@ body {
       height: auto;
 }
 
+.flashes {
+      background-color: red;
+      color: white;
+      padding: 2%;
+      font-family: monospace;
+}
+
 
 /* Landing page */
 .the_og {
