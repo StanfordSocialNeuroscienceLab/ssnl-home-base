@@ -17,7 +17,7 @@ def post_webhook(message: str):
 
     #####
 
-    webhook_url = "https://hooks.slack.com/services/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"
+    webhook_url = "https://hooks.slack.com/services/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"
     title = "New SSNL App Error"
 
     slack_data = {
