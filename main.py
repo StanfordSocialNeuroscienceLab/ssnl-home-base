@@ -64,6 +64,7 @@ def bp():
     return render_template("landing.html")
 
 
+
 @app.route("/P-Card", methods=["GET", "POST"])
 def bp_pcard():
 
