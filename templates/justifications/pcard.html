@@ -1,82 +1,83 @@
 <html>
-      {% extends "template.html" %}
+{% extends "template.html" %}
 
-      <body>
-            {% block content %}
+<body>
+      {% block content %}
 
-            <a href="{{ url_for('index') }}">
-                  <img src="static/img/THE_OG.jpg" class="the_og">
-            </a>
+      <a href="{{ url_for('index') }}">
+            <img src="static/img/THE_OG.jpg" class="the_og">
+      </a>
 
-            <form action="{{ url_for('bp_pcard') }}" method="POST">
-                  <h2>P-Card Justification</h2>
+      <form action="{{ url_for('bp_pcard') }}" method="POST">
+            <h2>P-Card Justification</h2>
 
-                  <label for="purchased_short">
-                        What was purchased? (Short)
-                  </label> <br>
-                  <input type="text" id="purchased_short" name="purchased_short">
+            <label for="purchased_short">
+                  What was purchased? (Short)
+            </label> <br>
+            <input type="text" id="purchased_short" name="purchased_short">
 
-                  <br> <br>
+            <br> <br>
 
-                  <label for="purchased_long">
-                        What was purchased? (Long)
-                  </label> <br>
-                  <textarea id="purchased_long" name="purchased_long" rows="5" cols="50"></textarea>
+            <label for="purchased_long">
+                  What was purchased? (Long)
+            </label> <br>
+            <textarea id="purchased_long" name="purchased_long" rows="5" cols="50"></textarea>
 
-                  <br> <br>
+            <br> <br>
 
-                  <label for="purchased_why">
-                        Why was it purchased?
-                  </label> <br>
-                  <textarea id="purchased_why" name="purchased_why" rows="5" cols="50"></textarea>
+            <label for="purchased_why">
+                  Why was it purchased?
+            </label> <br>
+            <textarea id="purchased_why" name="purchased_why" rows="5" cols="50"></textarea>
 
-                  <br> <br>
+            <br> <br>
 
-                  <label for="purchased_by">
-                        Purchased By
-                  </label><br>
-                  <select name="purchased_by" id="purchased_by">
-                        <option value=""></option>
-                        {% for member in members %}
-                              <option value="{{ member }}">{{ member.upper() }}</option>
-                        {% endfor %}
-                  </select>
+            <label for="purchased_by">
+                  Purchased By
+            </label><br>
+            <select name="purchased_by" id="purchased_by">
+                  <option value=""></option>
+                  {% for member in members %}
+                  <option value="{{ member }}">{{ member.upper() }}</option>
+                  {% endfor %}
+            </select>
 
-                  <br> <br>
+            <br> <br>
 
-                  <label for="funding_source">
-                        Funding Source
-                  </label><br>
-                  <input type="radio" id="funding_source_dean" name="funding_source" value="Dean's">
-                  <label for="funding_source_dean">Dean's Fund</label><br>
-                  <input type="radio" id="funding_source_scp_r01" name="funding_source" value="SCP R01">
-                  <label for="funding_source_scp_r01">Communities R01</label><br>
-                  <input type="radio" id="funding_source_resx" name="funding_source" value="ResX">
-                  <label for="funding_source_resx">ResX Task Force</label><br>
-                  <input type="radio" id="funding_source_masc" name="funding_source" value="MASC">
-                  <label for="funding_source_masc">MASC R01</label><br>
-                  <input type="radio" id="funding_source_jm" name="funding_source" value="Just Mercy">
-                  <label for="funding_source_jm">Just Mercy (Good Films Impact)</label><br> 
+            <label for="funding_source">
+                  Funding Source
+            </label><br>
+            <input type="radio" id="funding_source_dean" name="funding_source" value="Dean's">
+            <label for="funding_source_dean">Dean's Fund</label><br>
+            <input type="radio" id="funding_source_scp_r01" name="funding_source" value="SCP R01">
+            <label for="funding_source_scp_r01">Communities R01</label><br>
+            <input type="radio" id="funding_source_resx" name="funding_source" value="ResX">
+            <label for="funding_source_resx">ResX Task Force</label><br>
+            <input type="radio" id="funding_source_masc" name="funding_source" value="MASC">
+            <label for="funding_source_masc">MASC R01</label><br>
+            <input type="radio" id="funding_source_jm" name="funding_source" value="Just Mercy">
+            <label for="funding_source_jm">Just Mercy (Good Films Impact)</label><br>
 
-                  <br> <br>
+            <br> <br>
 
-                  <label for="charge_amount">
-                        Amount Charged to P-Card
-                  </label> <br>
-                  <input type="text" id="charge_amount" name="charge_amount">
+            <label for="charge_amount">
+                  Amount Charged to P-Card
+            </label> <br>
+            <input type="text" id="charge_amount" name="charge_amount">
 
-                  <br> <br>
+            <br> <br>
 
-                  <label for="date_charged">
-                        Date Charged
-                  </label><br>
-                  <input type="text" id="date_charged" name="date_charged">
+            <label for="date_charged">
+                  Date Charged
+            </label><br>
+            <input type="text" id="date_charged" name="date_charged">
 
-                  <br> <br> <br>
+            <br> <br> <br>
 
-                  <input type="submit" value="Download Justification">
-            </form>
+            <input type="submit" value="Download Justification">
+      </form>
 
-            {% endblock %}
-      </body>
+      {% endblock %}
+</body>
+
 </html>

@@ -155,7 +155,7 @@ def bp_reimbursements():
         j_why = request.form["purchased_why"]
         who = request.form["purchased_by"]
         source = request.form["funding_source"]
-        amount = request.form["charge_amount"].replace("$", "")
+        amount = request.form["charge_amount"].replace("$", "").strip()
         date_c = request.form["date_charged"]
 
         # -- Instantiate Reimbursement object
@@ -186,7 +186,7 @@ def bp_reimbursements():
         )
 
         try:
-            return download(path, reimburse.output_path)
+            return download(path)
 
         except Exception as e:
             message = f"Error @ Reimbursement\n\n{e}"
@@ -226,7 +226,7 @@ def bp_reocurring():
         )
 
         try:
-            return download(path, ripper.output_path)
+            return download(path)
 
         except Exception as e:
             message = f"Error @ Reocurring Charges\n\n{e}"
@@ -282,7 +282,7 @@ def mturk():
             app.config["UPLOAD_FOLDER"], f"SSNL-MTurk-{right_now}.zip"
         )
 
-        return download(target, output_path)
+        return download(target)
 
     return render_template("utils/mturk.html")
 
