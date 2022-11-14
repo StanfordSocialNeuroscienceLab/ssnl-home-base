@@ -23,7 +23,7 @@ app.config["BP_TEMPLATES"] = "files/templates"
 path_to_members = os.path.join(here, "files/packets/members.json")
 path_to_projects = os.path.join(here, "files/packets/projects.json")
 
-right_now = datetime.now(pytz.timezone("US/Pacific")).strftime("%m_%d_%Y")
+pacfic_time = datetime.now(pytz.timezone("US/Pacific")).strftime("%m_%d_%Y")
 logging.basicConfig(level=logging.INFO)
 
 
@@ -119,7 +119,7 @@ def bp_pcard():
         try:
             path = os.path.join(
                 app.config["JUSTIFICATIONS"],
-                f"SSNL-Justification-{right_now}-{amount}.zip",
+                f"SSNL-Justification-{p_card.timestamp}-{amount}.zip",
             )
 
         except Exception as e:
@@ -136,8 +136,6 @@ def bp_pcard():
             post_webhook(message=message)
 
             return redirect(url_for("index"))
-
-    logging.info(f"\n\n{get_members()}\n\n")
 
     return render_template("justifications/pcard.html", members=get_members())
 
@@ -182,7 +180,8 @@ def bp_reimbursements():
 
         # Download zipped files
         path = os.path.join(
-            app.config["JUSTIFICATIONS"], f"SSNL-Reimbursement-{right_now}-{amount}.zip"
+            app.config["JUSTIFICATIONS"],
+            f"SSNL-Reimbursement-{pacfic_time}-{amount}.zip",
         )
 
         try:
@@ -222,7 +221,7 @@ def bp_reocurring():
 
         # Download zipped files
         path = os.path.join(
-            app.config["JUSTIFICATIONS"], f"SSNL-{charge}-{right_now}.zip"
+            app.config["JUSTIFICATIONS"], f"SSNL-{charge}-{pacfic_time}.zip"
         )
 
         try:
@@ -279,7 +278,7 @@ def mturk():
 
         # Download zipped files
         target = os.path.join(
-            app.config["UPLOAD_FOLDER"], f"SSNL-MTurk-{right_now}.zip"
+            app.config["UPLOAD_FOLDER"], f"SSNL-MTurk-{pacfic_time}.zip"
         )
 
         return download(target)

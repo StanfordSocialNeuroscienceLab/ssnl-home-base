@@ -48,11 +48,11 @@ class PCard:
         self, here, charge_to_card, j_short, j_long, j_why, who, when, project
     ):
 
-        today_f = datetime.now(pytz.timezone("US/Pacific")).strftime("%m_%d_%Y")
+        self.timestamp = right_now
 
         self.base_path = os.path.join(here, "files/justifications")
         self.input_path = os.path.join(here, "files/templates")
-        self.output_path = os.path.join(self.base_path, today_f)
+        self.output_path = os.path.join(self.base_path, right_now)
 
         pathlib.Path(self.output_path).mkdir(exist_ok=True, parents=True)
 
