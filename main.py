@@ -281,7 +281,14 @@ def mturk():
             app.config["UPLOAD_FOLDER"], f"SSNL-MTurk-{pacfic_time}.zip"
         )
 
-        return download(target)
+        try:
+            return download(target)
+
+        except Exception as e:
+            message = f"Error @ MTurk\n\n{e}"
+            post_webhook(message=message)
+
+            return redirect(url_for("index"))
 
     return render_template("utils/mturk.html")
 
