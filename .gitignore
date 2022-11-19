@@ -2,7 +2,11 @@
 */.DS_Store
 *.pyc
 layout.md
+
+###
+
 static/bootstrap/bootstrap.min.js
 static/bootstrap/bootstrap.min.js.map
 files/packets/members.json
 files/packets/members.json
+files/justifications/
