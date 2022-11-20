@@ -1,47 +1,36 @@
 #!/bin/python3
 import pandas as pd
-import os, docx, tarfile, random, shutil, pytz
-from datetime import date, datetime
+import os, docx, shutil
+from datetime import datetime
+from uuid import uuid4
+import pathlib
+
+from ..base.helper import drop_a_line
 
 
 ##########
 
 
-def drop_a_line(path):
-
-    options = [
-        "Have a nice day!",
-        "Keep up the great work!",
-        "You're doing great!",
-        "You are the sun and the moon!",
-        "You are absolute magic!",
-        "Thank you for being you!",
-        "Make today great!",
-        "Make it a great day!",
-        "Do something nice for yourself today!",
-        "You are a light everywhere you go!",
-        "You can accomplish anything you set your mind to!",
-        "Everyone needs a friend like you!",
-    ]
-
-    with open(os.path.join(path, "README.txt"), "w") as file:
-        message = random.choice(options)
-
-        file.write("PLEASE READ\n\n")
-        file.write(message)
-
-
 class WorkerFile:
-    def __init__(self, filename, filepath, basepath, template_path):
-        # -- Paths
+    def __init__(self, filename, filepath, basepath, template_path, output_dir):
         self.incoming_filepath = filepath
         self.base_path = basepath
         self.template = os.path.join(template_path, "MTurk.docx")
 
-        # -- Attributes
+        ###
+
+        self.output_path = output_dir
+        pathlib.Path(self.output_path).mkdir(exist_ok=True, parents=True)
+
+        ###
+
         self.incoming_file = filename
         self.payments, self.workerfile = self.clean_filename()
         self.working_file = self.clean_dataframe()
+
+        ###
+
+        self.hex = uuid4().hex
 
     def clean_filename(self):
         temp = self.incoming_file.split(".")[0]
@@ -90,7 +79,7 @@ class WorkerFile:
         dataframe = self.working_file
         output_name = self.payments
 
-        with open(os.path.join(self.incoming_filepath, output_name), "w") as file:
+        with open(os.path.join(self.output_path, output_name), "w") as file:
             file.write(f"== {output_name} ==\n\n")
 
             for pay in dataframe["Pay"].unique():
@@ -112,7 +101,7 @@ class WorkerFile:
         total = pay_sum + fee_sum
         PCT = f"{percent}%"
 
-        with open(os.path.join(self.incoming_filepath, filename), "w") as file:
+        with open(os.path.join(self.output_path, filename), "w") as file:
             file.write("Total to Participants:\t\t{}".format(pay_sum))
             file.write("\t\tAmazon Fee: {}".format(PCT))
             file.write("\nTotal to Amazon:\t\t{}".format(fee_sum))
@@ -143,10 +132,10 @@ class WorkerFile:
         drop_a_line(self.incoming_filepath)
 
     def gunzip(self):
-        with tarfile.open(
-            os.path.join(self.base_path, "SSNL-MTurk-Workerfile.tar.gz"), "w:gz"
-        ) as tar:
-            tar.add(self.incoming_filepath, arcname="SSNL-MTurk-Workerfile")
+        out_path = os.path.join(self.base_path, f"SSNL-MTurk-{self.hex}")
+        shutil.make_archive(out_path, "zip", self.output_path)
+
+        self.download_me = os.path.join(self.base_path, f"SSNL-MTurk-{self.hex}.zip")
 
     def write_justification(
         self, total_subs, price_per_sub, percent, fee_per_sub, total
@@ -169,7 +158,7 @@ class WorkerFile:
         head = header.paragraphs[0]
         head.text = f"\n\nCreated {today}"
 
-        doc.save(os.path.join(self.incoming_filepath, f"mturk_{total}_zaki.docx"))
+        doc.save(os.path.join(self.output_path, f"mturk_{total}_zaki.docx"))
 
     def run(self):
         self.write_payment_combinations()

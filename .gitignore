@@ -2,6 +2,7 @@
 */.DS_Store
 *.pyc
 layout.md
+*ipynb*
 
 ###
 
@@ -10,3 +11,4 @@ static/bootstrap/bootstrap.min.js.map
 files/packets/members.json
 files/packets/members.json
 files/justifications/
+files/uploads/

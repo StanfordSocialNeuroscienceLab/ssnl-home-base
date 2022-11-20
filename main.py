@@ -1,12 +1,13 @@
 #!/bin/python3
-from flask import Flask, render_template, send_file, request, after_this_request, flash
+from flask import Flask, render_template, send_file, request, redirect, url_for
 from werkzeug.utils import secure_filename
 from flask_httpauth import HTTPBasicAuth
 import os, pathlib, pytz
 from datetime import datetime
 import logging
-from utils.slack import post_webhook
-from helper import *
+import json
+from utils.base.slack import post_webhook
+from utils.base.helper import *
 
 
 ##########
@@ -69,7 +70,7 @@ def bp_pcard():
 
     if request.method == "POST":
 
-        from justifications.justification import PCard
+        from utils.justifications.pcard import PCard
 
         try:
             j_short = request.form["purchased_short"]
@@ -145,7 +146,7 @@ def bp_reimbursements():
 
     if request.method == "POST":
 
-        from justifications.justification import Reimbursement
+        from utils.justifications.reimbursement import Reimbursement
 
         # -- Assign HTML form input to variables
         j_short = request.form["purchased_short"]
@@ -201,7 +202,7 @@ def bp_reocurring():
 
     if request.method == "POST":
 
-        from justifications.justification import Reocurring
+        from utils.justifications.reocurring import Reocurring
 
         # -- HTML form => variables
         charge = request.form["charge"]
@@ -244,14 +245,14 @@ def mturk():
 
     if request.method == "POST":
 
-        from utils.mturk import WorkerFile
+        from utils.justifications.mturk import WorkerFile
 
         # -- HTML form => variables
         file = request.files["file"]
         safe_name = secure_filename(file.filename)
 
         # -- Create output directories
-        output_dir = datetime.now().strftime("%b_%d_%Y_%H_%M_%S")
+        output_dir = datetime.now().strftime("mturk_%b_%d_%Y_%H_%M_%S")
         output_path = os.path.join(app.config["UPLOAD_FOLDER"], output_dir)
 
         if not os.path.exists(output_path):
@@ -267,7 +268,9 @@ def mturk():
                 filepath=output_path,
                 basepath=os.path.join(here, app.config["UPLOAD_FOLDER"]),
                 template_path=os.path.join(here, app.config["BP_TEMPLATES"]),
+                output_dir=output_path,
             )
+
             worker.run()
 
         except Exception as e:
@@ -276,13 +279,10 @@ def mturk():
 
             return redirect(url_for("index"))
 
-        # Download zipped files
-        target = os.path.join(
-            app.config["UPLOAD_FOLDER"], f"SSNL-MTurk-{pacfic_time}.zip"
-        )
+        ###
 
         try:
-            return download(target)
+            return download(worker.download_me)
 
         except Exception as e:
             message = f"Error @ MTurk\n\n{e}"
@@ -301,7 +301,7 @@ def ema():
 
     if request.method == "POST":
 
-        from utils.scp_ema_parser import EMA_Parser
+        from utils.base.scp_ema_parser import EMA_Parser
 
         # -- Read in and save JSON file
         file = request.files["file"]
@@ -426,7 +426,7 @@ def lab_manager_landing():
 @auth.login_required
 def view_members():
 
-    from utils.lab_manager_utils import build_members_df
+    from utils.base.lab_manager_utils import build_members_df
 
     dataframe, test = build_members_df()
 
@@ -439,7 +439,7 @@ def view_members():
 @auth.login_required
 def view_projects():
 
-    from utils.lab_manager_utils import build_projects_df
+    from utils.base.lab_manager_utils import build_projects_df
 
     dataframe, projects = build_projects_df()
 
@@ -452,7 +452,7 @@ def update_members():
 
     if request.method == "POST":
 
-        from utils.lab_manager_utils import MembersCursor
+        from utils.base.lab_manager_utils import MembersCursor
 
         # -- Form input
         member = request.form["member_to_update"]
@@ -481,7 +481,7 @@ def update_projects():
 
     if request.method == "POST":
 
-        from utils.lab_manager_utils import ProjectsCursor
+        from utils.base.lab_manager_utils import ProjectsCursor
 
         project = request.form["project_to_update"]
         pta = request.form["pta"]
@@ -511,7 +511,7 @@ def add_lab_member():
 
     if request.method == "POST":
 
-        from utils.lab_manager_utils import MembersCursor
+        from utils.base.lab_manager_utils import MembersCursor
 
         # -- Form input
         member = request.form["member_to_add"]
@@ -540,7 +540,7 @@ def add_project():
 
     if request.method == "POST":
 
-        from utils.lab_manager_utils import ProjectsCursor
+        from utils.base.lab_manager_utils import ProjectsCursor
 
         project = request.form["project_to_add"]
         pta = request.form["pta"]
