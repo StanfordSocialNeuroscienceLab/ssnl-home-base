@@ -1,8 +1,9 @@
 #!/bin/python3
-import docx, pathlib, os, random, pytz, json, shutil
+import docx, pathlib, os, pytz, json, shutil
 from datetime import datetime
 from main import path_to_members, path_to_projects
-from ..utils.helper import drop_a_line
+
+from ..base.helper import drop_a_line
 
 #####
 
