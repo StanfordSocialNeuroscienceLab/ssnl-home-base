@@ -66,6 +66,10 @@ class Reimbursement:
             self.project["funding-string"],
         )
 
+        template.paragraphs[3].text = (
+            template.paragraphs[3].text.replace('"', "").replace("'", "")
+        )
+
         header = template.sections[0].header
         head = header.paragraphs[0]
         head.text = f"\n\nCreated {now}"

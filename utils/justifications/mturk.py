@@ -4,6 +4,7 @@ import os, docx, shutil
 from datetime import datetime
 from uuid import uuid4
 import pathlib
+from flask import flash
 
 from ..base.helper import drop_a_line
 
@@ -152,6 +153,10 @@ class WorkerFile:
             fee_per_sub,
             total,
             today,
+        )
+
+        doc.paragraphs[3].text = (
+            doc.paragraphs[3].text.replace('"', "").replace("'", "")
         )
 
         header = doc.sections[0].header

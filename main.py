@@ -1,5 +1,5 @@
 #!/bin/python3
-from flask import Flask, render_template, send_file, request, redirect, url_for
+from flask import Flask, render_template, send_file, request, redirect, url_for, flash
 from werkzeug.utils import secure_filename
 from flask_httpauth import HTTPBasicAuth
 import os, pathlib, pytz
@@ -270,6 +270,18 @@ def mturk():
                 template_path=os.path.join(here, app.config["BP_TEMPLATES"]),
                 output_dir=output_path,
             )
+
+            ###
+
+            incoming_columns = [x.lower() for x in worker.load_file().columns]
+
+            # Sanity check
+            for var in ["workerid", "payment"]:
+                if var not in incoming_columns:
+                    flash(f"Whoops! We're missing the {var} column")
+                    return redirect(url_for("mturk"))
+
+            ###
 
             worker.run()
 
