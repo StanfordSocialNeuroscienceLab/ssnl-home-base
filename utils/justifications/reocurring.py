@@ -75,6 +75,7 @@ class Reocurring:
 
         doc = docx.Document(self.filepath)
         doc.paragraphs[3].text = doc.paragraphs[3].text.format(self.date)
+        doc.paragaphs[3].text = doc.paragraphs[3].text.replace('"', "").replace("'", "")
 
         header = doc.sections[0].header
         head = header.paragraphs[0]

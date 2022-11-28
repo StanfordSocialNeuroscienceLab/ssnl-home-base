@@ -155,6 +155,10 @@ class WorkerFile:
             today,
         )
 
+        doc.paragraphs[3].text = (
+            doc.paragraphs[3].text.replace('"', "").replace("'", "")
+        )
+
         header = doc.sections[0].header
         head = header.paragraphs[0]
         head.text = f"\n\nCreated {today}"
