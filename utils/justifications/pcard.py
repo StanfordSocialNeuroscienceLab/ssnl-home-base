@@ -66,6 +66,11 @@ class PCard:
         head = header.paragraphs[0]
         head.text = f"\n\nCreated {now}"
 
+        # Remove all quotes and apostrophes
+        template.paragraphs[3].text = (
+            template.paragraphs[3].text.replace('"', "").replace("'", "")
+        )
+
         template.save(os.path.join(self.output_path, self.output_filename))
 
         drop_a_line(self.output_path)
