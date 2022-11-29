@@ -1,40 +1,36 @@
 <html>
-      {% extends "template.html" %}
+{% extends "template.html" %}
 
-      <body>
+<body>
 
-            {% block content %}
+      {% block content %}
 
-            <img src="../static/img/THE_OG.jpg" class="the_og">
+      <img src="../static/img/THE_OG.jpg" class="the_og">
 
-            <h1><b>SSNL Home Base</b></h1>
+      <h1><b>SSNL Home Base</b></h1>
 
-            <a href="{{ url_for('bp') }}">
-                  <h3 class="home_page_link">Justification Automator</h3>
-            </a>
-            <a href="{{ url_for('mturk') }}">
-                  <h3 class="home_page_link">MTurk Workerfile Automator</h3>
-            </a>
-            <a href="{{ url_for('ema') }}">
-                  <h3 class="home_page_link">EMA JSON Parser</h3>
-            </a>
-            <a href="{{ url_for('combine_pdf') }}">
-                  <h3 class="home_page_link">Combine PDFs</h3>
-            </a>
+      <a href="{{ url_for('bp') }}">
+            <h3 class="home_page_link">Justification Automator</h3>
+      </a>
+      <a href="{{ url_for('mturk') }}">
+            <h3 class="home_page_link">MTurk Workerfile Automator</h3>
+      </a>
+      <a href="{{ url_for('combine_pdf') }}">
+            <h3 class="home_page_link">Combine PDFs</h3>
+      </a>
 
-            <div class="where_is_ian">
-                  <p>You got questions?</p>
-                  <p>
-                        <a href="mailto:IRF229@nyu.edu">
-                              <b>I've got answers</b>
-                        </a>
-                  </p>
-                  <a href="{{ url_for('lab_manager_login') }}">
-                        <img src="../static/img/yeehaw.webp" width="3%">
+      <div class="where_is_ian">
+            <p>
+                  <a href="mailto:IRF229@nyu.edu">
+                        <b>Contact Ian</b>
                   </a>
-            </div>
+            </p>
+            <a href="{{ url_for('lab_manager_login') }}">
+                  <img src="../static/img/yeehaw.webp" width="3%">
+            </a>
+      </div>
 
-            {% endblock %}
-      </body>
+      {% endblock %}
+</body>
 
 </html>

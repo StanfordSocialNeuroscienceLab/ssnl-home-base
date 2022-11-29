@@ -6,6 +6,7 @@ import os, pathlib, pytz
 from datetime import datetime
 import logging
 import json
+from time import sleep
 from utils.base.slack import post_webhook
 from utils.base.helper import *
 
@@ -365,6 +366,12 @@ def combine_pdf():
         ordered_files = []
 
         # -- Save and aggregate PDF inputs
+        logging.info(request.files)
+
+        if len(request.files) == 0:
+            flash("No files to merge")
+            return redirect(url_for("combine_pdf"))
+
         for k in request.files:
             temp = request.files[k]
 
