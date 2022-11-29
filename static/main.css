@@ -52,3 +52,72 @@ body {
 .mturk_box {
       padding: 25px 0px;
 }
+
+/* PDF Aggregator */
+.pdf_box {
+      margin-bottom: 20px;
+      transition: opacity 0.3s;
+}
+
+.pdf_box input {
+      padding: 5px 10px;
+      width: 100%;
+      border: none;
+      border: thin solid #d4d4d4;
+      color: #888;
+      font-family: ubuntu, sans-serif;
+      background-color: #f9f9f9;
+}
+
+.pdf_box input:focus {
+      outline: none;
+}
+
+.pdf_box span {
+      display: inline-block;
+      margin-left: 10px;
+      cursor: pointer;
+      background-color: #f9f9f9;
+      padding: 10px;
+      font-size: 20px;
+      transition: all 0.3s;
+      font-weight: bold;
+      border: thin solid #d4d4d4;
+      width: auto;
+}
+
+.pdf_box span:last-child {
+      display: none;
+      padding: 12px;
+}
+
+.pdf_box span:hover {
+      background-color: green;
+      border: thin solid green;
+      color: #fff;
+}
+
+.pdf_box span:last-child:hover {
+      background-color: red;
+      border: thin solid red;
+      color: #fff;
+}
+
+.pdf_file_store {
+      margin-bottom: 20px;
+      transition: opacity 0.3s;
+}
+
+.pdf_file_store input {
+      padding: 5px 10px;
+      width: 100%;
+      border: none;
+      border: thin solid #d4d4d4;
+      color: #888;
+      font-family: ubuntu, sans-serif;
+      background-color: #f9f9f9;
+}
+
+.pdf_file_store input:focus {
+      outline: none;
+}

@@ -22,9 +22,9 @@
       <div class="mturk_box">
             <h2>Upload Your Worker File Below</h2>
             <form action="{{ url_for('mturk') }}" method="POST" enctype="multipart/form-data">
-                  <input type="file" name="file" id="file" accept=".csv, .xlsx">
+                  <input type="file" name="file" id="file" class="form-control" accept=".csv, .xlsx">
                   <br> <br>
-                  <input type="submit" value="Upload">
+                  <button type="submit" class="btn btn-primary">Upload</button>
             </form>
       </div>
 
