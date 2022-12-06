@@ -74,8 +74,14 @@ class Reocurring:
     def write_justification(self):
 
         doc = docx.Document(self.filepath)
+
+        # Format date
         doc.paragraphs[3].text = doc.paragraphs[3].text.format(self.date)
-        doc.paragaphs[3].text = doc.paragraphs[3].text.replace('"', "").replace("'", "")
+
+        # Strip out weird characters for Tracy
+        doc.paragraphs[3].text = (
+            doc.paragraphs[3].text.replace('"', "").replace("'", "")
+        )
 
         header = doc.sections[0].header
         head = header.paragraphs[0]
