@@ -7,6 +7,7 @@ from datetime import datetime
 import logging
 import json
 from time import sleep
+from uuid import uuid4
 from utils.base.slack import post_webhook
 from utils.base.helper import *
 
@@ -25,7 +26,7 @@ app.config["BP_TEMPLATES"] = "files/templates"
 path_to_members = os.path.join(here, "files/packets/members.json")
 path_to_projects = os.path.join(here, "files/packets/projects.json")
 
-pacfic_time = datetime.now(pytz.timezone("US/Pacific")).strftime("%m_%d_%Y")
+pacific_time = datetime.now(pytz.timezone("US/Pacific")).strftime("%m_%d_%Y")
 logging.basicConfig(level=logging.INFO)
 
 
@@ -183,7 +184,7 @@ def bp_reimbursements():
         # Download zipped files
         path = os.path.join(
             app.config["JUSTIFICATIONS"],
-            f"SSNL-Reimbursement-{pacfic_time}-{amount}.zip",
+            f"SSNL-Reimbursement-{pacific_time}-{amount}.zip",
         )
 
         try:
@@ -223,8 +224,10 @@ def bp_reocurring():
 
         # Download zipped files
         path = os.path.join(
-            app.config["JUSTIFICATIONS"], f"SSNL-{charge}-{pacfic_time}.zip"
+            app.config["JUSTIFICATIONS"], f"SSNL-{charge}-{pacific_time}.zip"
         )
+
+        sleep(5)
 
         try:
             return download(path)
