@@ -210,11 +210,16 @@ def bp_reocurring():
         charge = request.form["charge"]
         date_of_charge = request.form["date_of_charge"]
 
+        logging.info("Reocurring charge submitted: date={}".format(date_of_charge))
+
         try:
             ripper = Reocurring(here=here, charge=charge, date_of_charge=date_of_charge)
 
             # Write to file
             ripper.write_justification()
+
+            # Output filename
+            output_filename = ripper.output_name
 
         except Exception as e:
             message = f"Error @ Reocurring Charges\n\n{e}"
@@ -223,9 +228,7 @@ def bp_reocurring():
             return redirect(url_for("index"))
 
         # Download zipped files
-        path = os.path.join(
-            app.config["JUSTIFICATIONS"], f"SSNL-{charge}-{pacific_time}.zip"
-        )
+        path = os.path.join(app.config["JUSTIFICATIONS"], f"{output_filename}.zip")
 
         sleep(5)
 

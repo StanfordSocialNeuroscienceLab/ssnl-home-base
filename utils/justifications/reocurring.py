@@ -14,8 +14,8 @@ with open(path_to_projects) as incoming:
     projects = json.load(incoming)
 
 # Current time in Pacific
-now = datetime.now(pytz.timezone("US/Pacific")).strftime("%m/%d/%Y")
-right_now = datetime.now(pytz.timezone("US/Pacific")).strftime("%m_%d_%Y")
+# now = datetime.now(pytz.timezone("US/Pacific")).strftime("%m/%d/%Y")
+# right_now = datetime.now(pytz.timezone("US/Pacific")).strftime("%m_%d_%Y")
 
 
 ##########
@@ -25,14 +25,15 @@ class Reocurring:
     def __init__(self, here, charge, date_of_charge):
         self.charge = charge
         self.date = date_of_charge
-
-        today_f = datetime.now(pytz.timezone("US/Pacific")).strftime(
-            "%b_%d_%Y_%H_%M_%S"
-        )
+        self.timestamp = datetime.now(pytz.timezone("US/Pacific"))
 
         self.base_path = os.path.join(here, "files/justifications")
         self.template_path = os.path.join(here, "files/templates/reoccuring")
-        self.output_path = os.path.join(self.base_path, today_f)
+        self.output_path = os.path.join(
+            self.base_path, self.timestamp.strftime("%b_%d_%Y_%H_%M_%S")
+        )
+
+        self.output_name = f"SSNL-{self.charge}-{self.timestamp.strftime('%m_%d_%Y')}"
 
         if not os.path.exists(self.output_path):
             pathlib.Path(self.output_path).mkdir(exist_ok=True, parents=True)
@@ -85,7 +86,7 @@ class Reocurring:
 
         header = doc.sections[0].header
         head = header.paragraphs[0]
-        head.text = "\n\nCreated {}".format(now)
+        head.text = "\n\nCreated {}".format(self.timestamp.strftime("%m/%d/%Y"))
 
         doc.save(os.path.join(self.output_path, self.filename))
 
@@ -95,6 +96,6 @@ class Reocurring:
 
     def gunzip(self):
 
-        out_path = os.path.join(self.base_path, f"SSNL-{self.charge}-{right_now}")
+        out_path = os.path.join(self.base_path, self.output_name)
 
         shutil.make_archive(out_path, "zip", self.output_path)
