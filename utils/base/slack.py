@@ -4,7 +4,6 @@ import requests
 import sys
 from flask import flash
 
-
 ##########
 
 
@@ -14,6 +13,7 @@ def post_webhook(message: str):
     """
 
     flash("Sorry, something went wrong! Ian's on it")
+    flash(f"For reference: {message}")
 
     #####
 
