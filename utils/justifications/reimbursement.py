@@ -5,8 +5,6 @@ from main import path_to_members, path_to_projects
 
 from ..base.helper import drop_a_line
 
-#####
-
 with open(path_to_members) as incoming:
     members = json.load(incoming)
 

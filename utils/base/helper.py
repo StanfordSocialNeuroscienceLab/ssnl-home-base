@@ -3,7 +3,6 @@ import os
 import shutil
 import random
 
-
 ##########
 
 
@@ -14,7 +13,6 @@ def cleanup_output(path):
 
     for file in os.listdir(path):
         if file != ".DS_Store":
-
             temp = os.path.join(path, file)
 
             if os.path.isdir(temp):
@@ -31,7 +29,6 @@ def cleanup_output(path):
 
 
 def drop_a_line(path):
-
     options = [
         "Have a nice day!",
         "Keep up the great work!",

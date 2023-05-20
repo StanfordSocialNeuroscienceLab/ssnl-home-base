@@ -5,8 +5,6 @@ from main import path_to_members, path_to_projects
 
 from ..base.helper import drop_a_line
 
-#####
-
 with open(path_to_members) as incoming:
     members = json.load(incoming)
 
@@ -73,7 +71,6 @@ class Reocurring:
         self.filepath = filepath
 
     def write_justification(self):
-
         doc = docx.Document(self.filepath)
 
         # Format date
@@ -95,7 +92,6 @@ class Reocurring:
         self.gunzip()
 
     def gunzip(self):
-
         out_path = os.path.join(self.base_path, self.output_name)
 
         shutil.make_archive(out_path, "zip", self.output_path)

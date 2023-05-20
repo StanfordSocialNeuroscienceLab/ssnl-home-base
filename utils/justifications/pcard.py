@@ -5,8 +5,6 @@ from main import path_to_members, path_to_projects
 
 from ..base.helper import drop_a_line
 
-#####
-
 with open(path_to_members) as incoming:
     members = json.load(incoming)
 
@@ -25,7 +23,6 @@ class PCard:
     def __init__(
         self, here, charge_to_card, j_short, j_long, j_why, who, when, project
     ):
-
         self.timestamp = right_now
 
         self.base_path = os.path.join(here, "files/justifications")

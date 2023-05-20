@@ -34,7 +34,6 @@ logging.basicConfig(level=logging.INFO)
 
 
 for path in ["uploads", "justifications"]:
-
     temp = os.path.join(here, "files", path)
 
     if not os.path.exists(temp):
@@ -48,7 +47,6 @@ for path in ["uploads", "justifications"]:
 def index():
     # Start with a clean cache
     for dir in ["files/uploads", "files/justifications"]:
-
         try:
             cleanup_output(dir)
 
@@ -69,9 +67,7 @@ def bp():
 
 @app.route("/P-Card", methods=["GET", "POST"])
 def bp_pcard():
-
     if request.method == "POST":
-
         from utils.justifications.pcard import PCard
 
         try:
@@ -145,9 +141,7 @@ def bp_pcard():
 
 @app.route("/Reimbursements", methods=["GET", "POST"])
 def bp_reimbursements():
-
     if request.method == "POST":
-
         from utils.justifications.reimbursement import Reimbursement
 
         # -- Assign HTML form input to variables
@@ -201,9 +195,7 @@ def bp_reimbursements():
 
 @app.route("/Reocurring-Charges", methods=["GET", "POST"])
 def bp_reocurring():
-
     if request.method == "POST":
-
         from utils.justifications.reocurring import Reocurring
 
         # -- HTML form => variables
@@ -249,9 +241,7 @@ def bp_reocurring():
 
 @app.route("/MTurk", methods=["GET", "POST"])
 def mturk():
-
     if request.method == "POST":
-
         from utils.justifications.mturk import WorkerFile
 
         # -- HTML form => variables
@@ -317,9 +307,7 @@ def mturk():
 
 @app.route("/EMA", methods=["GET", "POST"])
 def ema():
-
     if request.method == "POST":
-
         from utils.base.scp_ema_parser import EMA_Parser
 
         # -- Read in and save JSON file
@@ -356,9 +344,7 @@ def ema():
 
 @app.route("/combine_pdf", methods=["GET", "POST"])
 def combine_pdf():
-
     if request.method == "POST":
-
         from PyPDF2 import PdfFileMerger
 
         # -- Create output directories
@@ -423,7 +409,6 @@ def verify(username, password):
 
 @app.route("/lab_manager", methods=["GET", "POST"])
 def lab_manager_login():
-
     error = None
 
     if request.method == "POST":
@@ -450,7 +435,6 @@ def lab_manager_landing():
 @app.route("/lab_manager/view_lab_members", methods=["GET", "POST"])
 @auth.login_required
 def view_members():
-
     from utils.base.lab_manager_utils import build_members_df
 
     dataframe, test = build_members_df()
@@ -463,7 +447,6 @@ def view_members():
 @app.route("/lab_manager/view_projects", methods=["GET", "POST"])
 @auth.login_required
 def view_projects():
-
     from utils.base.lab_manager_utils import build_projects_df
 
     dataframe, projects = build_projects_df()
@@ -474,9 +457,7 @@ def view_projects():
 @app.route("/lab_manager/update_members", methods=["GET", "POST"])
 @auth.login_required
 def update_members():
-
     if request.method == "POST":
-
         from utils.base.lab_manager_utils import MembersCursor
 
         # -- Form input
@@ -503,9 +484,7 @@ def update_members():
 @app.route("/lab_manager/update_projects", methods=["GET", "POST"])
 @auth.login_required
 def update_projects():
-
     if request.method == "POST":
-
         from utils.base.lab_manager_utils import ProjectsCursor
 
         project = request.form["project_to_update"]
@@ -533,9 +512,7 @@ def update_projects():
 @app.route("/lab_manager/add_lab_member", methods=["GET", "POST"])
 @auth.login_required
 def add_lab_member():
-
     if request.method == "POST":
-
         from utils.base.lab_manager_utils import MembersCursor
 
         # -- Form input
@@ -562,9 +539,7 @@ def add_lab_member():
 @app.route("/lab_manager/add_project", methods=["GET", "POST"])
 @auth.login_required
 def add_project():
-
     if request.method == "POST":
-
         from utils.base.lab_manager_utils import ProjectsCursor
 
         project = request.form["project_to_add"]
