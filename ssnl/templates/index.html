@@ -9,13 +9,13 @@
 
       <h1><b>SSNL Home Base</b></h1>
 
-      <a href="{{ url_for('bp') }}">
+      <a href="{{ url_for('general.bp_justifications') }}">
             <h3 class="home_page_link">Justification Automator</h3>
       </a>
-      <a href="{{ url_for('mturk') }}">
+      <a href="{{ url_for('general.mturk') }}">
             <h3 class="home_page_link">MTurk Workerfile Automator</h3>
       </a>
-      <a href="{{ url_for('combine_pdf') }}">
+      <a href="{{ url_for('general.combine_pdf') }}">
             <h3 class="home_page_link">Combine PDFs</h3>
       </a>
 
@@ -25,7 +25,7 @@
                         <b>Contact Ian</b>
                   </a>
             </p>
-            <a href="{{ url_for('lab_manager_login') }}">
+            <a href="{{ url_for('admin.index') }}">
                   <img src="../static/img/yeehaw.webp" width="3%">
             </a>
       </div>

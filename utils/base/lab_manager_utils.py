@@ -3,7 +3,6 @@ import os, json
 import pandas as pd
 from main import path_to_members, path_to_projects
 
-
 ##########
 
 
@@ -50,7 +49,6 @@ def build_projects_df():
     projects_ = []
 
     for key in list(projects.keys()):
-
         temp_data = projects[key]
 
         try:
@@ -94,12 +92,10 @@ class JSONCursor:
         self.filepath = os.path.join(self.base_path)
 
     def open_file(self):
-
         with open(self.filepath) as incoming:
             return json.load(incoming)
 
     def save_file(self, temp_dictionary):
-
         with open(self.filepath, "w") as outgoing:
             json.dump(temp_dictionary, outgoing, indent=4)
 
@@ -111,7 +107,6 @@ class MembersCursor(JSONCursor):
     def __init__(
         self, path_to_packets, key, employee_number, title, create_new_key=False
     ):
-
         JSONCursor.__init__(self, path_to_packets, packet="members")
 
         self.key = key
@@ -121,7 +116,6 @@ class MembersCursor(JSONCursor):
         self.create_new_key = create_new_key
 
     def run(self):
-
         temp_data = self.open_file()
 
         if self.create_new_key:
@@ -143,7 +137,6 @@ class ProjectsCursor(JSONCursor):
     def __init__(
         self, path_to_packets, key, pta, sponsor, irb_number, create_new_key=False
     ):
-
         JSONCursor.__init__(self, path_to_packets=path_to_packets, packet="projects")
 
         self.key = key
@@ -154,7 +147,6 @@ class ProjectsCursor(JSONCursor):
         self.create_new_key = create_new_key
 
     def run(self):
-
         temp_data = self.open_file()
 
         if self.create_new_key:
