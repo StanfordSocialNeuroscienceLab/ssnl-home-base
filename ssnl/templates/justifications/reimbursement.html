@@ -4,11 +4,11 @@
 <body>
       {% block content %}
 
-      <a href="{{ url_for('index') }}">
+      <a href="{{ url_for('general.index') }}">
             <img src="static/img/THE_OG.jpg" class="the_og">
       </a>
 
-      <form action="{{ url_for('bp_reimbursements') }}" method="POST">
+      <form action="{{ url_for('general.bp_reimbursements') }}" method="POST">
             <h2>Reimbursement</h2>
             <label for="purchased_short">
                   What was purchased? (Short)

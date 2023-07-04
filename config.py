@@ -5,6 +5,8 @@ import pytz
 
 
 class SSNLConfig:
+    HERE = os.path.abspath(os.path.dirname(__file__))
+
     SECRET_KEY = "jamil4ever"
     UPLOAD_FOLDER = "files/uploads"
     JUSTIFICATIONS = "files/justifications"

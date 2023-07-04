@@ -1,32 +1,33 @@
 <html>
 
-      {% extends "template.html" %}
+{% extends "template.html" %}
 
-      <body>
+<body>
 
-            {% block content %}
+      {% block content %}
 
-            <a href="{{ url_for('index') }}">
-                  <img src="../../static/img/THE_OG.jpg" class="the_og">
-            </a>
+      <a href="{{ url_for('general.index') }}">
+            <img src="../../static/img/THE_OG.jpg" class="the_og">
+      </a>
 
-            <a href="{{ url_for('bp_pcard') }}">
-                  <h2>P-Card Forms</h2>
-            </a>
+      <a href="{{ url_for('general.bp_pcard') }}">
+            <h2>P-Card Forms</h2>
+      </a>
 
-            <br>
+      <br>
 
-            <a href="{{ url_for('bp_reimbursements') }}">
-                  <h2>Reimbursements</h2>
-            </a>
+      <a href="{{ url_for('general.bp_reimbursements') }}">
+            <h2>Reimbursements</h2>
+      </a>
 
-            <br>
+      <br>
 
-            <a href="{{ url_for('bp_reocurring') }}">
-                  <h2>Reocurring Charges</h2>
-            </a>
+      <a href="{{ url_for('general.bp_reocurring') }}">
+            <h2>Reocurring Charges</h2>
+      </a>
 
-            {% endblock %}
+      {% endblock %}
 
-      </body>
+</body>
+
 </html>
