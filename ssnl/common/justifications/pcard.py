@@ -1,38 +1,26 @@
 #!/bin/python3
-import docx, pathlib, os, pytz, json, shutil
-from datetime import datetime
-from config import SSNLConfig
+import docx
+import pathlib
+import os
+import shutil
 
 from ssnl.common.utils import drop_a_line
-
-#####
-
-path_to_members = SSNLConfig.MEMBER_PATH
-path_to_projects = SSNLConfig.PROJECT_PATH
-
-with open(path_to_members) as incoming:
-    members = json.load(incoming)
-
-with open(path_to_projects) as incoming:
-    projects = json.load(incoming)
-
-# Current time in Pacific
-now = datetime.now(pytz.timezone("US/Pacific")).strftime("%m/%d/%Y")
-right_now = datetime.now(pytz.timezone("US/Pacific")).strftime("%m_%d_%Y")
-
+from .base import FinanceObject
 
 ##########
 
 
-class PCard:
+class PCard(FinanceObject):
     def __init__(
         self, here, charge_to_card, j_short, j_long, j_why, who, when, project
     ):
-        self.timestamp = right_now
+        super().__init__()
+
+        self.timestamp = self.__timestamp.strftime("%m_%d_%Y")
 
         self.base_path = os.path.join(here, "files/justifications")
         self.input_path = os.path.join(here, "files/templates")
-        self.output_path = os.path.join(self.base_path, right_now)
+        self.output_path = os.path.join(self.base_path, self.timestamp)
 
         pathlib.Path(self.output_path).mkdir(exist_ok=True, parents=True)
 
@@ -41,9 +29,9 @@ class PCard:
         self.j_short = j_short
         self.j_long = j_long
         self.j_why = j_why
-        self.who = members[who]
+        self.who = self.member_dictionary[who]
         self.when = when
-        self.project = projects[project]
+        self.project = self.project_dictioanry[project]
 
         self._charge = charge_to_card
 
@@ -66,7 +54,7 @@ class PCard:
 
         header = template.sections[0].header
         head = header.paragraphs[0]
-        head.text = f"\n\nCreated {now}"
+        head.text = f"\n\nCreated {self.__timestamp.strftime('%m/%d/%Y')}"
 
         # Remove all quotes and apostrophes
         template.paragraphs[3].text = (
@@ -81,7 +69,7 @@ class PCard:
 
     def gunzip(self):
         out_path = os.path.join(
-            self.base_path, f"SSNL-Justification-{right_now}-{self._charge}"
+            self.base_path, f"SSNL-Justification-{self.timestamp}-{self._charge}"
         )
 
         shutil.make_archive(out_path, "zip", self.output_path)

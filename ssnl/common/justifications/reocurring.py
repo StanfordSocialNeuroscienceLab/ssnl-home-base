@@ -1,31 +1,21 @@
 #!/bin/python3
-import docx, pathlib, os, pytz, json, shutil
+import docx
+import pathlib
+import os
+import pytz
+import shutil
 from datetime import datetime
-from config import SSNLConfig
 
 from ssnl.common.utils import drop_a_line
-
-#####
-
-path_to_members = SSNLConfig.MEMBER_PATH
-path_to_projects = SSNLConfig.PROJECT_PATH
-
-with open(path_to_members) as incoming:
-    members = json.load(incoming)
-
-with open(path_to_projects) as incoming:
-    projects = json.load(incoming)
-
-# Current time in Pacific
-# now = datetime.now(pytz.timezone("US/Pacific")).strftime("%m/%d/%Y")
-# right_now = datetime.now(pytz.timezone("US/Pacific")).strftime("%m_%d_%Y")
-
+from .base import FinanceObject
 
 ##########
 
 
-class Reocurring:
+class Reocurring(FinanceObject):
     def __init__(self, here, charge, date_of_charge):
+        super().__init__()
+
         self.charge = charge
         self.date = date_of_charge
         self.timestamp = datetime.now(pytz.timezone("US/Pacific"))

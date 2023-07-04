@@ -1,33 +1,23 @@
 #!/bin/python3
-import docx, pathlib, os, pytz, json, shutil
+import docx
+import pathlib
+import os
+import pytz
+import shutil
 from datetime import datetime
-from config import SSNLConfig
 
 from ssnl.common.utils import drop_a_line
-
-#####
-
-path_to_members = SSNLConfig.MEMBER_PATH
-path_to_projects = SSNLConfig.PROJECT_PATH
-
-with open(path_to_members) as incoming:
-    members = json.load(incoming)
-
-with open(path_to_projects) as incoming:
-    projects = json.load(incoming)
-
-# Current time in Pacific
-now = datetime.now(pytz.timezone("US/Pacific")).strftime("%m/%d/%Y")
-right_now = datetime.now(pytz.timezone("US/Pacific")).strftime("%m_%d_%Y")
-
+from .base import FinanceObject
 
 ##########
 
 
-class Reimbursement:
+class Reimbursement(FinanceObject):
     def __init__(
         self, here, charge_to_card, j_short, j_long, j_why, who, when, project
     ):
+        super().__init__()
+
         today_f = datetime.now(pytz.timezone("US/Pacific")).strftime(
             "%b_%d_%Y_%H_%M_%S"
         )
@@ -45,11 +35,13 @@ class Reimbursement:
         self.j_short = j_short
         self.j_long = j_long
         self.j_why = j_why
-        self.who = members[who]
+        self.who = self.member_dictionary[who]
         self.when = when
-        self.project = projects[project]
+        self.project = self.project_dictioanry[project]
 
         self._charge = charge_to_card
+
+        self.timestamp = self.__timestamp
 
     def load_template(self):
         return docx.Document(os.path.join(self.input_path, "Reimbursement.docx"))
@@ -75,7 +67,7 @@ class Reimbursement:
 
         header = template.sections[0].header
         head = header.paragraphs[0]
-        head.text = f"\n\nCreated {now}"
+        head.text = f"\n\nCreated {self.timestamp.strftime('%m/%d/%Y')}"
 
         template.save(os.path.join(self.output_path, self.output_filename))
 
@@ -85,7 +77,8 @@ class Reimbursement:
 
     def gunzip(self):
         out_path = os.path.join(
-            self.base_path, f"SSNL-Reimbursement-{right_now}-{self._charge}"
+            self.base_path,
+            f"SSNL-Reimbursement-{self.timestamp.strftime('%m_%d_%Y')}-{self._charge}",
         )
 
         shutil.make_archive(out_path, "zip", self.output_path)
