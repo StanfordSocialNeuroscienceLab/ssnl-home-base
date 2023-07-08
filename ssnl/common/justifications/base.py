@@ -3,6 +3,9 @@ from config import SSNLConfig
 import json
 from datetime import datetime
 import pytz
+import logging
+
+logging.basicConfig(level=logging.INFO)
 
 ##########
 
@@ -24,4 +27,6 @@ class FinanceObject:
         with open(self.__path_to_projects) as temp:
             self.project_dictioanry = json.load(temp)
 
-        self.__timestamp = datetime.now(pytz.timezone("US/Pacific"))
+        self._timestamp = datetime.now(pytz.timezone("US/Pacific"))
+
+        logging.info("INITIALIZED FINANCE OBJECT")

@@ -16,7 +16,7 @@ class PCard(FinanceObject):
     ):
         super().__init__()
 
-        self.timestamp = self.__timestamp.strftime("%m_%d_%Y")
+        self.timestamp = self._timestamp.strftime("%m_%d_%Y")
 
         self.base_path = os.path.join(here, "files/justifications")
         self.input_path = os.path.join(here, "files/templates")
@@ -54,7 +54,7 @@ class PCard(FinanceObject):
 
         header = template.sections[0].header
         head = header.paragraphs[0]
-        head.text = f"\n\nCreated {self.__timestamp.strftime('%m/%d/%Y')}"
+        head.text = f"\n\nCreated {self._timestamp.strftime('%m/%d/%Y')}"
 
         # Remove all quotes and apostrophes
         template.paragraphs[3].text = (

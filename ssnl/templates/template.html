@@ -1,37 +1,42 @@
 <!DOCTYPE html>
 <html>
-      <head>
-            <title>SSNL Home Base</title>
 
-            <!--- Bootstrap CSS --->
-            <link rel="stylesheet" 
-                  href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
-                  integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" 
-                  crossorigin="anonymous">
+<head>
+      <title>SSNL Home Base</title>
 
-            <!--- Custom CSS --->
-            <link rel="stylesheet" href="static/main.css">
-            <link rel="icon" href="static/img/big_brain.jpg">
+      <!--- Bootstrap CSS --->
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+            integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
 
-      </head>
-      <body>
-            <!---  Error Handling --->
-            {% with messages = get_flashed_messages() %}
-                  {% if messages %}
-                        {% for message in messages %}
-                              <div class='alert alert-warning' role='alert'>
-                                    {{ message }}
-                              </div>
-                        {% endfor %}
-                  {% endif %}
-            {% endwith %}
+      <!--- Custom CSS --->
+      {#
+      <link rel="stylesheet" href="static/main.css"> #}
+      {#
+      <link rel="icon" href="static/img/big_brain.jpg"> #}
 
-            <!---  Dyanmic page content -->
-            {% block content %}
-            {% endblock %}
+      <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+      <link rel="stylesheet" href="{{ url_for('static', filename='/img/big_brain.jpg') }}">
+</head>
 
-            <!--- Custom JavaScript --->
-            {% block scripts %}
-            {% endblock %}
-      </body>
+<body>
+      <!---  Error Handling --->
+      {% with messages = get_flashed_messages() %}
+      {% if messages %}
+      {% for message in messages %}
+      <div class='alert alert-warning' role='alert'>
+            {{ message }}
+      </div>
+      {% endfor %}
+      {% endif %}
+      {% endwith %}
+
+      <!---  Dyanmic page content -->
+      {% block content %}
+      {% endblock %}
+
+      <!--- Custom JavaScript --->
+      {% block scripts %}
+      {% endblock %}
+</body>
+
 </html>
