@@ -1,6 +1,11 @@
 ### MAIN APPLICATION CONSTRUCTOR ###
 from flask import Flask
 from config import SSNLConfig
+import logging
+
+logging.basicConfig(level=logging.INFO)
+
+##########
 
 
 def create_app(config_class=SSNLConfig):
@@ -10,6 +15,9 @@ def create_app(config_class=SSNLConfig):
 
     app_ = Flask(__name__)
     app_.config.from_object(config_class)
+
+    logging.info("Running app...")
+    logging.info(f"Root={app_.config['HERE']}")
 
     ###
 
