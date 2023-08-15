@@ -10,23 +10,27 @@ from time import sleep
 from uuid import uuid4
 from utils.base.slack import post_webhook
 from utils.base.helper import *
+from dotenv import load_dotenv
 
 logger = logging.getLogger(__name__)
 
 ##########
 
+load_dotenv()
 
 app = Flask(__name__)
-app.secret_key = "jamil4ever"
-here = app.root_path
+app.secret_key = os.environ.get("SECRET_KEY")
+
+SLACK_HOOK = os.environ.get("SLACK_HOOK")
+HERE = app.root_path
 
 app.config["UPLOAD_FOLDER"] = "files/uploads"
 app.config["JUSTIFICATIONS"] = "files/justifications"
 app.config["BP_TEMPLATES"] = "files/templates"
 
-path_to_members = os.path.join(here, "files/packets/members.json")
-path_to_projects = os.path.join(here, "files/packets/projects.json")
-path_to_reocurring = os.path.join(here, "files/packets/reocurring.json")
+path_to_members = os.path.join(HERE, "files/packets/members.json")
+path_to_projects = os.path.join(HERE, "files/packets/projects.json")
+path_to_reocurring = os.path.join(HERE, "files/packets/reocurring.json")
 
 pacific_time = datetime.now(pytz.timezone("US/Pacific")).strftime("%m_%d_%Y")
 logging.basicConfig(level=logging.INFO)
@@ -36,7 +40,7 @@ logging.basicConfig(level=logging.INFO)
 
 
 for path in ["uploads", "justifications"]:
-    temp = os.path.join(here, "files", path)
+    temp = os.path.join(HERE, "files", path)
 
     if not os.path.exists(temp):
         pathlib.Path(temp).mkdir(parents=True, exist_ok=True)
@@ -54,7 +58,7 @@ def index():
 
         except Exception as e:
             message = f"Error @ cleanup_output\n\n{e}"
-            post_webhook(message=message)
+            post_webhook(message=message, hook=SLACK_HOOK)
 
     return render_template("index.html")
 
@@ -82,7 +86,7 @@ def bp_pcard():
             date_c = request.form["date_charged"]
 
             p_card = PCard(
-                here=here,
+                here=HERE,
                 charge_to_card=amount,
                 j_short=j_short,
                 j_long=j_long,
@@ -103,7 +107,7 @@ def bp_pcard():
 
         except Exception as e:
             message = f"Error @ P-Card Justification\n\n{e}"
-            post_webhook(message=message)
+            post_webhook(message=message, hook=SLACK_HOOK)
 
             return redirect(url_for("index"))
 
@@ -132,7 +136,7 @@ def bp_reimbursements():
             date_c = request.form["date_charged"]
 
             reimburse = Reimbursement(
-                here=here,
+                here=HERE,
                 charge_to_card=amount,
                 j_short=j_short,
                 j_long=j_long,
@@ -155,7 +159,7 @@ def bp_reimbursements():
 
         except Exception as e:
             message = f"Error @ Reimbursement\n\n{e}"
-            post_webhook(message=message)
+            post_webhook(message=message, hook=SLACK_HOOK)
 
             return redirect(url_for("index"))
 
@@ -181,7 +185,7 @@ def bp_reocurring():
             logging.info(f"charge={charge}")
             logging.info(f"date={date_of_charge}")
 
-            ripper = Reocurring(here=here, charge=charge, date_of_charge=date_of_charge)
+            ripper = Reocurring(here=HERE, charge=charge, date_of_charge=date_of_charge)
 
             # Write to file
             ripper.write_justification()
@@ -197,7 +201,7 @@ def bp_reocurring():
 
         except Exception as e:
             message = f"Error @ Reocurring Charges\n\n{e}"
-            post_webhook(message=message)
+            post_webhook(message=message, hook=SLACK_HOOK)
 
             return redirect(url_for("index"))
 
@@ -234,8 +238,8 @@ def mturk():
             worker = WorkerFile(
                 filename=safe_name,
                 filepath=output_path,
-                basepath=os.path.join(here, app.config["UPLOAD_FOLDER"]),
-                template_path=os.path.join(here, app.config["BP_TEMPLATES"]),
+                basepath=os.path.join(HERE, app.config["UPLOAD_FOLDER"]),
+                template_path=os.path.join(HERE, app.config["BP_TEMPLATES"]),
                 output_dir=output_path,
             )
 
@@ -257,7 +261,7 @@ def mturk():
 
         except Exception as e:
             message = f"Error @ MTurk\n\n{e}"
-            post_webhook(message=message)
+            post_webhook(message=message, hook=SLACK_HOOK)
 
             return redirect(url_for("index"))
 
@@ -310,7 +314,7 @@ def combine_pdf():
 
         except Exception as e:
             message = f"Error @ Combine PDF\n\n{e}"
-            post_webhook(message=message)
+            post_webhook(message=message, hook=SLACK_HOOK)
 
             return redirect(url_for("index"))
 

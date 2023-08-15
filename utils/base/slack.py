@@ -8,7 +8,7 @@ from flask import flash
 ##########
 
 
-def post_webhook(message: str):
+def post_webhook(message: str, hook: str):
     """
     This is a wrapper to send error data to the `ssnl-app-errors` slack channel
     """
@@ -17,7 +17,7 @@ def post_webhook(message: str):
 
     #####
 
-    webhook_url = "https://hooks.slack.com/services/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"
+    webhook_url = hook
     title = "New SSNL App Error"
 
     slack_data = {
