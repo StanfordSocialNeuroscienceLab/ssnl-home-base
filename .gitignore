@@ -9,7 +9,8 @@ layout.md
 static/bootstrap/bootstrap.min.js
 static/bootstrap/bootstrap.min.js.map
 files/packets/members.json
-files/packets/members.json
+files/packets/projects.json
+files/packets/reocurring.json
 files/justifications/
 files/uploads/
 files/DEV/

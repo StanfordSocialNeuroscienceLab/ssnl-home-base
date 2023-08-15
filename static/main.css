@@ -13,6 +13,10 @@ body {
       font-family: monospace;
 }
 
+.modular_payment_container {
+      padding: 15px 10px;
+}
+
 
 /* Landing page */
 .the_og {

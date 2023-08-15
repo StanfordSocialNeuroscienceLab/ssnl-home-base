@@ -1,37 +1,40 @@
 <html>
-      <head>
-            <title>SSNL Home Base</title>
-            <link rel="stylesheet" href="../../static/bootstrap/bootstrap.min.css">
-            <link rel="stylesheet" href="../../static/main.css">
-            <link rel="icon" href="../../static/img/big_brain.jpg">
-      </head>
-      <body>
 
-            {% block content %}
+<head>
+      <title>SSNL Home Base</title>
+      <link rel="stylesheet" href="../../static/bootstrap/bootstrap.min.css">
+      <link rel="stylesheet" href="../../static/main.css">
+      <link rel="icon" href="../../static/img/big_brain.jpg">
+</head>
 
-            <a href="{{ url_for('lab_manager_landing') }}">
-                  <img src="../../static/img/THE_OG.jpg" class="the_og">
-            </a>
+<body>
 
-            <form action="{{ url_for('add_lab_member') }}" method="POST">
-                  <label for="member_to_add">
-                        Lab Member Name
-                  </label><br>
-                  <input type="text" id="member_to_add" name="member_to_add">
-                  <br><br><br>
-                  <label for="employee_number">
-                        Employee Number
-                  </label><br>
-                  <input type="text" id="employee_number" name="employee_number" value="">
-                  <br><br><br>
-                  <label for="title">
-                        Title (RA, Grad Student, Postdoc, etc.)
-                  </label><br>
-                  <input type="text" id="title" name="title" value="">
-                  <br><br><br>
-                  <input type="submit" value="Update Lab Member">
-            </form>
+      {% block content %}
 
-            {% endblock %}
-      </body>
+      <a href="{{ url_for('lab_manager_landing') }}">
+            <img src="../../static/img/THE_OG.jpg" class="the_og">
+      </a>
+
+      <form action="{{ url_for('add_lab_member') }}" method="POST">
+            <label for="member_to_add">
+                  Lab Member Name
+            </label><br>
+            <input type="text" id="member_to_add" name="member_to_add">
+            <br><br><br>
+            <label for="employee_number">
+                  Employee Number
+            </label><br>
+            <input type="text" id="employee_number" name="employee_number" value="">
+            <br><br><br>
+            <label for="title">
+                  Title (RA, Grad Student, Postdoc, etc.)
+            </label><br>
+            <input type="text" id="title" name="title" value="">
+            <br><br><br>
+            <input type="submit" value="Update Lab Member">
+      </form>
+
+      {% endblock %}
+</body>
+
 </html>
