@@ -70,9 +70,9 @@ def bp():
 @app.route("/P-Card", methods=["GET", "POST"])
 def bp_pcard():
     if request.method == "POST":
-        from utils.justifications.pcard import PCard
-
         try:
+            from utils.justifications.pcard import PCard
+
             j_short = request.form["purchased_short"]
             j_long = request.form["purchased_long"]
             j_why = request.form["purchased_why"]
@@ -81,14 +81,6 @@ def bp_pcard():
             amount = request.form["charge_amount"].replace("$", "")
             date_c = request.form["date_charged"]
 
-        except Exception as e:
-            message = f"Error @ P-Card Justification\n\n{e}"
-            post_webhook(message=message)
-
-            return redirect(url_for("index"))
-
-        # -- Instantiate PCard object
-        try:
             p_card = PCard(
                 here=here,
                 charge_to_card=amount,
@@ -100,36 +92,13 @@ def bp_pcard():
                 project=source,
             )
 
-        except Exception as e:
-            message = f"Error @ P-Card Justification\n\n{e}"
-            post_webhook(message=message)
-
-            return redirect(url_for("index"))
-
-        # Write to file
-        try:
             p_card.write_justification()
 
-        except Exception as e:
-            message = f"Error @ P-Card Justification\n\n{e}"
-            post_webhook(message=message)
-
-            return redirect(url_for("index"))
-
-        # Download zipped files
-        try:
             path = os.path.join(
                 app.config["JUSTIFICATIONS"],
                 f"SSNL-Justification-{p_card.timestamp}-{amount}.zip",
             )
 
-        except Exception as e:
-            message = f"Error @ P-Card Justification\n\n{e}"
-            post_webhook(message=message)
-
-            return redirect(url_for("index"))
-
-        try:
             return download(path)
 
         except Exception as e:
@@ -150,19 +119,18 @@ def bp_pcard():
 @app.route("/Reimbursements", methods=["GET", "POST"])
 def bp_reimbursements():
     if request.method == "POST":
-        from utils.justifications.reimbursement import Reimbursement
-
-        # -- Assign HTML form input to variables
-        j_short = request.form["purchased_short"]
-        j_long = request.form["purchased_long"]
-        j_why = request.form["purchased_why"]
-        who = request.form["purchased_by"]
-        source = request.form["funding_source"]
-        amount = request.form["charge_amount"].replace("$", "").strip()
-        date_c = request.form["date_charged"]
-
-        # -- Instantiate Reimbursement object
         try:
+            from utils.justifications.reimbursement import Reimbursement
+
+            # -- Assign HTML form input to variables
+            j_short = request.form["purchased_short"]
+            j_long = request.form["purchased_long"]
+            j_why = request.form["purchased_why"]
+            who = request.form["purchased_by"]
+            source = request.form["funding_source"]
+            amount = request.form["charge_amount"].replace("$", "").strip()
+            date_c = request.form["date_charged"]
+
             reimburse = Reimbursement(
                 here=here,
                 charge_to_card=amount,
@@ -177,19 +145,12 @@ def bp_reimbursements():
             # Write to file
             reimburse.write_justification()
 
-        except Exception as e:
-            message = f"Error @ Reimbursement\n\n{e}"
-            post_webhook(message=message)
+            # Download zipped files
+            path = os.path.join(
+                app.config["JUSTIFICATIONS"],
+                f"SSNL-Reimbursement-{pacific_time}-{amount}.zip",
+            )
 
-            return redirect(url_for("index"))
-
-        # Download zipped files
-        path = os.path.join(
-            app.config["JUSTIFICATIONS"],
-            f"SSNL-Reimbursement-{pacific_time}-{amount}.zip",
-        )
-
-        try:
             return download(path)
 
         except Exception as e:
@@ -210,15 +171,14 @@ def bp_reimbursements():
 @app.route("/Reocurring-Charges", methods=["GET", "POST"])
 def bp_reocurring():
     if request.method == "POST":
-        from utils.justifications.reocurring import Reocurring
-
-        # -- HTML form => variables
-        charge = request.form["charge"]
-        date_of_charge = request.form["date_of_charge"]
-
-        logging.info("Reocurring charge submitted: date={}".format(date_of_charge))
-
         try:
+            from utils.justifications.reocurring import Reocurring
+
+            charge = request.form["charge"]
+            date_of_charge = request.form["date_of_charge"]
+
+            logging.info("Reocurring charge submitted: date={}".format(date_of_charge))
+
             ripper = Reocurring(here=here, charge=charge, date_of_charge=date_of_charge)
 
             # Write to file
@@ -227,18 +187,10 @@ def bp_reocurring():
             # Output filename
             output_filename = ripper.output_name
 
-        except Exception as e:
-            message = f"Error @ Reocurring Charges\n\n{e}"
-            post_webhook(message=message)
+            # Download zipped files
+            path = os.path.join(app.config["JUSTIFICATIONS"], f"{output_filename}.zip")
+            sleep(5)
 
-            return redirect(url_for("index"))
-
-        # Download zipped files
-        path = os.path.join(app.config["JUSTIFICATIONS"], f"{output_filename}.zip")
-
-        sleep(5)
-
-        try:
             return download(path)
 
         except Exception as e:
@@ -260,24 +212,23 @@ def bp_reocurring():
 @app.route("/MTurk", methods=["GET", "POST"])
 def mturk():
     if request.method == "POST":
-        from utils.justifications.mturk import WorkerFile
-
-        # -- HTML form => variables
-        file = request.files["file"]
-        safe_name = secure_filename(file.filename)
-
-        # -- Create output directories
-        output_dir = datetime.now().strftime("mturk_%b_%d_%Y_%H_%M_%S")
-        output_path = os.path.join(app.config["UPLOAD_FOLDER"], output_dir)
-
-        if not os.path.exists(output_path):
-            pathlib.Path(output_path).mkdir(exist_ok=True, parents=True)
-
-        # Save file
-        file.save(os.path.join(output_path, safe_name))
-
-        # -- Instantiate WorkerFile object
         try:
+            from utils.justifications.mturk import WorkerFile
+
+            # HTML form => variables
+            file = request.files["file"]
+            safe_name = secure_filename(file.filename)
+
+            # Create output directories
+            output_dir = datetime.now().strftime("mturk_%b_%d_%Y_%H_%M_%S")
+            output_path = os.path.join(app.config["UPLOAD_FOLDER"], output_dir)
+
+            if not os.path.exists(output_path):
+                pathlib.Path(output_path).mkdir(exist_ok=True, parents=True)
+
+            # Save file
+            file.save(os.path.join(output_path, safe_name))
+
             worker = WorkerFile(
                 filename=safe_name,
                 filepath=output_path,
@@ -300,15 +251,6 @@ def mturk():
 
             worker.run()
 
-        except Exception as e:
-            message = f"Error @ MTurk\n\n{e}"
-            post_webhook(message=message)
-
-            return redirect(url_for("index"))
-
-        ###
-
-        try:
             return download(worker.download_me)
 
         except Exception as e:
@@ -363,35 +305,33 @@ def ema():
 @app.route("/combine_pdf", methods=["GET", "POST"])
 def combine_pdf():
     if request.method == "POST":
-        from PyPDF2 import PdfFileMerger
-
-        # -- Create output directories
-        now = datetime.now().strftime("%b_%d_%Y_%H_%M_%S")
-        output_path = os.path.join(app.root_path, app.config["UPLOAD_FOLDER"], now)
-
-        if not os.path.exists(output_path):
-            pathlib.Path(output_path).mkdir(parents=True, exist_ok=True)
-
-        # -- List to append into
-        ordered_files = []
-
-        # -- Save and aggregate PDF inputs
-        logging.info(request.files)
-
-        if len(request.files) == 0:
-            flash("No files to merge")
-            return redirect(url_for("combine_pdf"))
-
-        for k in request.files:
-            temp = request.files[k]
-
-            if ".pdf" in temp.filename:
-                safe = secure_filename(temp.filename)
-                temp.save(os.path.join(output_path, safe))
-                ordered_files.append(os.path.join(output_path, safe))
-
-        # -- Instantiate PdfFileMerger object
         try:
+            from PyPDF2 import PdfFileMerger
+
+            now = datetime.now().strftime("%b_%d_%Y_%H_%M_%S")
+            output_path = os.path.join(app.root_path, app.config["UPLOAD_FOLDER"], now)
+
+            if not os.path.exists(output_path):
+                pathlib.Path(output_path).mkdir(parents=True, exist_ok=True)
+
+            # -- List to append into
+            ordered_files = []
+
+            # -- Save and aggregate PDF inputs
+            logging.info(request.files)
+
+            if len(request.files) == 0:
+                flash("No files to merge")
+                return redirect(url_for("combine_pdf"))
+
+            for k in request.files:
+                temp = request.files[k]
+
+                if ".pdf" in temp.filename:
+                    safe = secure_filename(temp.filename)
+                    temp.save(os.path.join(output_path, safe))
+                    ordered_files.append(os.path.join(output_path, safe))
+
             ripper = PdfFileMerger()
 
             # Add files to PDF object
