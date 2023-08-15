@@ -1,42 +1,45 @@
 <html>
-      <head>
-            <title>SSNL Home Base</title>
-            <link rel="stylesheet" href="../../static/bootstrap/bootstrap.min.css">
-            <link rel="stylesheet" href="../../static/main.css">
-            <link rel="icon" href="../../static/img/big_brain.jpg">
-      </head>
-      <body>
 
-            {% block content %}
+<head>
+      <title>SSNL Home Base</title>
+      <link rel="stylesheet" href="../../static/bootstrap/bootstrap.min.css">
+      <link rel="stylesheet" href="../../static/main.css">
+      <link rel="icon" href="../../static/img/big_brain.jpg">
+</head>
 
-            <a href="{{ url_for('lab_manager_landing') }}">
-                  <img src="../../static/img/THE_OG.jpg" class="the_og">
-            </a>
+<body>
 
-            <form action="{{ url_for('add_project') }}" method="POST">
-                  <label for="project_to_add">
-                        Project Name
-                  </label><br>
-                  <input type="text" id="project_to_add" name="project_to_add">
-                  <br><br><br>
-                  <label for="pta">
-                        PTA (Project-Task-Award)
-                  </label><br>
-                  <input type="text" id="pta" name="pta" value="">
-                  <br><br><br>
-                  <label for="sponsor">
-                        Sponsor (e.g., National Institute of Health)
-                  </label><br>
-                  <input type="text" id="sponsor" name="sponsor" value="">
-                  <br><br><br>
-                  <label for="irb_number">
-                        IRB Number (if applicable)
-                  </label><br>
-                  <input type="text" id="irb_number" name="irb_number" value="">
-                  <br><br><br>
-                  <input type="submit" value="Update Project">
-            </form>
+      {% block content %}
 
-            {% endblock %}
-      </body>
+      <a href="{{ url_for('lab_manager_landing') }}">
+            <img src="../../static/img/THE_OG.jpg" class="the_og">
+      </a>
+
+      <form action="{{ url_for('add_project') }}" method="POST">
+            <label for="project_to_add">
+                  Project Name
+            </label><br>
+            <input type="text" id="project_to_add" name="project_to_add">
+            <br><br><br>
+            <label for="pta">
+                  PTA (Project-Task-Award)
+            </label><br>
+            <input type="text" id="pta" name="pta" value="">
+            <br><br><br>
+            <label for="sponsor">
+                  Sponsor (e.g., National Institute of Health)
+            </label><br>
+            <input type="text" id="sponsor" name="sponsor" value="">
+            <br><br><br>
+            <label for="irb_number">
+                  IRB Number (if applicable)
+            </label><br>
+            <input type="text" id="irb_number" name="irb_number" value="">
+            <br><br><br>
+            <input type="submit" value="Update Project">
+      </form>
+
+      {% endblock %}
+</body>
+
 </html>
