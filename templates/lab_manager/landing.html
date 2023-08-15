@@ -1,0 +1,84 @@
+<html>
+
+{% extends "template.html" %}
+
+<body>
+
+      {% block content %}
+
+      {% if manager_name %}
+      <div style="padding: 2% 0%;">
+            <h1>
+                  <b>
+                        Hi {{ manager_name }}!
+                  </b>
+            </h1>
+      </div>
+      {% else %}
+      <div style="padding: 2% 0%;">
+            <h1>
+                  <b>
+                        Lab Manager Utilities
+                  </b>
+            </h1>
+      </div>
+      {% endif %}
+
+      {% if special_text %}
+      <div>
+            <p>
+                  <i>
+                        {{ special_text }}
+                  </i>
+            </p>
+      </div>
+      {% endif %}
+
+      <div style="padding: 1%;">
+            <h2>Admin Options Below</h2>
+      </div>
+      <div style="padding: 0.5%;">
+            <a href="{{ url_for('view_members') }}">
+                  <h3>View Lab Members</h3>
+            </a>
+      </div>
+      <div style="padding: 0.5%;">
+            <a href="{{ url_for('view_projects') }}">
+                  <h3>View Projects</h3>
+            </a>
+      </div>
+      <br> <br>
+      <div style="padding: 0.5%">
+            <a href="{{ url_for('update_members') }}">
+                  <h3>Update Existing Lab Member</h3>
+            </a>
+      </div>
+      <div style="padding: 0.5%">
+            <a href="{{ url_for('update_projects') }}">
+                  <h3>Update Existing Lab Project</h3>
+            </a>
+      </div>
+      <br> <br>
+      <div style="padding: 0.5%;">
+            <a href="{{ url_for('add_lab_member') }}">
+                  <h3>Add Lab Member</h3>
+            </a>
+      </div>
+      <div style="padding: 0.5%;">
+            <a href="{{ url_for('add_project') }}">
+                  <h3>Add Project</h3>
+            </a>
+      </div>
+      <div style="padding: 1%;">
+            <h4>
+                  Go Home
+            </h4>
+            <a href="{{ url_for('index') }}">
+                  <img src="../../static/img/yeehaw.webp" width="3%">
+            </a>
+      </div>
+
+      {% endblock %}
+</body>
+
+</html>
