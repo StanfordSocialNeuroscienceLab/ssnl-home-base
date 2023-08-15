@@ -7,7 +7,9 @@ import os
 from config import SSNLConfig  # TODO - Figure out the app context here...
 
 from ssnl.general import bp
-from ssnl.common.utils import post_webhook, get_members, download
+
+# TODO - Make JSON helper more abstract
+from ssnl.common.utils import post_webhook, load_local_json, download
 
 ##########
 
@@ -123,7 +125,13 @@ def bp_pcard():
 
             return redirect(url_for("general.index"))
 
-    return render_template("justifications/pcard.html", members=get_members())
+    return render_template(
+        "justifications/justification_template.html",
+        endpoint="bp_pcard",
+        form_title="P-Card Justifcation Form",
+        funding_sources=get_projects(),
+        members=get_members(),
+    )
 
 
 @bp.route("/reimbursements", methods=methods)
