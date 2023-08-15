@@ -62,12 +62,12 @@ def index():
 #####
 
 
-@app.route("/Justifications", methods=["GET", "POST"])
+@app.route("/justifications", methods=["GET", "POST"])
 def bp():
     return render_template("landing.html")
 
 
-@app.route("/P-Card", methods=["GET", "POST"])
+@app.route("/pcard", methods=["GET", "POST"])
 def bp_pcard():
     if request.method == "POST":
         try:
@@ -116,7 +116,7 @@ def bp_pcard():
     )
 
 
-@app.route("/Reimbursements", methods=["GET", "POST"])
+@app.route("/reimbursements", methods=["GET", "POST"])
 def bp_reimbursements():
     if request.method == "POST":
         try:
@@ -168,7 +168,7 @@ def bp_reimbursements():
     )
 
 
-@app.route("/Reocurring-Charges", methods=["GET", "POST"])
+@app.route("/reocurring", methods=["GET", "POST"])
 def bp_reocurring():
     if request.method == "POST":
         try:
@@ -177,7 +177,9 @@ def bp_reocurring():
             charge = request.form["charge"]
             date_of_charge = request.form["date_of_charge"]
 
-            logging.info("Reocurring charge submitted: date={}".format(date_of_charge))
+            logging.info("Reocurring charge submitted")
+            logging.info(f"charge={charge}")
+            logging.info(f"date={date_of_charge}")
 
             ripper = Reocurring(here=here, charge=charge, date_of_charge=date_of_charge)
 
@@ -209,7 +211,7 @@ def bp_reocurring():
 #####
 
 
-@app.route("/MTurk", methods=["GET", "POST"])
+@app.route("/mturk", methods=["GET", "POST"])
 def mturk():
     if request.method == "POST":
         try:
@@ -263,43 +265,6 @@ def mturk():
 
 
 #####
-
-
-@app.route("/EMA", methods=["GET", "POST"])
-def ema():
-    if request.method == "POST":
-        from utils.base.scp_ema_parser import EMA_Parser
-
-        # -- Read in and save JSON file
-        file = request.files["file"]
-        safe_name = secure_filename(file.filename)
-
-        output_dir = datetime.now().strftime("%b_%d_%Y_%H_%M_%S")
-        output_path = os.path.join(
-            app.root_path, app.config["UPLOAD_FOLDER"], output_dir
-        )
-
-        if not os.path.exists(output_path):
-            pathlib.Path(output_path).mkdir(exist_ok=True, parents=True)
-
-        file.save(os.path.join(output_path, safe_name))
-
-        # -- Instantiate EMA_Parser object
-        try:
-            parser = EMA_Parser(filename=safe_name, output_path=output_path)
-            parser.big_dogs_only()
-
-        except Exception as e:
-            message = f"Error @ EMA Parser\n\n{e}"
-            post_webhook(message=message)
-
-            return redirect(url_for("index"))
-
-        # -- Download resulting files
-        target = os.path.join(output_path, "SCP_EMA_Responses.tar.gz")
-        return download(target)
-
-    return render_template("utils/ema.html")
 
 
 @app.route("/combine_pdf", methods=["GET", "POST"])
@@ -549,5 +514,5 @@ def get_reocurring() -> list:
 
 
 if __name__ == "__main__":
-    logging.info("\n=== App Running ===\n")
-    app.run(debug=True)
+    logging.info(" === App Running ===")
+    app.run(debug=True, host="0.0.0.0")

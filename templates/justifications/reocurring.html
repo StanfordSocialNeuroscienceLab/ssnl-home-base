@@ -9,26 +9,27 @@
       </a>
 
       <form action="{{ url_for('bp_reocurring') }}" method="POST">
-            <h2>Reocurring Charges</h2>
-
-            <br><br>
-            <select name="charge" id="charge">
-                  <option value="">---- Select One ----</option>
-                  <option value="AWS_SCP">AWS (Communities Project)</option>
-                  <option value="AWS_JM">AWS (Just Mercy)</option>
-                  <option value="Mailchimp">Mailchimp</option>
-                  <option value="Forge">Laravel Forge</option>
-                  <option value="Buzzsprout">Buzzsprout (Eric's Podcast)</option>
-                  <option value="PythonAnywhere">PythonAnywhere</option>
-                  <option value="SCP_Adobe">Adobe Creative Cloud (SCP)</option>
-            </select>
-            <br> <br> <br>
-            <label for="date_of_charge">
-                  Date of Charge
-            </label>
-            <input type="text" name="date_of_charge" id="date_of_charge">
-            <br><br><br>
-            <button class="btn btn-primary" type="submit">Download Justification</button>
+            <div class="modular_payment_container">
+                  <h2>Reocurring Charges</h2>
+            </div>
+            <div class="modular_payment_container">
+                  <select name="charge" id="charge">
+                        <option value=""></option>
+                        {% for r in rec_charges.keys() %}
+                        <option value="{{ r }}"> {{ rec_charges[r] }}</option>
+                        {% endfor %}
+                  </select>
+            </div>
+            <div class="modular_payment_container">
+                  <label for="date_of_charge">
+                        <b>Date Charged</b>
+                  </label><br>
+                  <p>Use MM/DD/YYYY format or write TODAY</p>
+                  <input type="text" id="date_of_charge" name="date_of_charge">
+            </div>
+            <div class="modular_payment_container">
+                  <button class="btn btn-primary" type="submit">Download Justification</button>
+            </div>
       </form>
 
       {% endblock %}
