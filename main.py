@@ -11,6 +11,7 @@ from uuid import uuid4
 from utils.base.slack import post_webhook
 from utils.base.helper import *
 
+logger = logging.getLogger(__name__)
 
 ##########
 
@@ -25,6 +26,7 @@ app.config["BP_TEMPLATES"] = "files/templates"
 
 path_to_members = os.path.join(here, "files/packets/members.json")
 path_to_projects = os.path.join(here, "files/packets/projects.json")
+path_to_reocurring = os.path.join(here, "files/packets/reocurring.json")
 
 pacific_time = datetime.now(pytz.timezone("US/Pacific")).strftime("%m_%d_%Y")
 logging.basicConfig(level=logging.INFO)
@@ -34,7 +36,6 @@ logging.basicConfig(level=logging.INFO)
 
 
 for path in ["uploads", "justifications"]:
-
     temp = os.path.join(here, "files", path)
 
     if not os.path.exists(temp):
@@ -48,7 +49,6 @@ for path in ["uploads", "justifications"]:
 def index():
     # Start with a clean cache
     for dir in ["files/uploads", "files/justifications"]:
-
         try:
             cleanup_output(dir)
 
@@ -69,9 +69,7 @@ def bp():
 
 @app.route("/P-Card", methods=["GET", "POST"])
 def bp_pcard():
-
     if request.method == "POST":
-
         from utils.justifications.pcard import PCard
 
         try:
@@ -140,14 +138,18 @@ def bp_pcard():
 
             return redirect(url_for("index"))
 
-    return render_template("justifications/pcard.html", members=get_members())
+    return render_template(
+        "justifications/justification_template.html",
+        endpoint="bp_pcard",
+        form_title="P-Card Justifcation Form",
+        funding_sources=get_projects(),
+        members=get_members(),
+    )
 
 
 @app.route("/Reimbursements", methods=["GET", "POST"])
 def bp_reimbursements():
-
     if request.method == "POST":
-
         from utils.justifications.reimbursement import Reimbursement
 
         # -- Assign HTML form input to variables
@@ -196,14 +198,18 @@ def bp_reimbursements():
 
             return redirect(url_for("index"))
 
-    return render_template("justifications/reimbursement.html", members=get_members())
+    return render_template(
+        "justifications/justification_template.html",
+        endpoint="bp_reimbursements",
+        form_title="Reimbursement Form",
+        funding_sources=get_projects(),
+        members=get_members(),
+    )
 
 
 @app.route("/Reocurring-Charges", methods=["GET", "POST"])
 def bp_reocurring():
-
     if request.method == "POST":
-
         from utils.justifications.reocurring import Reocurring
 
         # -- HTML form => variables
@@ -241,7 +247,11 @@ def bp_reocurring():
 
             return redirect(url_for("index"))
 
-    return render_template("justifications/reocurring.html", members=get_members())
+    return render_template(
+        "justifications/reocurring.html",
+        members=get_members(),
+        rec_charges=get_reocurring(),
+    )
 
 
 #####
@@ -249,9 +259,7 @@ def bp_reocurring():
 
 @app.route("/MTurk", methods=["GET", "POST"])
 def mturk():
-
     if request.method == "POST":
-
         from utils.justifications.mturk import WorkerFile
 
         # -- HTML form => variables
@@ -317,9 +325,7 @@ def mturk():
 
 @app.route("/EMA", methods=["GET", "POST"])
 def ema():
-
     if request.method == "POST":
-
         from utils.base.scp_ema_parser import EMA_Parser
 
         # -- Read in and save JSON file
@@ -356,9 +362,7 @@ def ema():
 
 @app.route("/combine_pdf", methods=["GET", "POST"])
 def combine_pdf():
-
     if request.method == "POST":
-
         from PyPDF2 import PdfFileMerger
 
         # -- Create output directories
@@ -423,7 +427,6 @@ def verify(username, password):
 
 @app.route("/lab_manager", methods=["GET", "POST"])
 def lab_manager_login():
-
     error = None
 
     if request.method == "POST":
@@ -450,7 +453,6 @@ def lab_manager_landing():
 @app.route("/lab_manager/view_lab_members", methods=["GET", "POST"])
 @auth.login_required
 def view_members():
-
     from utils.base.lab_manager_utils import build_members_df
 
     dataframe, test = build_members_df()
@@ -463,7 +465,6 @@ def view_members():
 @app.route("/lab_manager/view_projects", methods=["GET", "POST"])
 @auth.login_required
 def view_projects():
-
     from utils.base.lab_manager_utils import build_projects_df
 
     dataframe, projects = build_projects_df()
@@ -474,9 +475,7 @@ def view_projects():
 @app.route("/lab_manager/update_members", methods=["GET", "POST"])
 @auth.login_required
 def update_members():
-
     if request.method == "POST":
-
         from utils.base.lab_manager_utils import MembersCursor
 
         # -- Form input
@@ -503,9 +502,7 @@ def update_members():
 @app.route("/lab_manager/update_projects", methods=["GET", "POST"])
 @auth.login_required
 def update_projects():
-
     if request.method == "POST":
-
         from utils.base.lab_manager_utils import ProjectsCursor
 
         project = request.form["project_to_update"]
@@ -533,9 +530,7 @@ def update_projects():
 @app.route("/lab_manager/add_lab_member", methods=["GET", "POST"])
 @auth.login_required
 def add_lab_member():
-
     if request.method == "POST":
-
         from utils.base.lab_manager_utils import MembersCursor
 
         # -- Form input
@@ -562,9 +557,7 @@ def add_lab_member():
 @app.route("/lab_manager/add_project", methods=["GET", "POST"])
 @auth.login_required
 def add_project():
-
     if request.method == "POST":
-
         from utils.base.lab_manager_utils import ProjectsCursor
 
         project = request.form["project_to_add"]
@@ -597,9 +590,19 @@ def download(filepath):
     return send_file(filepath, as_attachment=True)
 
 
-def get_members():
+def get_members() -> list:
     with open(path_to_members) as temp:
         return sorted(list(json.load(temp).keys()))
+
+
+def get_projects() -> dict:
+    with open(path_to_projects) as temp:
+        return json.load(temp)
+
+
+def get_reocurring() -> list:
+    with open(path_to_reocurring) as temp:
+        return json.load(temp)
 
 
 ##########
