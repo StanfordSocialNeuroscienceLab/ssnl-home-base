@@ -8,6 +8,7 @@ from ssnl.common.utils import (
     get_projects,
     get_reocurring_projects,
     update_local_json,
+    write_to_local_json,
 )
 
 ##########
@@ -60,15 +61,15 @@ def landing():
 @bp.route("/view_members", methods=methods)
 @auth.login_required
 def view_members():
-    member_data = None
+    member_data = get_members(full=True)
     return render_template("admin/member__view.html", data=member_data)
 
 
 @bp.route("/view_projects", methods=methods)
 @auth.login_required
 def view_projects():
-    member_data = None
-    return render_template("admin/project__view.html", data=member_data)
+    project_data = get_projects()
+    return render_template("admin/project__view.html", data=project_data)
 
 
 @bp.route("/update_members", methods=methods)
@@ -87,6 +88,8 @@ def update_members():
             config={"employee_number": employee_number, "title": title},
         )
 
+        return redirect(url_for("admin.landing"))
+
     return render_template("admin/member__update.html", lab_members=lab_members)
 
 
@@ -100,8 +103,24 @@ def update_projects():
 @bp.route("/add_member", methods=methods)
 @auth.login_required
 def add_member():
-    member_data = None
-    return render_template("admin/member__add.html", data=member_data)
+    if request.method == "POST":
+        member = request.form["member_to_add"]
+        employee_number = request.form["employee_number"]
+        title = request.form["title"]
+
+        new_data = {
+            "full_name": member,
+            "employee_number": employee_number,
+            "title": title,
+        }
+
+        write_to_local_json(
+            path_to_json=SSNLConfig.MEMBER_PATH, key=member, new_data=new_data
+        )
+
+        return redirect(url_for("admin.landing"))
+
+    return render_template("admin/member__add.html")
 
 
 @bp.route("/add_project", methods=methods)

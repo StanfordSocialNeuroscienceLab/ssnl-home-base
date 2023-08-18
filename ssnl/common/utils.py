@@ -6,6 +6,7 @@ import requests
 from flask import flash
 import sys
 import random
+import traceback
 from config import SSNLConfig
 
 logging.basicConfig(level=logging.INFO)
@@ -38,27 +39,36 @@ def update_local_json(path_to_json: str, key: str, config: dict):
     Updates local JSON file with responses from a Flask form
     """
 
-    logging.info(f"Updating the {key} field in {path_to_json.split('/')[-1]}")
+    filename = path_to_json.split("/")[-1]
 
-    # Open local JSON file as dictionary
-    with open(path_to_json) as incoming:
-        packet = json.load(incoming)
+    try:
+        logging.info(f"Updating the {key} field in {filename}")
 
-    # Isolate key (e.g., "Ian Ferguson")
-    temp = packet[key]
+        # Open local JSON file as dictionary
+        with open(path_to_json) as incoming:
+            packet = json.load(incoming)
 
-    # Loop through config keys
-    for k in config.keys():
-        if config[k]:
-            logging.info(f"Updating {k}...")
-            temp[k] = config[k]
+        # Isolate key (e.g., "Ian Ferguson")
+        temp = packet[key]
 
-    # Reassign to local storage
-    packet[key] = temp
+        # Loop through config keys
+        for k in config.keys():
+            if config[k]:
+                logging.info(f"Updating {k}...")
+                temp[k] = config[k]
 
-    # Write to local storage
-    with open(path_to_json, "w") as outgoing:
-        json.dump(packet, outgoing, indent=5)
+        # Reassign to local storage
+        packet[key] = temp
+
+        # Write to local storage
+        with open(path_to_json, "w") as outgoing:
+            json.dump(packet, outgoing, indent=5)
+
+        flash(f"Updated {filename}")
+
+    except Exception as e:
+        message = f"Failed to update {filename}\n\n{traceback.format_exc()}"
+        post_webhook(message=message)
 
 
 def write_to_local_json(path_to_json: str, key: str, new_data: dict):
@@ -66,15 +76,24 @@ def write_to_local_json(path_to_json: str, key: str, new_data: dict):
     Adds a new key to a local JSON file
     """
 
-    logging.info(f"Adding the {key} key to {path_to_json.split('/')[-1]}")
+    filename = path_to_json.split("/")[-1]
 
-    with open(path_to_json) as incoming:
-        packet = json.load(incoming)
+    try:
+        logging.info(f"Adding the {key} key to {path_to_json.split('/')[-1]}")
 
-    packet[key] = new_data
+        with open(path_to_json) as incoming:
+            packet = json.load(incoming)
 
-    with open(path_to_json, "w") as outgoing:
-        json.dump(packet, outgoing, indent=5)
+        packet[key] = new_data
+
+        with open(path_to_json, "w") as outgoing:
+            json.dump(packet, outgoing, indent=5)
+
+        flash(f"Updated {path_to_json.split('/')[-1]}")
+
+    except Exception as e:
+        message = f"Failed to write to {filename}\n\n{traceback.format_exc()}"
+        post_webhook(message=message)
 
 
 def post_webhook(message: str):
@@ -137,7 +156,7 @@ def drop_a_line(path):
 #####
 
 
-def get_members() -> list:
+def get_members(full: bool = False) -> list:
     """
     Queries members JSON and returns keys
     """
@@ -147,7 +166,10 @@ def get_members() -> list:
     with open(member_path) as incoming:
         temp = json.load(incoming)
 
-    return [x for x in temp.keys()]
+    if not full:
+        return [x for x in temp.keys()]
+
+    return temp
 
 
 def get_projects() -> dict:

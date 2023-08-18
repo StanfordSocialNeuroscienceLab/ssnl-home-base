@@ -8,6 +8,17 @@
 </head>
 
 <body>
+    <!---  Error Handling --->
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    {% for message in messages %}
+    <div class='alert alert-warning' role='alert'>
+        {{ message }}
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+
     <div class="modular_payment_container">
         <a href="{{ url_for('admin.landing') }}">
             <img src="{{ url_for('static', filename='img/THE_OG.jpg') }}" class="the_og">
