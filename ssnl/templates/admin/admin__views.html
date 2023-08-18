@@ -5,7 +5,7 @@
     <table class="table table-hover">
         <tr>
             {% for col in data.columns %}
-            <th>{{ col.replace("_", " ").title() }}</th>
+            <th>{{ col.replace("_", " ").replace("-", " ").title() }}</th>
             {% endfor %}
         </tr>
         {% for ix in data.index %}

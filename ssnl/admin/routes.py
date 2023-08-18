@@ -21,7 +21,7 @@ auth = HTTPBasicAuth()
 def verify(username, password):
     if not (username and password):
         return False
-    return password == "test"
+    return password == SSNLConfig.SECRET_KEY
 
 
 #####
@@ -41,13 +41,13 @@ def landing():
     endpoint_map = {
         "View Members": "admin.view_members",
         "View Finance Sources": "admin.view_projects",
-        "View Recurring Projects": "admin.view_recurring",
+        # "View Recurring Projects": "admin.view_recurring",
         "Update Members": "admin.update_members",
         "Update Finance Sources": "admin.update_projects",
-        "Update Recurring Projects": "admin.update_recurring",
+        # "Update Recurring Projects": "admin.update_recurring",
         "Add Member": "admin.add_member",
         "Add Finance Source": "admin.add_project",
-        "Add Recurring Projects": "admin.add_recurring",
+        # "Add Recurring Projects": "admin.add_recurring",
     }
 
     if request.method == "POST":
@@ -71,6 +71,14 @@ def view_members():
 @auth.login_required
 def view_projects():
     project_data = get_projects()
+    project_data = pd.DataFrame().from_dict(data=project_data, orient="index")
+    return render_template("admin/admin__views.html", data=project_data)
+
+
+@bp.route("/view_recurring", methods=methods)
+@auth.login_required
+def view_recurring():
+    project_data = get_reocurring_projects()
     project_data = pd.DataFrame().from_dict(data=project_data, orient="index")
     return render_template("admin/admin__views.html", data=project_data)
 
@@ -99,8 +107,12 @@ def update_members():
 @bp.route("/update_projects", methods=methods)
 @auth.login_required
 def update_projects():
-    member_data = None
-    return render_template("admin/project__update.html", data=member_data)
+    if request.method == "POST":
+        funding_string = ""
+        award_number = ""
+        irb_number = ""
+        irb_name = ""
+    return render_template("admin/project__update.html")
 
 
 @bp.route("/add_member", methods=methods)
@@ -129,5 +141,9 @@ def add_member():
 @bp.route("/add_project", methods=methods)
 @auth.login_required
 def add_project():
-    member_data = None
-    return render_template("admin/project__add.html", data=member_data)
+    if request.method == "POST":
+        funding_string = ""
+        award_number = ""
+        irb_number = ""
+        irb_name = ""
+    return render_template("admin/project__add.html")

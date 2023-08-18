@@ -14,7 +14,6 @@ logging.basicConfig(level=logging.INFO)
 ##########
 
 
-# Global utils...
 def safe_load_json(path: str) -> dict:
     """
     Ensures that a filepath exists before
