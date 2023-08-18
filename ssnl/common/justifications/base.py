@@ -28,5 +28,6 @@ class FinanceObject:
             self.project_dictioanry = json.load(temp)
 
         self._timestamp = datetime.now(pytz.timezone("US/Pacific"))
+        self.when = self._timestamp.strftime("%m/%d/%Y")
 
         logging.info("INITIALIZED FINANCE OBJECT")

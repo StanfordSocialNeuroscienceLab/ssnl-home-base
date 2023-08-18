@@ -5,14 +5,14 @@ import os
 import shutil
 
 from ssnl.common.utils import drop_a_line
-from .base import FinanceObject
+from ssnl.common.justifications.base import FinanceObject
 
 ##########
 
 
 class PCard(FinanceObject):
     def __init__(
-        self, here, charge_to_card, j_short, j_long, j_why, who, when, project
+        self, here, charge_to_card, j_short, j_long, j_why, who, when, project, where
     ):
         super().__init__()
 
@@ -30,7 +30,12 @@ class PCard(FinanceObject):
         self.j_long = j_long
         self.j_why = j_why
         self.who = self.member_dictionary[who]
-        self.when = when
+
+        # If user passes in "TODAY" we won't overwrite the attribute
+        if not when.strip().upper() == "TODAY":
+            self.when = when
+
+        self.where = where
         self.project = self.project_dictioanry[project]
 
         self._charge = charge_to_card
@@ -48,6 +53,7 @@ class PCard(FinanceObject):
             self.who["title"],
             self.j_long,
             self.when,
+            self.where,
             self.j_why,
             self.project["funding-string"],
         )

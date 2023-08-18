@@ -14,7 +14,7 @@ from .base import FinanceObject
 
 class Reimbursement(FinanceObject):
     def __init__(
-        self, here, charge_to_card, j_short, j_long, j_why, who, when, project
+        self, here, charge_to_card, j_short, j_long, j_why, who, when, project, where
     ):
         super().__init__()
 
@@ -36,7 +36,12 @@ class Reimbursement(FinanceObject):
         self.j_long = j_long
         self.j_why = j_why
         self.who = self.member_dictionary[who]
-        self.when = when
+
+        # If user passes in "TODAY" we won't overwrite the attribute
+        if not when.strip().upper() == "TODAY":
+            self.when = when
+
+        self.where = where
         self.project = self.project_dictioanry[project]
 
         self._charge = charge_to_card
@@ -57,6 +62,7 @@ class Reimbursement(FinanceObject):
             self.who["employee_number"],
             self.j_long,
             self.when,
+            self.where,
             self.j_why,
             self.project["funding-string"],
         )
