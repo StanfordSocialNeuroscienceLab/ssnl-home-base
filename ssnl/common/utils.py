@@ -106,12 +106,25 @@ def get_members() -> list:
     return [x for x in temp.keys()]
 
 
-def get_projects() -> list:
+def get_projects() -> dict:
     """
-    Queries projects JSON and returns keys
+    Queries projects JSON and returns dictionary
     """
 
     project_path = SSNLConfig.PROJECT_PATH
+
+    with open(project_path) as incoming:
+        temp = json.load(incoming)
+
+    return temp
+
+
+def get_reocurring_projects() -> dict:
+    """
+    Queries reocurring JSON and returns dictionary
+    """
+
+    project_path = SSNLConfig.REOCURRING_PATH
 
     with open(project_path) as incoming:
         temp = json.load(incoming)

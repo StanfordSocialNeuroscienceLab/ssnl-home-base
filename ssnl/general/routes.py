@@ -10,7 +10,13 @@ from config import SSNLConfig  # TODO - Figure out the app context here...
 from ssnl.general import bp
 
 # TODO - Make JSON helper more abstract
-from ssnl.common.utils import post_webhook, download, get_members, get_projects
+from ssnl.common.utils import (
+    post_webhook,
+    download,
+    get_members,
+    get_projects,
+    get_reocurring_projects,
+)
 
 ##########
 
@@ -169,7 +175,9 @@ def bp_reocurring():
 
             return redirect(url_for("general.index"))
 
-    return render_template("justifications/reocurring.html")
+    rec_charges = get_reocurring_projects()
+
+    return render_template("justifications/reocurring.html", rec_charges=rec_charges)
 
 
 @bp.route("/mturk", methods=methods)

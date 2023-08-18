@@ -22,6 +22,7 @@ class SSNLConfig:
     JSON_PATH = os.path.join(HERE, "files/packets")
     MEMBER_PATH = os.path.join(JSON_PATH, "members.json")
     PROJECT_PATH = os.path.join(JSON_PATH, "projects.json")
+    REOCURRING_PATH = os.path.join(JSON_PATH, "reocurring.json")
     ADMIN_PATH = os.path.join(JSON_PATH, "admin.json")
 
     PACIFIC_TIME = datetime.now(pytz.timezone("US/Pacific"))

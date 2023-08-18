@@ -17,7 +17,10 @@ class Reocurring(FinanceObject):
         super().__init__()
 
         self.charge = charge
-        self.date = date_of_charge
+
+        if not date_of_charge.strip().upper() == "TODAY":
+            self.when = date_of_charge
+
         self.timestamp = datetime.now(pytz.timezone("US/Pacific"))
 
         self.base_path = os.path.join(here, "files/justifications")
@@ -69,7 +72,7 @@ class Reocurring(FinanceObject):
         doc = docx.Document(self.filepath)
 
         # Format date
-        doc.paragraphs[3].text = doc.paragraphs[3].text.format(self.date)
+        doc.paragraphs[3].text = doc.paragraphs[3].text.format(self.when)
 
         # Strip out weird characters for Tracy
         doc.paragraphs[3].text = (
