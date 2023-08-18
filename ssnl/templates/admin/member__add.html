@@ -1,0 +1,32 @@
+{% extends "admin/admin_template.html" %}
+
+<body>
+
+      {% block content %}
+
+      <form action="{{ url_for('admin.add_member') }}" method="POST">
+            <div class="modular_payment_container">
+                  <label for="member_to_add">
+                        <b>Lab Member Name</b>
+                  </label><br>
+                  <input type="text" id="member_to_add" name="member_to_add">
+            </div>
+            <div class="modular_payment_container">
+                  <label for="employee_number">
+                        <b>Employee Number</b>
+                  </label><br>
+                  <input type="text" id="employee_number" name="employee_number" value="">
+            </div>
+            <div class="modular_payment_container">
+                  <label for="title">
+                        <b>Title (RA, Grad Student, Postdoc, etc.)</b>
+                  </label><br>
+                  <input type="text" id="title" name="title" value="">
+            </div>
+            <div clas="modular_payment_container">
+                  <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+      </form>
+
+      {% endblock %}
+</body>

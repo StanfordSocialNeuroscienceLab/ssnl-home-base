@@ -34,47 +34,30 @@
       </div>
       {% endif %}
 
-      <div style="padding: 1%;">
-            <h2>Admin Options Below</h2>
-      </div>
-      <div style="padding: 0.5%;">
-            <a href="{{ url_for('admin.view_members') }}">
-                  <h3>View Lab Members</h3>
-            </a>
-      </div>
-      <div style="padding: 0.5%;">
-            <a href="{{ url_for('admin.view_projects') }}">
-                  <h3>View Projects</h3>
-            </a>
-      </div>
-      <br> <br>
-      <div style="padding: 0.5%">
-            <a href="{{ url_for('admin.update_members') }}">
-                  <h3>Update Existing Lab Member</h3>
-            </a>
-      </div>
-      <div style="padding: 0.5%">
-            <a href="{{ url_for('admin.update_projects') }}">
-                  <h3>Update Existing Lab Project</h3>
-            </a>
-      </div>
-      <br> <br>
-      <div style="padding: 0.5%;">
-            <a href="{{ url_for('admin.add_member') }}">
-                  <h3>Add Lab Member</h3>
-            </a>
-      </div>
-      <div style="padding: 0.5%;">
-            <a href="{{ url_for('admin.add_project') }}">
-                  <h3>Add Project</h3>
-            </a>
-      </div>
-      <div style="padding: 1%;">
+      <form action="{{ url_for('admin.landing') }}" method="POST">
+            <div class="modular_payment_container">
+                  <h2>Pick an Option</h2>
+
+                  <select name="endpoint" id="endpoint">
+                        <option value="HERE"></option>
+                        {% for k in endpoint_map.keys() %}
+                        <option value="{{ endpoint_map[k] }}">{{ k }}</option>
+                        {% endfor %}
+                  </select>
+            </div>
+            <div clas="modular_payment_container">
+                  <button type="submit" class="btn btn-primary">Go to Option</button>
+            </div>
+
+      </form>
+
+
+      <div class="modular_payment_container">
             <h4>
                   Go Home
             </h4>
             <a href="{{ url_for('general.index') }}">
-                  <img src="../../static/img/yeehaw.webp" width="3%">
+                  <img src="{{ url_for('static', filename='/img/yeehaw.webp') }}" width="3%">
             </a>
       </div>
 
