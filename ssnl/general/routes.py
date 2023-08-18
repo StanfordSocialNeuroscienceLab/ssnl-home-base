@@ -4,6 +4,7 @@ from werkzeug.utils import secure_filename
 from datetime import datetime
 import pathlib
 import os
+import traceback
 from config import SSNLConfig  # TODO - Figure out the app context here...
 
 from ssnl.general import bp
@@ -72,7 +73,7 @@ def bp_pcard():
             # if dev:
             #     raise e
 
-            message = f"Error @ P-Card Justification\n\n{e}"
+            message = f"Error @ P-Card Justification\n\n{str(traceback.format_exc())}"
             post_webhook(message=message)
 
             return redirect(url_for("general.index"))
@@ -126,7 +127,7 @@ def bp_reimbursements():
             if dev:
                 raise e
 
-            message = f"Error @ Reimbursement\n\n{e}"
+            message = f"Error @ Reimbursement\n\n{str(traceback.format_exc())}"
             post_webhook(message=message)
 
             return redirect(url_for("general.index"))
@@ -159,7 +160,7 @@ def bp_reocurring():
             if dev:
                 raise e
 
-            message = f"Error @ Reocurring Charges\n\n{e}"
+            message = f"Error @ Reocurring Charges\n\n{str(traceback.format_exc())}"
             post_webhook(message=message)
 
             return redirect(url_for("general.index"))
@@ -212,7 +213,7 @@ def mturk():
             if dev:
                 raise e
 
-            message = f"Error @ MTurk\n\n{e}"
+            message = f"Error @ MTurk\n\n{str(traceback.format_exc())}"
             post_webhook(message=message)
 
             return redirect(url_for("general.index"))
@@ -261,7 +262,7 @@ def combine_pdf():
             if dev:
                 raise e
 
-            message = f"Error @ Combine PDF\n\n{e}"
+            message = f"Error @ Combine PDF\n\n{str(traceback.format_exc())}"
             post_webhook(message=message)
 
             return redirect(url_for("general.index"))
