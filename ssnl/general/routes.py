@@ -9,7 +9,7 @@ from config import SSNLConfig  # TODO - Figure out the app context here...
 from ssnl.general import bp
 
 # TODO - Make JSON helper more abstract
-from ssnl.common.utils import post_webhook, load_local_json, download
+from ssnl.common.utils import post_webhook, download, get_members, get_projects
 
 ##########
 
@@ -127,7 +127,7 @@ def bp_pcard():
 
     return render_template(
         "justifications/justification_template.html",
-        endpoint="bp_pcard",
+        endpoint="general.bp_pcard",
         form_title="P-Card Justifcation Form",
         funding_sources=get_projects(),
         members=get_members(),
@@ -199,7 +199,7 @@ def bp_reimbursements():
 @bp.route("/reocurring", methods=methods)
 def bp_reocurring():
     if request.method == "POST":
-        from utils.justifications.reocurring import Reocurring
+        from ssnl.common.justifications.reocurring import Reocurring
 
         charge = request.form["charge"]
         date_of_charge = request.form["date_of_charge"]
@@ -243,7 +243,7 @@ def bp_reocurring():
 @bp.route("/mturk", methods=methods)
 def mturk():
     if request.method == "POST":
-        from utils.justifications.mturk import WorkerFile
+        from ssnl.common.justifications.mturk import WorkerFile
 
         # -- HTML form => variables
         file = request.files["file"]

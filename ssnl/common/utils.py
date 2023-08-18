@@ -116,4 +116,4 @@ def get_projects() -> list:
     with open(project_path) as incoming:
         temp = json.load(incoming)
 
-    return [x for x in temp.keys()]
+    return temp
