@@ -2,6 +2,9 @@
 import os
 from datetime import datetime
 import pytz
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 class SSNLConfig:
@@ -10,7 +13,8 @@ class SSNLConfig:
     ROOT = os.path.abspath(os.path.dirname(__file__))
     HERE = os.path.join(ROOT, "ssnl")
 
-    SECRET_KEY = "jamil4ever"
+    SECRET_KEY = os.environ.get("SECRET_KEY")
+    SLACK_HOOK = os.environ.get("SLACK_HOOK")
     UPLOAD_FOLDER = "files/uploads"
     JUSTIFICATIONS = "files/justifications"
     BP_TEMPLATES = "files/templates"
