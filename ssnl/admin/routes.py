@@ -1,6 +1,7 @@
 ### LAB MANAGER / ADMIN ROUTES ###
 from flask import render_template, redirect, url_for, request
 from flask_httpauth import HTTPBasicAuth
+import pandas as pd
 from ssnl.admin import bp
 from config import SSNLConfig
 from ssnl.common.utils import (
@@ -62,14 +63,16 @@ def landing():
 @auth.login_required
 def view_members():
     member_data = get_members(full=True)
-    return render_template("admin/member__view.html", data=member_data)
+    member_data = pd.DataFrame().from_dict(data=member_data, orient="index")
+    return render_template("admin/admin__views.html", data=member_data)
 
 
 @bp.route("/view_projects", methods=methods)
 @auth.login_required
 def view_projects():
     project_data = get_projects()
-    return render_template("admin/project__view.html", data=project_data)
+    project_data = pd.DataFrame().from_dict(data=project_data, orient="index")
+    return render_template("admin/admin__views.html", data=project_data)
 
 
 @bp.route("/update_members", methods=methods)
