@@ -2,6 +2,7 @@
 from flask import render_template, redirect, url_for
 from flask_httpauth import HTTPBasicAuth
 from ssnl.admin import bp
+from config import SSNLConfig
 
 ##########
 
