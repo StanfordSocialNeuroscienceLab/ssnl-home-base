@@ -46,6 +46,7 @@ def bp_pcard():
             j_why = request.form["purchased_why"]
             who = request.form["purchased_by"]
             source = request.form["funding_source"]
+            where = request.form["purchased_where"]
             amount = request.form["charge_amount"].replace("$", "")
             date_c = request.form["date_charged"]
 
@@ -57,6 +58,7 @@ def bp_pcard():
                 j_why=j_why,
                 who=who,
                 when=date_c,
+                where=where,
                 project=source,
             )
 
@@ -99,6 +101,7 @@ def bp_reimbursements():
         source = request.form["funding_source"]
         amount = request.form["charge_amount"].replace("$", "").strip()
         date_c = request.form["date_charged"]
+        where = request.form["purchased_where"]
 
         try:
             reimburse = Reimbursement(
@@ -110,6 +113,7 @@ def bp_reimbursements():
                 who=who,
                 when=date_c,
                 project=source,
+                where=where,
             )
 
             # Write to file
