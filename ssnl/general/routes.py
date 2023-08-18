@@ -48,18 +48,6 @@ def bp_pcard():
             amount = request.form["charge_amount"].replace("$", "")
             date_c = request.form["date_charged"]
 
-        except Exception as e:
-            if dev:
-                raise e
-
-            message = f"Error @ P-Card Justification\n\n{e}"
-            post_webhook(message=message)
-
-            return redirect(url_for("general.index"))
-
-        ###
-
-        try:
             p_card = PCard(
                 here=here,
                 charge_to_card=amount,
@@ -71,54 +59,18 @@ def bp_pcard():
                 project=source,
             )
 
-        except Exception as e:
-            if dev:
-                raise e
-
-            message = f"Error @ P-Card Justification\n\n{e}"
-            post_webhook(message=message)
-
-            return redirect(url_for("general.index"))
-
-        ###
-
-        try:
             p_card.write_justification()
 
-        except Exception as e:
-            if dev:
-                raise e
-
-            message = f"Error @ P-Card Justification\n\n{e}"
-            post_webhook(message=message)
-
-            return redirect(url_for("general.index"))
-
-        ###
-
-        try:
             path = os.path.join(
                 SSNLConfig.JUSTIFICATIONS,
                 f"SSNL-Justification-{p_card.timestamp}-{amount}.zip",
             )
 
-        except Exception as e:
-            if dev:
-                raise e
-
-            message = f"Error @ P-Card Justification\n\n{e}"
-            post_webhook(message=message)
-
-            return redirect(url_for("general.index"))
-
-        ###
-
-        try:
             return download(path)
 
         except Exception as e:
-            if dev:
-                raise e
+            # if dev:
+            #     raise e
 
             message = f"Error @ P-Card Justification\n\n{e}"
             post_webhook(message=message)
@@ -162,26 +114,12 @@ def bp_reimbursements():
             # Write to file
             reimburse.write_justification()
 
-        except Exception as e:
-            if dev:
-                raise e
+            # Download zipped files
+            path = os.path.join(
+                SSNLConfig.JUSTIFICATIONS,
+                f"SSNL-Reimbursement-{reimburse.timestamp}-{amount}.zip",
+            )
 
-            message = f"Error @ Reimbursement\n\n{e}"
-            post_webhook(message=message)
-
-            return redirect(url_for("general.index"))
-
-        ###
-
-        # Download zipped files
-        path = os.path.join(
-            SSNLConfig.JUSTIFICATIONS,
-            f"SSNL-Reimbursement-{reimburse.timestamp}-{amount}.zip",
-        )
-
-        ###
-
-        try:
             return download(path)
 
         except Exception as e:
@@ -213,19 +151,8 @@ def bp_reocurring():
             # Output filename
             output_filename = ripper.output_name
 
-        except Exception as e:
-            if dev:
-                raise e
+            path = os.path.join(SSNLConfig.JUSTIFICATIONS, f"{output_filename}.zip")
 
-            message = f"Error @ Reocurring Charges\n\n{e}"
-            post_webhook(message=message)
-
-            return redirect(url_for("general.index"))
-
-        # Download zipped files
-        path = os.path.join(SSNLConfig.JUSTIFICATIONS, f"{output_filename}.zip")
-
-        try:
             return download(path)
 
         except Exception as e:
@@ -245,21 +172,17 @@ def mturk():
     if request.method == "POST":
         from ssnl.common.justifications.mturk import WorkerFile
 
-        # -- HTML form => variables
         file = request.files["file"]
         safe_name = secure_filename(file.filename)
 
-        # -- Create output directories
         output_dir = datetime.now().strftime("mturk_%b_%d_%Y_%H_%M_%S")
         output_path = os.path.join(SSNLConfig.UPLOAD_FOLDER, output_dir)
 
         if not os.path.exists(output_path):
             pathlib.Path(output_path).mkdir(exist_ok=True, parents=True)
 
-        # Save file
         file.save(os.path.join(output_path, safe_name))
 
-        # -- Instantiate WorkerFile object
         try:
             worker = WorkerFile(
                 filename=safe_name,
@@ -283,18 +206,6 @@ def mturk():
 
             worker.run()
 
-        except Exception as e:
-            if dev:
-                raise e
-
-            message = f"Error @ MTurk\n\n{e}"
-            post_webhook(message=message)
-
-            return redirect(url_for("general.index"))
-
-        ###
-
-        try:
             return download(worker.download_me)
 
         except Exception as e:
@@ -314,7 +225,6 @@ def combine_pdf():
     if request.method == "POST":
         from PyPDF2 import PdfFileMerger
 
-        # -- Create output directories
         now = datetime.now().strftime("%b_%d_%Y_%H_%M_%S")
         output_path = os.path.join(SSNLConfig.ROOT, SSNLConfig.UPLOAD_FOLDER, now)
 
@@ -335,7 +245,6 @@ def combine_pdf():
                 temp.save(os.path.join(output_path, safe))
                 ordered_files.append(os.path.join(output_path, safe))
 
-        # -- Instantiate PdfFileMerger object
         try:
             ripper = PdfFileMerger()
 
