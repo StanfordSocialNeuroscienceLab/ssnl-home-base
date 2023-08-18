@@ -1,42 +1,34 @@
-<html>
-
-<head>
-      <title>SSNL Home Base</title>
-      <link rel="stylesheet" href="../../static/bootstrap/bootstrap.min.css">
-      <link rel="stylesheet" href="../../static/main.css">
-      <link rel="icon" href="../../static/img/big_brain.jpg">
-</head>
+{% extends "admin/admin_template.html" %}
 
 <body>
 
       {% block content %}
 
-      <a href="{{ url_for('lab_manager_landing') }}">
-            <img src="../../static/img/THE_OG.jpg" class="the_og">
-      </a>
-
-      <h2>Update Existing Project</h2>
-
-      <form action="{{ url_for('update_members') }}" method="POST">
-            <label for="member_to_update">
-                  Lab Member to Update
-            </label><br>
-            <input type="text" id="member_to_update" name="member_to_update">
-            <br><br><br>
-            <label for="employee_number">
-                  New Employee Number (leave blank if NA)
-            </label><br>
-            <input type="text" id="employee_number" name="employee_number" value="">
-            <br><br><br>
-            <label for="title">
-                  New Title (leave blank if NA)
-            </label><br>
-            <input type="text" id="title" name="title" value="">
-            <br><br><br>
-            <input type="submit" value="Update Lab Member">
+      <form action="{{ url_for('admin.update_members') }}" method="POST">
+            <div class="modular_payment_container">
+                  <select name="lab_member" id="lab_member">
+                        <option value=""></option>
+                        {% for member in lab_members %}
+                        <option value="{{ member }}">{{ member }}</option>
+                        {% endfor %}
+                  </select>
+            </div>
+            <div class="modular_payment_container">
+                  <label for="employee_number">
+                        <b>Employee Number</b>
+                  </label><br>
+                  <input type="text" id="employee_number" name="employee_number" value="">
+            </div>
+            <div class="modular_payment_container">
+                  <label for="title">
+                        <b>Title (RA, Grad Student, Postdoc, etc.)</b>
+                  </label><br>
+                  <input type="text" id="title" name="title" value="">
+            </div>
+            <div clas="modular_payment_container">
+                  <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
       </form>
 
       {% endblock %}
 </body>
-
-</html>

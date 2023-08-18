@@ -33,6 +33,50 @@ def safe_load_json(path: str) -> dict:
         return json.load(temp)
 
 
+def update_local_json(path_to_json: str, key: str, config: dict):
+    """
+    Updates local JSON file with responses from a Flask form
+    """
+
+    logging.info(f"Updating the {key} field in {path_to_json.split('/')[-1]}")
+
+    # Open local JSON file as dictionary
+    with open(path_to_json) as incoming:
+        packet = json.load(incoming)
+
+    # Isolate key (e.g., "Ian Ferguson")
+    temp = packet[key]
+
+    # Loop through config keys
+    for k in config.keys():
+        if config[k]:
+            logging.info(f"Updating {k}...")
+            temp[k] = config[k]
+
+    # Reassign to local storage
+    packet[key] = temp
+
+    # Write to local storage
+    with open(path_to_json, "w") as outgoing:
+        json.dump(packet, outgoing, indent=5)
+
+
+def write_to_local_json(path_to_json: str, key: str, new_data: dict):
+    """
+    Adds a new key to a local JSON file
+    """
+
+    logging.info(f"Adding the {key} key to {path_to_json.split('/')[-1]}")
+
+    with open(path_to_json) as incoming:
+        packet = json.load(incoming)
+
+    packet[key] = new_data
+
+    with open(path_to_json, "w") as outgoing:
+        json.dump(packet, outgoing, indent=5)
+
+
 def post_webhook(message: str):
     """
     This is a wrapper to send error data to the `ssnl-app-errors` slack channel

@@ -3,7 +3,12 @@ from flask import render_template, redirect, url_for, request
 from flask_httpauth import HTTPBasicAuth
 from ssnl.admin import bp
 from config import SSNLConfig
-from ssnl.common.utils import get_members, get_projects, get_reocurring_projects
+from ssnl.common.utils import (
+    get_members,
+    get_projects,
+    get_reocurring_projects,
+    update_local_json,
+)
 
 ##########
 
@@ -69,8 +74,20 @@ def view_projects():
 @bp.route("/update_members", methods=methods)
 @auth.login_required
 def update_members():
-    member_data = None
-    return render_template("admin/member__update.html", data=member_data)
+    lab_members = [x for x in get_members()]
+
+    if request.method == "POST":
+        member = request.form["lab_member"]
+        employee_number = request.form["employee_number"]
+        title = request.form["title"]
+
+        update_local_json(
+            path_to_json=SSNLConfig.MEMBER_PATH,
+            key=member,
+            config={"employee_number": employee_number, "title": title},
+        )
+
+    return render_template("admin/member__update.html", lab_members=lab_members)
 
 
 @bp.route("/update_projects", methods=methods)
