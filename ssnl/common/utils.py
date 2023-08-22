@@ -11,6 +11,10 @@ from config import SSNLConfig
 
 logging.basicConfig(level=logging.INFO)
 
+LEGACY_MEMBERS = [
+    x.strip().title() for x in os.environ.get("LEGACY_MEMBERS").split(",")
+]
+
 ##########
 
 
@@ -165,10 +169,12 @@ def get_members(full: bool = False) -> list:
     with open(member_path) as incoming:
         temp = json.load(incoming)
 
-    if not full:
-        return [x for x in temp.keys()]
+    current_members = [x for x in temp.keys() if x not in LEGACY_MEMBERS]
 
-    return temp
+    if not full:
+        return current_members
+
+    return {k: v for k, v in temp.items() if k in current_members}
 
 
 def get_projects() -> dict:
