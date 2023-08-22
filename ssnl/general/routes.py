@@ -5,11 +5,9 @@ from datetime import datetime
 import pathlib
 import os
 import traceback
-from config import SSNLConfig  # TODO - Figure out the app context here...
+from config import SSNLConfig
 
 from ssnl.general import bp
-
-# TODO - Make JSON helper more abstract
 from ssnl.common.utils import (
     post_webhook,
     download,
