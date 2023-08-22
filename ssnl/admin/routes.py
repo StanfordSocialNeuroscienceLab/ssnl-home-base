@@ -1,7 +1,8 @@
 ### LAB MANAGER / ADMIN ROUTES ###
-from flask import render_template, redirect, url_for, request
+from flask import render_template, redirect, url_for, request, flash
 from flask_httpauth import HTTPBasicAuth
 import pandas as pd
+import logging
 from ssnl.admin import bp
 from config import SSNLConfig
 from ssnl.common.utils import (
@@ -14,6 +15,7 @@ from ssnl.common.utils import (
 
 ##########
 
+logging.basicConfig(level=logging.INFO)
 auth = HTTPBasicAuth()
 
 
@@ -99,6 +101,8 @@ def update_members():
             config={"employee_number": employee_number, "title": title},
         )
 
+        flash(f"{member} updated in database")
+
         return redirect(url_for("admin.landing"))
 
     return render_template("admin/member__update.html", lab_members=lab_members)
@@ -107,12 +111,39 @@ def update_members():
 @bp.route("/update_projects", methods=methods)
 @auth.login_required
 def update_projects():
+    projects = get_projects()
+
     if request.method == "POST":
-        funding_string = ""
-        award_number = ""
-        irb_number = ""
-        irb_name = ""
-    return render_template("admin/project__update.html")
+        project_name = request.form["project_name"]
+        award_number = request.form["pta"]
+        sponsor = request.form["sponsor"]
+        irb_number = request.form["irb_number"]
+        irb_name = request.form["irb_name"]
+
+        funding_string = f"{award_number} (PI: Jamil Zaki, Sponsor: {sponsor})"
+
+        new_data = {
+            "funding_string": funding_string,
+            "award": award_number.split("-")[-1],
+            "irb-number": irb_number,
+            "irb-name": irb_name,
+        }
+
+        temp = projects[project_name]
+
+        for key in new_data.keys():
+            if temp[key] != new_data[key]:
+                temp[key] = new_data[key]
+
+        write_to_local_json(
+            path_to_json=SSNLConfig.PROJECT_PATH, key=project_name, new_data=temp
+        )
+
+        flash(f"{project_name} updated in database")
+
+        return redirect(url_for("admin.landing"))
+
+    return render_template("admin/project__update.html", projects=projects)
 
 
 @bp.route("/add_member", methods=methods)
@@ -133,6 +164,8 @@ def add_member():
             path_to_json=SSNLConfig.MEMBER_PATH, key=member, new_data=new_data
         )
 
+        flash(f"{member} added to database")
+
         return redirect(url_for("admin.landing"))
 
     return render_template("admin/member__add.html")
@@ -142,8 +175,27 @@ def add_member():
 @auth.login_required
 def add_project():
     if request.method == "POST":
-        funding_string = ""
-        award_number = ""
-        irb_number = ""
-        irb_name = ""
+        project_name = request.form["project_to_add"]
+        award_number = request.form["pta"]
+        sponsor = request.form["sponsor"]
+        irb_number = str(request.form["irb_number"])
+        irb_name = str(request.form["irb_name"])
+
+        funding_string = f"{award_number} (PI: Jamil Zaki, Sponsor: {sponsor.title()})"
+
+        new_data = {
+            "funding-string": funding_string,
+            "award": award_number.split("-")[-1],
+            "irb-number": irb_number,
+            "irb-name": irb_name,
+        }
+
+        write_to_local_json(
+            path_to_json=SSNLConfig.PROJECT_PATH, key=project_name, new_data=new_data
+        )
+
+        flash(f"{project_name} written to database")
+
+        return redirect(url_for("admin.landing"))
+
     return render_template("admin/project__add.html")

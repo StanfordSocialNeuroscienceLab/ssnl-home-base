@@ -1,47 +1,56 @@
-<html>
+{% extends "admin/admin_template.html" %}
 
-<head>
-      <title>SSNL Home Base</title>
-      <link rel="stylesheet" href="../../static/bootstrap/bootstrap.min.css">
-      <link rel="stylesheet" href="../../static/main.css">
-      <link rel="icon" href="../../static/img/big_brain.jpg">
-</head>
 
 <body>
 
       {% block content %}
 
-      <a href="{{ url_for('lab_manager_landing') }}">
-            <img src="../../static/img/THE_OG.jpg" class="the_og">
-      </a>
+      <div class="modular_payment_container">
+            <h2>Update an Existing Financial Source</h2>
+            <p>Fill out any fields that you want to update and leave the rest blank</p>
+      </div>
 
-      <h2>Update Existing Project</h2>
-
-      <form action="{{ url_for('update_projects') }}" method="POST">
-            <label for="project_to_update">
-                  Project to Update
-            </label><br>
-            <input type="text" id="project_to_update" name="project_to_update">
-            <br><br><br>
-            <label for="pta">
-                  New PTA (leave blank if NA)
-            </label><br>
-            <input type="text" id="pta" name="pta" value="">
-            <br><br><br>
-            <label for="sponsor">
-                  New Sponsor (leave blank if NA)
-            </label><br>
-            <input type="text" id="sponsor" name="sponsor" value="">
-            <br><br><br>
-            <label for="irb_number">
-                  New IRB Number (leave blank if NA)
-            </label><br>
-            <input type="text" id="irb_number" name="irb_number" value="">
-            <br><br><br>
-            <input type="submit" value="Update Project">
+      <form action="{{ url_for('admin.update_projects') }}" method="POST">
+            <div class="modular_payment_container">
+                  <select name="project_name" id="project_name">
+                        <option value=""></option>
+                        {% for project in projects.keys() %}
+                        <option value="{{ project }}">{{ project }}</option>
+                        {% endfor %}
+                  </select>
+            </div>
+            <div class="modular_payment_container">
+                  <label for="pta">
+                        <b>PTA (Project-Task-Award)</b>
+                        <br>
+                        <p>E.g., 12345-67-PTANUM</p>
+                  </label><br>
+                  <input type="text" id="pta" name="pta" value="">
+            </div>
+            <div class="modular_payment_container">
+                  <label for="sponsor">
+                        <b>Sponsor</b>
+                        <br>
+                        <p>E.g., National Institute of Health</p>
+                  </label><br>
+                  <input type="text" id="sponsor" name="sponsor" value="">
+            </div>
+            <div class="modular_payment_container">
+                  <label for="irb_number">
+                        <b>IRB Number (if applicable)</b>
+                  </label><br>
+                  <input type="text" id="irb_number" name="irb_number" value="">
+            </div>
+            <div class="modular_payment_container">
+                  <label for="irb_name">
+                        <b>IRB Name (if applicable)</b>
+                  </label><br>
+                  <input type="text" id="irb_name" name="irb_name" value="">
+            </div>
+            <div class="modular_payment_container">
+                  <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
       </form>
 
       {% endblock %}
 </body>
-
-</html>
