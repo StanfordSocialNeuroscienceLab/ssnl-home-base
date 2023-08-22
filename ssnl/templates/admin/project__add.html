@@ -1,0 +1,55 @@
+{% extends "admin/admin_template.html" %}
+
+
+<body>
+
+      {% block content %}
+
+      <div class="modular_payment_container">
+            <h2>Add a New Financial Source</h2>
+      </div>
+
+      <form action="{{ url_for('admin.add_project') }}" method="POST">
+            <div class="modular_payment_container">
+                  <label for="project_to_add">
+                        <b>Project Name</b>
+                        <br>
+                        <p>E.g., Just Mercy</p>
+                  </label><br>
+                  <input type="text" id="project_to_add" name="project_to_add">
+            </div>
+            <div class="modular_payment_container">
+                  <label for="pta">
+                        <b>PTA (Project-Task-Award)</b>
+                        <br>
+                        <p>E.g., 12345-67-PTANUM</p>
+                  </label><br>
+                  <input type="text" id="pta" name="pta" value="">
+            </div>
+            <div class="modular_payment_container">
+                  <label for="sponsor">
+                        <b>Sponsor</b>
+                        <br>
+                        <p>E.g., National Institute of Health</p>
+                  </label><br>
+                  <input type="text" id="sponsor" name="sponsor" value="">
+            </div>
+            <div class="modular_payment_container">
+                  <label for="irb_number">
+                        <b>IRB Number (if applicable)</b>
+                  </label><br>
+                  <input type="text" id="irb_number" name="irb_number" value="">
+            </div>
+            <div class="modular_payment_container">
+                  <label for="irb_name">
+                        <b>IRB Name (if applicable)</b>
+                  </label><br>
+                  <input type="text" id="irb_name" name="irb_name" value="">
+            </div>
+            <div class="modular_payment_container">
+                  <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+      </form>
+
+      {% endblock %}
+</body>

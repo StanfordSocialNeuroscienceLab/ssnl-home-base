@@ -1,0 +1,52 @@
+{
+     "Jamil Zaki": {
+          "full_name": "Jamil Zaki",
+          "title": "Principal Investigator",
+          "employee_number": "005778469"
+     },
+     "Rachel Calcott": {
+          "full_name": "Rachel Calcott",
+          "title": "Lab Manager",
+          "employee_number": "NONE"
+     },
+     "Ian Ferguson": {
+          "full_name": "Ian Ferguson",
+          "title": "Lab Manager",
+          "employee_number": "50017234"
+     },
+     "Rui Pei": {
+          "full_name": "Rui Pei",
+          "title": "Postdoc",
+          "employee_number": "06642333"
+     },
+     "Luiza Santos": {
+          "full_name": "Luiza Santos",
+          "title": "Graduate Student",
+          "employee_number": "NONE"
+     },
+     "Eric Neumann": {
+          "full_name": "Eric Neumann",
+          "title": "Graduate Student",
+          "employee_number": "NONE"
+     },
+     "Samantha Grayson": {
+          "full_name": "Samantha Grayson",
+          "title": "Research Assistant",
+          "employee_number": "50018861"
+     },
+     "Daniel Ogunbamowo": {
+          "full_name": "Daniel Ogunbamowo",
+          "title": "Research Assistant",
+          "employee_number": "50018870"
+     },
+     "Catherine Garton": {
+          "full_name": "Catherine Garton",
+          "title": "Graduate Student",
+          "employee_number": "NONE"
+     },
+     "Ricky Hollywood": {
+          "full_name": "Ricky Hollywood",
+          "employee_number": "12345",
+          "title": "Superstar"
+     }
+}

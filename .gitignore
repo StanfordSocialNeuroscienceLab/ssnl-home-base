@@ -3,15 +3,17 @@
 *.pyc
 layout.md
 *ipynb*
-.env
+*.env*
 
 ###
 
-static/bootstrap/bootstrap.min.js
-static/bootstrap/bootstrap.min.js.map
-files/packets/members.json
-files/packets/projects.json
-files/packets/reocurring.json
-files/justifications/
-files/uploads/
-files/DEV/
+*/static/bootstrap/bootstrap.min.js
+*/static/bootstrap/bootstrap.min.js.map
+*/files/packets/members.json
+*/files/packets/*.json
+*/files/packets/*.json
+*/files/justifications/
+*/files/uploads/
+*/files/DEV/
+ssnl/files/packets/projects.json
+ssnl/files/packets/members.json

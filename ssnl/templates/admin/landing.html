@@ -1,0 +1,67 @@
+<html>
+
+{% extends "template.html" %}
+
+<body>
+
+      {% block content %}
+
+      {% if manager_name %}
+      <div style="padding: 2% 0%;">
+            <h1>
+                  <b>
+                        Hi {{ manager_name }}!
+                  </b>
+            </h1>
+      </div>
+      {% else %}
+      <div style="padding: 2% 0%;">
+            <h1>
+                  <b>
+                        Lab Manager Utilities
+                  </b>
+            </h1>
+      </div>
+      {% endif %}
+
+      {% if special_text %}
+      <div>
+            <p>
+                  <i>
+                        {{ special_text }}
+                  </i>
+            </p>
+      </div>
+      {% endif %}
+
+      <form action="{{ url_for('admin.landing') }}" method="POST">
+            <div class="modular_payment_container">
+                  <h2>Pick an Option</h2>
+
+                  <select name="endpoint" id="endpoint">
+                        <option value="HERE"></option>
+                        {% for k in endpoint_map.keys() %}
+                        <option value="{{ endpoint_map[k] }}">{{ k }}</option>
+                        {% endfor %}
+                  </select>
+            </div>
+            <div clas="modular_payment_container">
+                  <button type="submit" class="btn btn-primary">Go to Option</button>
+            </div>
+
+      </form>
+
+
+      <div class="modular_payment_container">
+            <h4>
+                  Go Home
+            </h4>
+            <a href="{{ url_for('general.index') }}">
+                  <img src="{{ url_for('static', filename='/img/yeehaw.webp') }}" width="3%">
+            </a>
+      </div>
+
+      {% endblock %}
+</body>
+
+</html>

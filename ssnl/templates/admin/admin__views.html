@@ -1,0 +1,21 @@
+{% extends "admin/admin_template.html" %}
+
+<body>
+    {% block content %}
+    <table class="table table-hover">
+        <tr>
+            {% for col in data.columns %}
+            <th>{{ col.replace("_", " ").replace("-", " ").title() }}</th>
+            {% endfor %}
+        </tr>
+        {% for ix in data.index %}
+        <tr>
+            {% for col in data.columns %}
+            <td>{{ data[col][ix] }}</td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+
+    </table>
+    {% endblock %}
+</body>
