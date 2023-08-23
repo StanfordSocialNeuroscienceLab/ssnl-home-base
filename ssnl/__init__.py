@@ -3,8 +3,13 @@ from flask import Flask
 from config import SSNLConfig, config_path
 import logging
 from dotenv import load_dotenv
+import os
 
 logging.basicConfig(level=logging.INFO)
+
+if not os.path.exists(config_path):
+    raise OSError(f"{config_path} does not exist")
+
 load_dotenv(config_path)
 
 ##########

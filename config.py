@@ -2,7 +2,6 @@
 import os
 from datetime import datetime
 import pytz
-from dotenv import load_dotenv
 
 config_path = os.path.join(".", ".env")
 
