@@ -22,7 +22,7 @@ def create_app(config_class=SSNLConfig):
 
     app_ = Flask(__name__)
     app_.config.from_object(config_class)
-    app_.secret_key = SSNLConfig.SECRET_KEY
+    app_.secret_key = "whatever"
     app_.config["SESSION_TYPE"] = "filesystem"
 
     logging.info("Running app...")
