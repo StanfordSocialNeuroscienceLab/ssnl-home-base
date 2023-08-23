@@ -4,7 +4,7 @@ from datetime import datetime
 import pytz
 from dotenv import load_dotenv
 
-load_dotenv()
+load_dotenv("./.env")
 
 
 class SSNLConfig:
