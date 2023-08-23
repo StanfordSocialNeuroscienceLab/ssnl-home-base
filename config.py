@@ -2,8 +2,9 @@
 import os
 from datetime import datetime
 import pytz
+import os
 
-config_path = os.path.join(".", ".env")
+config_path = os.path.join(os.path.dirname(__file__), ".env")
 
 
 class SSNLConfig:
