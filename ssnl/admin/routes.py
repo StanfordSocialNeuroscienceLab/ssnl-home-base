@@ -38,7 +38,7 @@ def index():
 
 
 @bp.route("/landed", methods=methods)
-@auth.login_required
+# @auth.login_required
 def landing():
     endpoint_map = {
         "View Members": "admin.view_members",
@@ -62,7 +62,7 @@ def landing():
 
 
 @bp.route("/view_members", methods=methods)
-@auth.login_required
+# @auth.login_required
 def view_members():
     member_data = get_members(full=True)
     member_data = pd.DataFrame().from_dict(data=member_data, orient="index")
@@ -70,7 +70,7 @@ def view_members():
 
 
 @bp.route("/view_projects", methods=methods)
-@auth.login_required
+# @auth.login_required
 def view_projects():
     project_data = get_projects()
     project_data = pd.DataFrame().from_dict(data=project_data, orient="index")
@@ -78,7 +78,7 @@ def view_projects():
 
 
 @bp.route("/view_recurring", methods=methods)
-@auth.login_required
+# @auth.login_required
 def view_recurring():
     project_data = get_reocurring_projects()
     project_data = pd.DataFrame().from_dict(data=project_data, orient="index")
@@ -86,7 +86,7 @@ def view_recurring():
 
 
 @bp.route("/update_members", methods=methods)
-@auth.login_required
+# @auth.login_required
 def update_members():
     lab_members = [x for x in get_members()]
 
@@ -109,7 +109,7 @@ def update_members():
 
 
 @bp.route("/update_projects", methods=methods)
-@auth.login_required
+# @auth.login_required
 def update_projects():
     projects = get_projects()
 
@@ -147,7 +147,7 @@ def update_projects():
 
 
 @bp.route("/add_member", methods=methods)
-@auth.login_required
+# @auth.login_required
 def add_member():
     if request.method == "POST":
         member = request.form["member_to_add"]
@@ -172,7 +172,7 @@ def add_member():
 
 
 @bp.route("/add_project", methods=methods)
-@auth.login_required
+# @auth.login_required
 def add_project():
     if request.method == "POST":
         project_name = request.form["project_to_add"]
