@@ -1,9 +1,11 @@
 ### MAIN APPLICATION CONSTRUCTOR ###
 from flask import Flask
-from config import SSNLConfig
+from config import SSNLConfig, config_path
 import logging
+from dotenv import load_dotenv
 
 logging.basicConfig(level=logging.INFO)
+load_dotenv(config_path)
 
 ##########
 
