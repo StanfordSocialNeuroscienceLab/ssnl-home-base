@@ -8,7 +8,7 @@ config_path = os.path.join(os.path.dirname(__file__), ".env")
 
 
 class SSNLConfig:
-    DEVMODE = True
+    DEVMODE = False
 
     ROOT = os.path.abspath(os.path.dirname(__file__))
     HERE = os.path.join(ROOT, "ssnl")

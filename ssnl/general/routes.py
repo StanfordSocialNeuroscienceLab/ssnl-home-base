@@ -140,7 +140,13 @@ def bp_reimbursements():
 
             return redirect(url_for("general.index"))
 
-    return render_template("justifications/reimbursement.html", members=get_members())
+    return render_template(
+        "justifications/justification_template.html",
+        endpoint="general.bp_reimbursements",
+        form_title="Reimbursement Form",
+        funding_sources=get_projects(),
+        members=get_members(),
+    )
 
 
 @bp.route("/reocurring", methods=methods)
